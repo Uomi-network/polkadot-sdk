@@ -883,7 +883,6 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 <a href="#733" id="733">733</a>
 <a href="#734" id="734">734</a>
 <a href="#735" id="735">735</a>
-<a href="#736" id="736">736</a>
 </pre></div><pre class="rust"><code><span class="comment">// Copyright (C) Parity Technologies (UK) Ltd.
 // SPDX-License-Identifier: Apache-2.0
 
@@ -934,7 +933,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 <span class="kw">use </span>xcm_builder::{
 	AccountId32Aliases, AllowExplicitUnpaidExecutionFrom, AllowHrmpNotificationsFromRelayChain,
 	AllowKnownQueryResponses, AllowSubscriptionsFrom, AllowTopLevelPaidExecutionFrom,
-	DenyReserveTransferToRelayChain, DenyThenTry, DescribeFamily, DescribePalletTerminal,
+	DenyReserveTransferToRelayChain, DenyThenTry, DescribeAllTerminal, DescribeFamily,
 	EnsureXcmOrigin, FrameTransactionalProcessor, FungibleAdapter, FungiblesAdapter,
 	GlobalConsensusParachainConvertsFor, HashedDescription, IsConcrete, LocalMint,
 	MatchedConvertedConcreteId, NetworkExportTableItem, NoChecking, NonFungiblesAdapter,
@@ -979,9 +978,8 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 	</span>SiblingParachainConvertsVia&lt;Sibling, AccountId&gt;,
 	<span class="comment">// Straight up local `AccountId32` origins just alias directly to `AccountId`.
 	</span>AccountId32Aliases&lt;RelayNetwork, AccountId&gt;,
-	<span class="comment">// Foreign chain account alias into local accounts according to a hash of their standard
-	// description.
-	</span>HashedDescription&lt;AccountId, DescribeFamily&lt;DescribePalletTerminal&gt;&gt;,
+	<span class="comment">// Foreign locations alias into accounts according to a hash of their standard description.
+	</span>HashedDescription&lt;AccountId, DescribeFamily&lt;DescribeAllTerminal&gt;&gt;,
 	<span class="comment">// Different global consensus parachain sovereign account.
 	// (Used for over-bridge transfers and reserve processing)
 	</span>GlobalConsensusParachainConvertsFor&lt;UniversalLocation, AccountId&gt;,

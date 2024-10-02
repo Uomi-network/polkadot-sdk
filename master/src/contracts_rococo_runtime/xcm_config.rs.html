@@ -456,6 +456,9 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 <a href="#306" id="306">306</a>
 <a href="#307" id="307">307</a>
 <a href="#308" id="308">308</a>
+<a href="#309" id="309">309</a>
+<a href="#310" id="310">310</a>
+<a href="#311" id="311">311</a>
 </pre></div><pre class="rust"><code><span class="comment">// Copyright (C) Parity Technologies (UK) Ltd.
 // SPDX-License-Identifier: Apache-2.0
 
@@ -498,12 +501,13 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 <span class="kw">use </span>xcm_builder::{
 	AccountId32Aliases, AllowExplicitUnpaidExecutionFrom, AllowHrmpNotificationsFromRelayChain,
 	AllowKnownQueryResponses, AllowSubscriptionsFrom, AllowTopLevelPaidExecutionFrom,
-	DenyReserveTransferToRelayChain, DenyThenTry, EnsureXcmOrigin, FixedWeightBounds,
-	FrameTransactionalProcessor, FungibleAdapter, IsConcrete, NativeAsset, ParentAsSuperuser,
-	ParentIsPreset, RelayChainAsNative, SendXcmFeeToAccount, SiblingParachainAsNative,
-	SiblingParachainConvertsVia, SignedAccountId32AsNative, SignedToAccountId32,
-	SovereignSignedViaLocation, TakeWeightCredit, TrailingSetTopicAsId, UsingComponents,
-	WithComputedOrigin, WithUniqueTopic, XcmFeeManagerFromComponents,
+	DenyReserveTransferToRelayChain, DenyThenTry, DescribeAllTerminal, DescribeFamily,
+	EnsureXcmOrigin, FixedWeightBounds, FrameTransactionalProcessor, FungibleAdapter,
+	HashedDescription, IsConcrete, NativeAsset, ParentAsSuperuser, ParentIsPreset,
+	RelayChainAsNative, SendXcmFeeToAccount, SiblingParachainAsNative, SiblingParachainConvertsVia,
+	SignedAccountId32AsNative, SignedToAccountId32, SovereignSignedViaLocation, TakeWeightCredit,
+	TrailingSetTopicAsId, UsingComponents, WithComputedOrigin, WithUniqueTopic,
+	XcmFeeManagerFromComponents,
 };
 <span class="kw">use </span>xcm_executor::XcmExecutor;
 
@@ -533,6 +537,8 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 	</span>SiblingParachainConvertsVia&lt;Sibling, AccountId&gt;,
 	<span class="comment">// Straight up local `AccountId32` origins just alias directly to `AccountId`.
 	</span>AccountId32Aliases&lt;RelayNetwork, AccountId&gt;,
+	<span class="comment">// Foreign locations alias into accounts according to a hash of their standard description.
+	</span>HashedDescription&lt;AccountId, DescribeFamily&lt;DescribeAllTerminal&gt;&gt;,
 );
 
 <span class="doccomment">/// Means for transacting the native currency on this chain.

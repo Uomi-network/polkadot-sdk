@@ -1629,6 +1629,10 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 <a href="#1479" id="1479">1479</a>
 <a href="#1480" id="1480">1480</a>
 <a href="#1481" id="1481">1481</a>
+<a href="#1482" id="1482">1482</a>
+<a href="#1483" id="1483">1483</a>
+<a href="#1484" id="1484">1484</a>
+<a href="#1485" id="1485">1485</a>
 </pre></div><pre class="rust"><code><span class="comment">// Copyright (C) Parity Technologies (UK) Ltd.
 // This file is part of Polkadot.
 
@@ -1660,7 +1664,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 <span class="kw">use </span>polkadot_primitives::{
 	ApprovalVotingParams, AsyncBackingParams, Balance, ExecutorParamError, ExecutorParams,
 	NodeFeatures, SessionIndex, LEGACY_MIN_BACKING_VOTES, MAX_CODE_SIZE, MAX_HEAD_DATA_SIZE,
-	MAX_POV_SIZE, ON_DEMAND_MAX_QUEUE_MAX_SIZE,
+	ON_DEMAND_MAX_QUEUE_MAX_SIZE,
 };
 <span class="kw">use </span>sp_runtime::{traits::Zero, Perbill, Percent};
 
@@ -1676,6 +1680,10 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 <span class="kw">use </span>polkadot_primitives::SchedulerParams;
 
 <span class="kw">const </span>LOG_TARGET: <span class="kw-2">&amp;</span>str = <span class="string">"runtime::configuration"</span>;
+
+<span class="comment">// This value is derived from network layer limits. See `sc_network::MAX_RESPONSE_SIZE` and
+// `polkadot_node_network_protocol::POV_RESPONSE_SIZE`.
+</span><span class="kw">const </span>POV_SIZE_HARD_LIMIT: u32 = <span class="number">16 </span>* <span class="number">1024 </span>* <span class="number">1024</span>;
 
 <span class="doccomment">/// All configuration of the runtime with respect to paras.
 </span><span class="attr">#[derive(
@@ -1941,7 +1949,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 	</span>MaxCodeSizeExceedHardLimit { max_code_size: u32 },
 	<span class="doccomment">/// `max_head_data_size` exceeds the hard limit of `MAX_HEAD_DATA_SIZE`.
 	</span>MaxHeadDataSizeExceedHardLimit { max_head_data_size: u32 },
-	<span class="doccomment">/// `max_pov_size` exceeds the hard limit of `MAX_POV_SIZE`.
+	<span class="doccomment">/// `max_pov_size` exceeds the hard limit of `POV_SIZE_HARD_LIMIT`.
 	</span>MaxPovSizeExceedHardLimit { max_pov_size: u32 },
 	<span class="doccomment">/// `minimum_validation_upgrade_delay` is less than `paras_availability_period`.
 	</span>MinimumValidationUpgradeDelayLessThanChainAvailabilityPeriod {
@@ -2008,7 +2016,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 			})
 		}
 
-		<span class="kw">if </span><span class="self">self</span>.max_pov_size &gt; MAX_POV_SIZE {
+		<span class="kw">if </span><span class="self">self</span>.max_pov_size &gt; POV_SIZE_HARD_LIMIT {
 			<span class="kw">return </span><span class="prelude-val">Err</span>(MaxPovSizeExceedHardLimit { max_pov_size: <span class="self">self</span>.max_pov_size })
 		}
 

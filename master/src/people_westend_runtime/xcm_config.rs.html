@@ -440,6 +440,9 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 <a href="#290" id="290">290</a>
 <a href="#291" id="291">291</a>
 <a href="#292" id="292">292</a>
+<a href="#293" id="293">293</a>
+<a href="#294" id="294">294</a>
+<a href="#295" id="295">295</a>
 </pre></div><pre class="rust"><code><span class="comment">// Copyright (C) Parity Technologies (UK) Ltd.
 // SPDX-License-Identifier: Apache-2.0
 
@@ -480,12 +483,13 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 <span class="kw">use </span>xcm_builder::{
 	AccountId32Aliases, AllowExplicitUnpaidExecutionFrom, AllowHrmpNotificationsFromRelayChain,
 	AllowKnownQueryResponses, AllowSubscriptionsFrom, AllowTopLevelPaidExecutionFrom,
-	DenyReserveTransferToRelayChain, DenyThenTry, DescribeTerminus, EnsureXcmOrigin,
-	FrameTransactionalProcessor, FungibleAdapter, HashedDescription, IsConcrete, ParentAsSuperuser,
-	ParentIsPreset, RelayChainAsNative, SendXcmFeeToAccount, SiblingParachainAsNative,
-	SiblingParachainConvertsVia, SignedAccountId32AsNative, SignedToAccountId32,
-	SovereignSignedViaLocation, TakeWeightCredit, TrailingSetTopicAsId, UsingComponents,
-	WeightInfoBounds, WithComputedOrigin, WithUniqueTopic, XcmFeeManagerFromComponents,
+	DenyReserveTransferToRelayChain, DenyThenTry, DescribeAllTerminal, DescribeFamily,
+	DescribeTerminus, EnsureXcmOrigin, FrameTransactionalProcessor, FungibleAdapter,
+	HashedDescription, IsConcrete, ParentAsSuperuser, ParentIsPreset, RelayChainAsNative,
+	SendXcmFeeToAccount, SiblingParachainAsNative, SiblingParachainConvertsVia,
+	SignedAccountId32AsNative, SignedToAccountId32, SovereignSignedViaLocation, TakeWeightCredit,
+	TrailingSetTopicAsId, UsingComponents, WeightInfoBounds, WithComputedOrigin, WithUniqueTopic,
+	XcmFeeManagerFromComponents,
 };
 <span class="kw">use </span>xcm_executor::XcmExecutor;
 
@@ -535,6 +539,8 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 	</span>AccountId32Aliases&lt;RelayNetwork, AccountId&gt;,
 	<span class="comment">// Here/local root location to `AccountId`.
 	</span>HashedDescription&lt;AccountId, DescribeTerminus&gt;,
+	<span class="comment">// Foreign locations alias into accounts according to a hash of their standard description.
+	</span>HashedDescription&lt;AccountId, DescribeFamily&lt;DescribeAllTerminal&gt;&gt;,
 );
 
 <span class="doccomment">/// Means for transacting the native currency on this chain.
