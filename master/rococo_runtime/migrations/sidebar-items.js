@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"struct":["CouncilPalletName","DemocracyPalletName","GetLegacyLeaseImpl","PhragmenElectionPalletId","PhragmenElectionPalletName","TechnicalCommitteePalletName","TechnicalMembershipPalletName","TipsPalletName","UnlockConfig"],"type":["Unreleased"]};

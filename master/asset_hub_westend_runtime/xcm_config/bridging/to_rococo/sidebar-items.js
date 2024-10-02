@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"struct":["AssetHubRococo","BridgeTable","EthereumEcosystem","EthereumNetwork","RocLocation","RococoEcosystem","RococoNetwork","SiblingBridgeHubWithBridgeHubRococoInstance","UniversalAliases"],"type":["RococoOrEthereumAssetFromAssetHubRococo"]};

@@ -1,0 +1,3 @@
+(function() {var implementors = {
+"polkadot_test_runtime":[["impl <a class=\"trait\" href=\"polkadot_runtime_parachains/assigner_parachains/pallet/trait.Config.html\" title=\"trait polkadot_runtime_parachains::assigner_parachains::pallet::Config\">Config</a> for <a class=\"struct\" href=\"polkadot_test_runtime/struct.Runtime.html\" title=\"struct polkadot_test_runtime::Runtime\">Runtime</a>"]]
+};if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

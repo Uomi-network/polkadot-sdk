@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["get_account_id_from_seed","get_from_seed","polkadot_chain_spec_properties","polkadot_local_testnet_config","polkadot_local_testnet_genesis"],"trait":["IdentifyVariant"],"type":["PolkadotChainSpec"]};
