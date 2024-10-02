@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1727883136410,
+  "lastUpdate": 1727885249962,
   "repoUrl": "https://github.com/paritytech/polkadot-sdk",
   "entries": {
     "availability-recovery-regression-bench": [
@@ -22343,6 +22343,50 @@ window.BENCHMARK_DATA = {
           {
             "name": "test-environment",
             "value": 0.23616004910000005,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "git@kchr.de",
+            "name": "Bastian Köcher",
+            "username": "bkchr"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "8614dc0e055d06de4a3774ac1da0a422b33f34e2",
+          "message": "Always amend to the same commit for gh-pages (#5909)",
+          "timestamp": "2024-10-02T17:37:21+02:00",
+          "tree_id": "d85d8c32d516852ae33484e6d21a6ee9f960136c",
+          "url": "https://github.com/paritytech/polkadot-sdk/commit/8614dc0e055d06de4a3774ac1da0a422b33f34e2"
+        },
+        "date": 1727885231013,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "Received from peers",
+            "value": 307203,
+            "unit": "KiB"
+          },
+          {
+            "name": "Sent to peers",
+            "value": 1.6666666666666665,
+            "unit": "KiB"
+          },
+          {
+            "name": "availability-recovery",
+            "value": 11.591309342499999,
+            "unit": "seconds"
+          },
+          {
+            "name": "test-environment",
+            "value": 0.23211496353333333,
             "unit": "seconds"
           }
         ]
