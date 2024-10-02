@@ -324,7 +324,7 @@ var srcIndex = new Map(JSON.parse('[\
 ["polkadot_node_subsystem_util",["",[["inclusion_emulator",[],["mod.rs"]],["runtime",[],["error.rs","mod.rs"]]],["availability_chunks.rs","backing_implicit_view.rs","database.rs","determine_new_blocks.rs","lib.rs","nesting_sender.rs","reputation.rs","vstaging.rs"]]],\
 ["polkadot_overseer",["",[],["dummy.rs","lib.rs","memory_stats.rs","metrics.rs"]]],\
 ["polkadot_parachain",["",[["chain_spec",[],["asset_hubs.rs","bridge_hubs.rs","collectives.rs","coretime.rs","glutton.rs","mod.rs","penpal.rs","people.rs","rococo_parachain.rs","seedling.rs","shell.rs"]]],["main.rs"]]],\
-["polkadot_parachain_lib",["",[["common",[],["aura.rs","chain_spec.rs","command.rs","mod.rs","rpc.rs","runtime.rs","spec.rs","types.rs"]],["fake_runtime_api",[],["mod.rs","utils.rs"]]],["cli.rs","command.rs","lib.rs","service.rs"]]],\
+["polkadot_parachain_lib",["",[["common",[],["aura.rs","chain_spec.rs","command.rs","mod.rs","rpc.rs","runtime.rs","spec.rs","types.rs"]],["fake_runtime_api",[],["mod.rs","utils.rs"]],["nodes",[],["aura.rs","manual_seal.rs","mod.rs","shell.rs"]]],["cli.rs","command.rs","lib.rs"]]],\
 ["polkadot_parachain_primitives",["",[],["lib.rs","primitives.rs"]]],\
 ["polkadot_prepare_worker",["",[],["prepare-worker.rs"]]],\
 ["polkadot_primitives",["",[["v8",[],["async_backing.rs","executor_params.rs","metrics.rs","mod.rs","signed.rs","slashing.rs"]],["vstaging",[],["async_backing.rs","mod.rs"]]],["lib.rs","runtime_api.rs"]]],\

@@ -455,15 +455,6 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 <a href="#305" id="305">305</a>
 <a href="#306" id="306">306</a>
 <a href="#307" id="307">307</a>
-<a href="#308" id="308">308</a>
-<a href="#309" id="309">309</a>
-<a href="#310" id="310">310</a>
-<a href="#311" id="311">311</a>
-<a href="#312" id="312">312</a>
-<a href="#313" id="313">313</a>
-<a href="#314" id="314">314</a>
-<a href="#315" id="315">315</a>
-<a href="#316" id="316">316</a>
 </pre></div><pre class="rust"><code><span class="comment">// Copyright (C) Parity Technologies (UK) Ltd.
 // This file is part of Cumulus.
 
@@ -488,13 +479,12 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 			AuraConsensusId, Consensus, Runtime, RuntimeResolver <span class="kw">as </span>RuntimeResolverT,
 			RuntimeResolver,
 		},
-		spec::DynNodeSpec,
 		types::Block,
 		NodeBlock, NodeExtraArgs,
 	},
 	fake_runtime_api,
+	nodes::{shell::ShellNode, DynNodeSpecExt},
 	runtime::BlockNumber,
-	service::ShellNode,
 };
 <span class="attr">#[cfg(feature = <span class="string">"runtime-benchmarks"</span>)]
 </span><span class="kw">use </span>cumulus_client_service::storage_proof_size::HostFunctions <span class="kw">as </span>ReclaimHostFunctions;
@@ -518,17 +508,17 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 <span class="kw">pub fn </span>new_aura_node_spec&lt;Block&gt;(
 	aura_id: AuraConsensusId,
 	extra_args: <span class="kw-2">&amp;</span>NodeExtraArgs,
-) -&gt; Box&lt;<span class="kw">dyn </span>DynNodeSpec&gt;
+) -&gt; Box&lt;<span class="kw">dyn </span>DynNodeSpecExt&gt;
 <span class="kw">where
 	</span>Block: NodeBlock,
 {
 	<span class="kw">match </span>aura_id {
-		AuraConsensusId::Sr25519 =&gt; <span class="kw">crate</span>::service::new_aura_node_spec::&lt;
+		AuraConsensusId::Sr25519 =&gt; <span class="kw">crate</span>::nodes::aura::new_aura_node_spec::&lt;
 			Block,
 			fake_runtime_api::aura_sr25519::RuntimeApi,
 			sp_consensus_aura::sr25519::AuthorityId,
 		&gt;(extra_args),
-		AuraConsensusId::Ed25519 =&gt; <span class="kw">crate</span>::service::new_aura_node_spec::&lt;
+		AuraConsensusId::Ed25519 =&gt; <span class="kw">crate</span>::nodes::aura::new_aura_node_spec::&lt;
 			Block,
 			fake_runtime_api::aura_ed25519::RuntimeApi,
 			sp_consensus_aura::ed25519::AuthorityId,
@@ -540,7 +530,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 	config: <span class="kw-2">&amp;</span>sc_service::Configuration,
 	runtime_resolver: <span class="kw-2">&amp;</span>Box&lt;<span class="kw">dyn </span>RuntimeResolverT&gt;,
 	extra_args: <span class="kw-2">&amp;</span>NodeExtraArgs,
-) -&gt; std::result::Result&lt;Box&lt;<span class="kw">dyn </span>DynNodeSpec&gt;, sc_cli::Error&gt; {
+) -&gt; std::result::Result&lt;Box&lt;<span class="kw">dyn </span>DynNodeSpecExt&gt;, sc_cli::Error&gt; {
 	<span class="kw">let </span>runtime = runtime_resolver.runtime(config.chain_spec.as_ref())<span class="question-mark">?</span>;
 
 	<span class="prelude-val">Ok</span>(<span class="kw">match </span>runtime {
@@ -680,6 +670,20 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 			<span class="kw">let </span>collator_options = cli.run.collator_options();
 
 			runner.run_node_until_exit(|config| <span class="kw">async move </span>{
+				<span class="kw">let </span>node_spec =
+					new_node_spec(<span class="kw-2">&amp;</span>config, <span class="kw-2">&amp;</span>cmd_config.runtime_resolver, <span class="kw-2">&amp;</span>cli.node_extra_args())<span class="question-mark">?</span>;
+				<span class="kw">let </span>para_id = ParaId::from(
+					Extensions::try_get(<span class="kw-2">&amp;*</span>config.chain_spec)
+						.map(|e| e.para_id)
+						.ok_or(<span class="string">"Could not find parachain extension in chain-spec."</span>)<span class="question-mark">?</span>,
+				);
+
+				<span class="kw">if let </span><span class="prelude-val">Some</span>(dev_block_time) = cli.dev_block_time {
+					<span class="kw">return </span>node_spec
+						.start_manual_seal_node(config, para_id, dev_block_time)
+						.map_err(Into::into)
+				}
+
 				<span class="comment">// If Statemint (Statemine, Westmint, Rockmine) DB exists and we're using the
 				// asset-hub chain spec, then rename the base path to the new chain ID. In the case
 				// that both file paths exist, the node will exit, as the user must decide (by
@@ -729,15 +733,9 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 					}))
 					.flatten();
 
-				<span class="kw">let </span>para_id = Extensions::try_get(<span class="kw-2">&amp;*</span>config.chain_spec)
-					.map(|e| e.para_id)
-					.ok_or(<span class="string">"Could not find parachain extension in chain-spec."</span>)<span class="question-mark">?</span>;
-
-				<span class="kw">let </span>id = ParaId::from(para_id);
-
 				<span class="kw">let </span>parachain_account =
 					AccountIdConversion::&lt;polkadot_primitives::AccountId&gt;::into_account_truncating(
-						<span class="kw-2">&amp;</span>id,
+						<span class="kw-2">&amp;</span>para_id,
 					);
 
 				<span class="kw">let </span>tokio_handle = config.tokio_handle.clone();
@@ -745,40 +743,24 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 					SubstrateCli::create_configuration(<span class="kw-2">&amp;</span>polkadot_cli, <span class="kw-2">&amp;</span>polkadot_cli, tokio_handle)
 						.map_err(|err| <span class="macro">format!</span>(<span class="string">"Relay chain argument error: {}"</span>, err))<span class="question-mark">?</span>;
 
-				<span class="macro">info!</span>(<span class="string">"🪪 Parachain id: {:?}"</span>, id);
+				<span class="macro">info!</span>(<span class="string">"🪪 Parachain id: {:?}"</span>, para_id);
 				<span class="macro">info!</span>(<span class="string">"🧾 Parachain Account: {}"</span>, parachain_account);
 				<span class="macro">info!</span>(<span class="string">"✍️ Is collating: {}"</span>, <span class="kw">if </span>config.role.is_authority() { <span class="string">"yes" </span>} <span class="kw">else </span>{ <span class="string">"no" </span>});
 
-				start_node(
-					config,
-					<span class="kw-2">&amp;</span>cmd_config.runtime_resolver,
-					polkadot_config,
-					collator_options,
-					id,
-					cli.node_extra_args(),
-					hwbench,
-				)
-				.<span class="kw">await
-			</span>})
+				node_spec
+					.start_node(
+						config,
+						polkadot_config,
+						collator_options,
+						para_id,
+						hwbench,
+						cli.node_extra_args(),
+					)
+					.<span class="kw">await
+					</span>.map_err(Into::into)
+			})
 		},
 	}
-}
-
-<span class="attr">#[sc_tracing::logging::prefix_logs_with(<span class="string">"Parachain"</span>)]
-</span><span class="kw">async fn </span>start_node(
-	config: sc_service::Configuration,
-	runtime_resolver: <span class="kw-2">&amp;</span>Box&lt;<span class="kw">dyn </span>RuntimeResolverT&gt;,
-	polkadot_config: sc_service::Configuration,
-	collator_options: cumulus_client_cli::CollatorOptions,
-	id: ParaId,
-	extra_args: NodeExtraArgs,
-	hwbench: <span class="prelude-ty">Option</span>&lt;sc_sysinfo::HwBench&gt;,
-) -&gt; <span class="prelude-ty">Result</span>&lt;sc_service::TaskManager&gt; {
-	<span class="kw">let </span>node_spec = new_node_spec(<span class="kw-2">&amp;</span>config, runtime_resolver, <span class="kw-2">&amp;</span>extra_args)<span class="question-mark">?</span>;
-	node_spec
-		.start_node(config, polkadot_config, collator_options, id, hwbench, extra_args)
-		.<span class="kw">await
-		</span>.map_err(Into::into)
 }
 </code></pre></div></section></main><script> mermaid.init({ startOnLoad: true, theme: "dark" }, "pre.language-mermaid > code");</script>
 

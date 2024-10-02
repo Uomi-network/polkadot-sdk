@@ -325,7 +325,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 // You should have received a copy of the GNU General Public License
 // along with Cumulus.  If not, see &lt;http://www.gnu.org/licenses/&gt;.
 
-</span><span class="kw">use </span><span class="kw">crate</span>::common::spec::NodeSpec;
+</span><span class="kw">use </span><span class="kw">crate</span>::common::spec::BaseNodeSpec;
 <span class="kw">use </span>cumulus_client_cli::ExportGenesisHeadCommand;
 <span class="kw">use </span>frame_benchmarking_cli::BlockCmd;
 <span class="attr">#[cfg(any(feature = <span class="string">"runtime-benchmarks"</span>))]
@@ -392,7 +392,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 
 <span class="kw">impl</span>&lt;T&gt; NodeCommandRunner <span class="kw">for </span>T
 <span class="kw">where
-	</span>T: NodeSpec,
+	</span>T: BaseNodeSpec,
 {
 	<span class="kw">fn </span>prepare_check_block_cmd(
 		<span class="self">self</span>: Box&lt;<span class="self">Self</span>&gt;,

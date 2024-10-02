@@ -543,6 +543,15 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 <a href="#393" id="393">393</a>
 <a href="#394" id="394">394</a>
 <a href="#395" id="395">395</a>
+<a href="#396" id="396">396</a>
+<a href="#397" id="397">397</a>
+<a href="#398" id="398">398</a>
+<a href="#399" id="399">399</a>
+<a href="#400" id="400">400</a>
+<a href="#401" id="401">401</a>
+<a href="#402" id="402">402</a>
+<a href="#403" id="403">403</a>
+<a href="#404" id="404">404</a>
 </pre></div><pre class="rust"><code><span class="comment">// Copyright (C) Parity Technologies (UK) Ltd.
 // This file is part of Cumulus.
 
@@ -584,6 +593,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 <span class="kw">use </span>sc_service::{Configuration, ImportQueue, PartialComponents, TaskManager};
 <span class="kw">use </span>sc_sysinfo::HwBench;
 <span class="kw">use </span>sc_telemetry::{TelemetryHandle, TelemetryWorker};
+<span class="kw">use </span>sc_tracing::tracing::Instrument;
 <span class="kw">use </span>sc_transaction_pool::FullPool;
 <span class="kw">use </span>sp_keystore::KeystorePtr;
 <span class="kw">use </span>std::{future::Future, pin::Pin, sync::Arc, time::Duration};
@@ -636,7 +646,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 	}
 }
 
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">trait </span>NodeSpec {
+<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">trait </span>BaseNodeSpec {
 	<span class="kw">type </span>Block: NodeBlock;
 
 	<span class="kw">type </span>RuntimeApi: ConstructNodeRuntimeApi&lt;
@@ -645,16 +655,6 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 	&gt;;
 
 	<span class="kw">type </span>BuildImportQueue: BuildImportQueue&lt;<span class="self">Self</span>::Block, <span class="self">Self</span>::RuntimeApi&gt;;
-
-	<span class="kw">type </span>BuildRpcExtensions: BuildRpcExtensions&lt;
-		ParachainClient&lt;<span class="self">Self</span>::Block, <span class="self">Self</span>::RuntimeApi&gt;,
-		ParachainBackend&lt;<span class="self">Self</span>::Block&gt;,
-		FullPool&lt;<span class="self">Self</span>::Block, ParachainClient&lt;<span class="self">Self</span>::Block, <span class="self">Self</span>::RuntimeApi&gt;&gt;,
-	&gt;;
-
-	<span class="kw">type </span>StartConsensus: StartConsensus&lt;<span class="self">Self</span>::Block, <span class="self">Self</span>::RuntimeApi&gt;;
-
-	<span class="kw">const </span>SYBIL_RESISTANCE: CollatorSybilResistance;
 
 	<span class="doccomment">/// Starts a `ServiceBuilder` for a full service.
 	///
@@ -732,6 +732,18 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 			other: (block_import, telemetry, telemetry_worker_handle),
 		})
 	}
+}
+
+<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">trait </span>NodeSpec: BaseNodeSpec {
+	<span class="kw">type </span>BuildRpcExtensions: BuildRpcExtensions&lt;
+		ParachainClient&lt;<span class="self">Self</span>::Block, <span class="self">Self</span>::RuntimeApi&gt;,
+		ParachainBackend&lt;<span class="self">Self</span>::Block&gt;,
+		FullPool&lt;<span class="self">Self</span>::Block, ParachainClient&lt;<span class="self">Self</span>::Block, <span class="self">Self</span>::RuntimeApi&gt;&gt;,
+	&gt;;
+
+	<span class="kw">type </span>StartConsensus: StartConsensus&lt;<span class="self">Self</span>::Block, <span class="self">Self</span>::RuntimeApi&gt;;
+
+	<span class="kw">const </span>SYBIL_RESISTANCE: CollatorSybilResistance;
 
 	<span class="doccomment">/// Start a node with the given parachain spec.
 	///
@@ -747,147 +759,153 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 	<span class="kw">where
 		</span>Net: NetworkBackend&lt;<span class="self">Self</span>::Block, Hash&gt;,
 	{
-		Box::pin(<span class="kw">async move </span>{
-			<span class="kw">let </span>parachain_config = prepare_node_config(parachain_config);
+		Box::pin(
+			<span class="kw">async move </span>{
+				<span class="kw">let </span>parachain_config = prepare_node_config(parachain_config);
 
-			<span class="kw">let </span>params = <span class="self">Self</span>::new_partial(<span class="kw-2">&amp;</span>parachain_config)<span class="question-mark">?</span>;
-			<span class="kw">let </span>(block_import, <span class="kw-2">mut </span>telemetry, telemetry_worker_handle) = params.other;
+				<span class="kw">let </span>params = <span class="self">Self</span>::new_partial(<span class="kw-2">&amp;</span>parachain_config)<span class="question-mark">?</span>;
+				<span class="kw">let </span>(block_import, <span class="kw-2">mut </span>telemetry, telemetry_worker_handle) = params.other;
 
-			<span class="kw">let </span>client = params.client.clone();
-			<span class="kw">let </span>backend = params.backend.clone();
+				<span class="kw">let </span>client = params.client.clone();
+				<span class="kw">let </span>backend = params.backend.clone();
 
-			<span class="kw">let </span><span class="kw-2">mut </span>task_manager = params.task_manager;
-			<span class="kw">let </span>(relay_chain_interface, collator_key) = build_relay_chain_interface(
-				polkadot_config,
-				<span class="kw-2">&amp;</span>parachain_config,
-				telemetry_worker_handle,
-				<span class="kw-2">&amp;mut </span>task_manager,
-				collator_options.clone(),
-				hwbench.clone(),
-			)
-			.<span class="kw">await
-			</span>.map_err(|e| sc_service::Error::Application(Box::new(e) <span class="kw">as </span>Box&lt;<span class="kw">_</span>&gt;))<span class="question-mark">?</span>;
+				<span class="kw">let </span><span class="kw-2">mut </span>task_manager = params.task_manager;
+				<span class="kw">let </span>(relay_chain_interface, collator_key) = build_relay_chain_interface(
+					polkadot_config,
+					<span class="kw-2">&amp;</span>parachain_config,
+					telemetry_worker_handle,
+					<span class="kw-2">&amp;mut </span>task_manager,
+					collator_options.clone(),
+					hwbench.clone(),
+				)
+				.<span class="kw">await
+				</span>.map_err(|e| sc_service::Error::Application(Box::new(e) <span class="kw">as </span>Box&lt;<span class="kw">_</span>&gt;))<span class="question-mark">?</span>;
 
-			<span class="kw">let </span>validator = parachain_config.role.is_authority();
-			<span class="kw">let </span>prometheus_registry = parachain_config.prometheus_registry().cloned();
-			<span class="kw">let </span>transaction_pool = params.transaction_pool.clone();
-			<span class="kw">let </span>import_queue_service = params.import_queue.service();
-			<span class="kw">let </span>net_config = FullNetworkConfiguration::&lt;<span class="kw">_</span>, <span class="kw">_</span>, Net&gt;::new(
-				<span class="kw-2">&amp;</span>parachain_config.network,
-				prometheus_registry.clone(),
-			);
+				<span class="kw">let </span>validator = parachain_config.role.is_authority();
+				<span class="kw">let </span>prometheus_registry = parachain_config.prometheus_registry().cloned();
+				<span class="kw">let </span>transaction_pool = params.transaction_pool.clone();
+				<span class="kw">let </span>import_queue_service = params.import_queue.service();
+				<span class="kw">let </span>net_config = FullNetworkConfiguration::&lt;<span class="kw">_</span>, <span class="kw">_</span>, Net&gt;::new(
+					<span class="kw-2">&amp;</span>parachain_config.network,
+					prometheus_registry.clone(),
+				);
 
-			<span class="kw">let </span>(network, system_rpc_tx, tx_handler_controller, start_network, sync_service) =
-				build_network(BuildNetworkParams {
-					parachain_config: <span class="kw-2">&amp;</span>parachain_config,
-					net_config,
+				<span class="kw">let </span>(network, system_rpc_tx, tx_handler_controller, start_network, sync_service) =
+					build_network(BuildNetworkParams {
+						parachain_config: <span class="kw-2">&amp;</span>parachain_config,
+						net_config,
+						client: client.clone(),
+						transaction_pool: transaction_pool.clone(),
+						para_id,
+						spawn_handle: task_manager.spawn_handle(),
+						relay_chain_interface: relay_chain_interface.clone(),
+						import_queue: params.import_queue,
+						sybil_resistance_level: <span class="self">Self</span>::SYBIL_RESISTANCE,
+					})
+					.<span class="kw">await</span><span class="question-mark">?</span>;
+
+				<span class="kw">let </span>rpc_builder = {
+					<span class="kw">let </span>client = client.clone();
+					<span class="kw">let </span>transaction_pool = transaction_pool.clone();
+					<span class="kw">let </span>backend_for_rpc = backend.clone();
+
+					Box::new(<span class="kw">move </span>|<span class="kw">_</span>| {
+						<span class="self">Self</span>::BuildRpcExtensions::build_rpc_extensions(
+							client.clone(),
+							backend_for_rpc.clone(),
+							transaction_pool.clone(),
+						)
+					})
+				};
+
+				sc_service::spawn_tasks(sc_service::SpawnTasksParams {
+					rpc_builder,
 					client: client.clone(),
 					transaction_pool: transaction_pool.clone(),
+					task_manager: <span class="kw-2">&amp;mut </span>task_manager,
+					config: parachain_config,
+					keystore: params.keystore_container.keystore(),
+					backend: backend.clone(),
+					network: network.clone(),
+					sync_service: sync_service.clone(),
+					system_rpc_tx,
+					tx_handler_controller,
+					telemetry: telemetry.as_mut(),
+				})<span class="question-mark">?</span>;
+
+				<span class="kw">if let </span><span class="prelude-val">Some</span>(hwbench) = hwbench {
+					sc_sysinfo::print_hwbench(<span class="kw-2">&amp;</span>hwbench);
+					<span class="kw">if </span>validator {
+						warn_if_slow_hardware(<span class="kw-2">&amp;</span>hwbench);
+					}
+
+					<span class="kw">if let </span><span class="prelude-val">Some</span>(<span class="kw-2">ref mut </span>telemetry) = telemetry {
+						<span class="kw">let </span>telemetry_handle = telemetry.handle();
+						task_manager.spawn_handle().spawn(
+							<span class="string">"telemetry_hwbench"</span>,
+							<span class="prelude-val">None</span>,
+							sc_sysinfo::initialize_hwbench_telemetry(telemetry_handle, hwbench),
+						);
+					}
+				}
+
+				<span class="kw">let </span>announce_block = {
+					<span class="kw">let </span>sync_service = sync_service.clone();
+					Arc::new(<span class="kw">move </span>|hash, data| sync_service.announce_block(hash, data))
+				};
+
+				<span class="kw">let </span>relay_chain_slot_duration = Duration::from_secs(<span class="number">6</span>);
+
+				<span class="kw">let </span>overseer_handle = relay_chain_interface
+					.overseer_handle()
+					.map_err(|e| sc_service::Error::Application(Box::new(e)))<span class="question-mark">?</span>;
+
+				start_relay_chain_tasks(StartRelayChainTasksParams {
+					client: client.clone(),
+					announce_block: announce_block.clone(),
 					para_id,
-					spawn_handle: task_manager.spawn_handle(),
 					relay_chain_interface: relay_chain_interface.clone(),
-					import_queue: params.import_queue,
-					sybil_resistance_level: <span class="self">Self</span>::SYBIL_RESISTANCE,
-				})
-				.<span class="kw">await</span><span class="question-mark">?</span>;
-
-			<span class="kw">let </span>rpc_builder = {
-				<span class="kw">let </span>client = client.clone();
-				<span class="kw">let </span>transaction_pool = transaction_pool.clone();
-				<span class="kw">let </span>backend_for_rpc = backend.clone();
-
-				Box::new(<span class="kw">move </span>|<span class="kw">_</span>| {
-					<span class="self">Self</span>::BuildRpcExtensions::build_rpc_extensions(
-						client.clone(),
-						backend_for_rpc.clone(),
-						transaction_pool.clone(),
-					)
-				})
-			};
-
-			sc_service::spawn_tasks(sc_service::SpawnTasksParams {
-				rpc_builder,
-				client: client.clone(),
-				transaction_pool: transaction_pool.clone(),
-				task_manager: <span class="kw-2">&amp;mut </span>task_manager,
-				config: parachain_config,
-				keystore: params.keystore_container.keystore(),
-				backend: backend.clone(),
-				network: network.clone(),
-				sync_service: sync_service.clone(),
-				system_rpc_tx,
-				tx_handler_controller,
-				telemetry: telemetry.as_mut(),
-			})<span class="question-mark">?</span>;
-
-			<span class="kw">if let </span><span class="prelude-val">Some</span>(hwbench) = hwbench {
-				sc_sysinfo::print_hwbench(<span class="kw-2">&amp;</span>hwbench);
-				<span class="kw">if </span>validator {
-					warn_if_slow_hardware(<span class="kw-2">&amp;</span>hwbench);
-				}
-
-				<span class="kw">if let </span><span class="prelude-val">Some</span>(<span class="kw-2">ref mut </span>telemetry) = telemetry {
-					<span class="kw">let </span>telemetry_handle = telemetry.handle();
-					task_manager.spawn_handle().spawn(
-						<span class="string">"telemetry_hwbench"</span>,
-						<span class="prelude-val">None</span>,
-						sc_sysinfo::initialize_hwbench_telemetry(telemetry_handle, hwbench),
-					);
-				}
-			}
-
-			<span class="kw">let </span>announce_block = {
-				<span class="kw">let </span>sync_service = sync_service.clone();
-				Arc::new(<span class="kw">move </span>|hash, data| sync_service.announce_block(hash, data))
-			};
-
-			<span class="kw">let </span>relay_chain_slot_duration = Duration::from_secs(<span class="number">6</span>);
-
-			<span class="kw">let </span>overseer_handle = relay_chain_interface
-				.overseer_handle()
-				.map_err(|e| sc_service::Error::Application(Box::new(e)))<span class="question-mark">?</span>;
-
-			start_relay_chain_tasks(StartRelayChainTasksParams {
-				client: client.clone(),
-				announce_block: announce_block.clone(),
-				para_id,
-				relay_chain_interface: relay_chain_interface.clone(),
-				task_manager: <span class="kw-2">&amp;mut </span>task_manager,
-				da_recovery_profile: <span class="kw">if </span>validator {
-					DARecoveryProfile::Collator
-				} <span class="kw">else </span>{
-					DARecoveryProfile::FullNode
-				},
-				import_queue: import_queue_service,
-				relay_chain_slot_duration,
-				recovery_handle: Box::new(overseer_handle.clone()),
-				sync_service,
-			})<span class="question-mark">?</span>;
-
-			<span class="kw">if </span>validator {
-				<span class="self">Self</span>::StartConsensus::start_consensus(
-					client.clone(),
-					block_import,
-					prometheus_registry.as_ref(),
-					telemetry.as_ref().map(|t| t.handle()),
-					<span class="kw-2">&amp;</span>task_manager,
-					relay_chain_interface.clone(),
-					transaction_pool,
-					params.keystore_container.keystore(),
+					task_manager: <span class="kw-2">&amp;mut </span>task_manager,
+					da_recovery_profile: <span class="kw">if </span>validator {
+						DARecoveryProfile::Collator
+					} <span class="kw">else </span>{
+						DARecoveryProfile::FullNode
+					},
+					import_queue: import_queue_service,
 					relay_chain_slot_duration,
-					para_id,
-					collator_key.expect(<span class="string">"Command line arguments do not allow this. qed"</span>),
-					overseer_handle,
-					announce_block,
-					backend.clone(),
-					node_extra_args,
-				)<span class="question-mark">?</span>;
+					recovery_handle: Box::new(overseer_handle.clone()),
+					sync_service,
+				})<span class="question-mark">?</span>;
+
+				<span class="kw">if </span>validator {
+					<span class="self">Self</span>::StartConsensus::start_consensus(
+						client.clone(),
+						block_import,
+						prometheus_registry.as_ref(),
+						telemetry.as_ref().map(|t| t.handle()),
+						<span class="kw-2">&amp;</span>task_manager,
+						relay_chain_interface.clone(),
+						transaction_pool,
+						params.keystore_container.keystore(),
+						relay_chain_slot_duration,
+						para_id,
+						collator_key.expect(<span class="string">"Command line arguments do not allow this. qed"</span>),
+						overseer_handle,
+						announce_block,
+						backend.clone(),
+						node_extra_args,
+					)<span class="question-mark">?</span>;
+				}
+
+				start_network.start_network();
+
+				<span class="prelude-val">Ok</span>(task_manager)
 			}
-
-			start_network.start_network();
-
-			<span class="prelude-val">Ok</span>(task_manager)
-		})
+			.instrument(<span class="macro">sc_tracing::tracing::info_span!</span>(
+				sc_tracing::logging::PREFIX_LOG_SPAN,
+				name = <span class="string">"Parachain"</span>,
+			)),
+		)
 	}
 }
 
