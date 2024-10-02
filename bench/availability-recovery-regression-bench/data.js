@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1727859138206,
+  "lastUpdate": 1727883136410,
   "repoUrl": "https://github.com/paritytech/polkadot-sdk",
   "entries": {
     "availability-recovery-regression-bench": [
@@ -22299,6 +22299,50 @@ window.BENCHMARK_DATA = {
           {
             "name": "test-environment",
             "value": 0.23397594966666663,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "serban@parity.io",
+            "name": "Serban Iorga",
+            "username": "serban300"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": false,
+          "id": "3cf83ca8e2d4a2828a8eeb0836556a092c0b7f59",
+          "message": "`polkadot-parachain`: add manual seal support (#5586)\n\nResolves https://github.com/paritytech/polkadot-sdk/issues/5026\n\nThis PR adds support for starting a dev node with manual seal consensus.\nThis can be done by using the `--dev-block-time` argument . For example:\n```\npolkadot-parachain --chain asset-hub-rococo-dev --dev-block-time 5000 --tmp\n```",
+          "timestamp": "2024-10-02T13:13:59Z",
+          "tree_id": "acb152f2bf9ab6c0d095c30050131c2625b67384",
+          "url": "https://github.com/paritytech/polkadot-sdk/commit/3cf83ca8e2d4a2828a8eeb0836556a092c0b7f59"
+        },
+        "date": 1727883117500,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "Sent to peers",
+            "value": 1.6666666666666665,
+            "unit": "KiB"
+          },
+          {
+            "name": "Received from peers",
+            "value": 307203,
+            "unit": "KiB"
+          },
+          {
+            "name": "availability-recovery",
+            "value": 11.636701991766667,
+            "unit": "seconds"
+          },
+          {
+            "name": "test-environment",
+            "value": 0.23616004910000005,
             "unit": "seconds"
           }
         ]
