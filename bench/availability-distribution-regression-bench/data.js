@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1727859169867,
+  "lastUpdate": 1727883162224,
   "repoUrl": "https://github.com/paritytech/polkadot-sdk",
   "entries": {
     "availability-distribution-regression-bench": [
@@ -27943,6 +27943,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "availability-store",
             "value": 0.18217238815999998,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "serban@parity.io",
+            "name": "Serban Iorga",
+            "username": "serban300"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": false,
+          "id": "3cf83ca8e2d4a2828a8eeb0836556a092c0b7f59",
+          "message": "`polkadot-parachain`: add manual seal support (#5586)\n\nResolves https://github.com/paritytech/polkadot-sdk/issues/5026\n\nThis PR adds support for starting a dev node with manual seal consensus.\nThis can be done by using the `--dev-block-time` argument . For example:\n```\npolkadot-parachain --chain asset-hub-rococo-dev --dev-block-time 5000 --tmp\n```",
+          "timestamp": "2024-10-02T13:13:59Z",
+          "tree_id": "acb152f2bf9ab6c0d095c30050131c2625b67384",
+          "url": "https://github.com/paritytech/polkadot-sdk/commit/3cf83ca8e2d4a2828a8eeb0836556a092c0b7f59"
+        },
+        "date": 1727883143058,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "Received from peers",
+            "value": 433.3333333333332,
+            "unit": "KiB"
+          },
+          {
+            "name": "Sent to peers",
+            "value": 18481.666666666653,
+            "unit": "KiB"
+          },
+          {
+            "name": "availability-store",
+            "value": 0.17806465361333332,
+            "unit": "seconds"
+          },
+          {
+            "name": "bitfield-distribution",
+            "value": 0.02402119819999999,
+            "unit": "seconds"
+          },
+          {
+            "name": "availability-distribution",
+            "value": 0.016262467026666668,
+            "unit": "seconds"
+          },
+          {
+            "name": "test-environment",
+            "value": 0.008845720606666744,
             "unit": "seconds"
           }
         ]
