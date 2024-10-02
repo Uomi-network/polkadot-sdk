@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1727859201413,
+  "lastUpdate": 1727883187468,
   "repoUrl": "https://github.com/paritytech/polkadot-sdk",
   "entries": {
     "approval-voting-regression-bench": [
@@ -21040,6 +21040,105 @@ window.BENCHMARK_DATA = {
           {
             "name": "approval-voting",
             "value": 0.00001831491,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "serban@parity.io",
+            "name": "Serban Iorga",
+            "username": "serban300"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": false,
+          "id": "3cf83ca8e2d4a2828a8eeb0836556a092c0b7f59",
+          "message": "`polkadot-parachain`: add manual seal support (#5586)\n\nResolves https://github.com/paritytech/polkadot-sdk/issues/5026\n\nThis PR adds support for starting a dev node with manual seal consensus.\nThis can be done by using the `--dev-block-time` argument . For example:\n```\npolkadot-parachain --chain asset-hub-rococo-dev --dev-block-time 5000 --tmp\n```",
+          "timestamp": "2024-10-02T13:13:59Z",
+          "tree_id": "acb152f2bf9ab6c0d095c30050131c2625b67384",
+          "url": "https://github.com/paritytech/polkadot-sdk/commit/3cf83ca8e2d4a2828a8eeb0836556a092c0b7f59"
+        },
+        "date": 1727883168625,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "Received from peers",
+            "value": 52939.7,
+            "unit": "KiB"
+          },
+          {
+            "name": "Sent to peers",
+            "value": 63633.770000000004,
+            "unit": "KiB"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-db",
+            "value": 2.1090733044599945,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-distribution",
+            "value": 0.00001852738,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-2",
+            "value": 2.4111779825199995,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-gather-signatures",
+            "value": 0.006039821170000003,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting/test-environment",
+            "value": 0.000018295109999999998,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-subsystem",
+            "value": 0.48850636695999594,
+            "unit": "seconds"
+          },
+          {
+            "name": "test-environment",
+            "value": 3.3618882618121395,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-distribution/test-environment",
+            "value": 0.00001852738,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-1",
+            "value": 2.36896069999,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-3",
+            "value": 2.3675957333200017,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting",
+            "value": 0.000018295109999999998,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-0",
+            "value": 2.382981797840001,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel",
+            "value": 12.134335706259993,
             "unit": "seconds"
           }
         ]
