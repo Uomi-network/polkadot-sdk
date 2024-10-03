@@ -9,7 +9,5 @@
 "people_rococo_runtime":[],
 "people_westend_runtime":[],
 "polkadot_sdk_frame":[],
-"rococo_parachain_runtime":[],
-"seedling_runtime":[],
-"shell_runtime":[]
+"rococo_parachain_runtime":[]
 };if (window.register_type_impls) {window.register_type_impls(type_impls);} else {window.pending_type_impls = type_impls;}})()

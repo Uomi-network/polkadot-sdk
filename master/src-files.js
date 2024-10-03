@@ -323,8 +323,8 @@ var srcIndex = new Map(JSON.parse('[\
 ["polkadot_node_subsystem_types",["",[["messages",[],["network_bridge_event.rs"]]],["errors.rs","lib.rs","messages.rs","runtime_client.rs"]]],\
 ["polkadot_node_subsystem_util",["",[["inclusion_emulator",[],["mod.rs"]],["runtime",[],["error.rs","mod.rs"]]],["availability_chunks.rs","backing_implicit_view.rs","database.rs","determine_new_blocks.rs","lib.rs","nesting_sender.rs","reputation.rs","vstaging.rs"]]],\
 ["polkadot_overseer",["",[],["dummy.rs","lib.rs","memory_stats.rs","metrics.rs"]]],\
-["polkadot_parachain",["",[["chain_spec",[],["asset_hubs.rs","bridge_hubs.rs","collectives.rs","coretime.rs","glutton.rs","mod.rs","penpal.rs","people.rs","rococo_parachain.rs","seedling.rs","shell.rs"]]],["main.rs"]]],\
-["polkadot_parachain_lib",["",[["common",[],["aura.rs","chain_spec.rs","command.rs","mod.rs","rpc.rs","runtime.rs","spec.rs","types.rs"]],["fake_runtime_api",[],["mod.rs","utils.rs"]],["nodes",[],["aura.rs","manual_seal.rs","mod.rs","shell.rs"]]],["cli.rs","command.rs","lib.rs"]]],\
+["polkadot_parachain",["",[["chain_spec",[],["asset_hubs.rs","bridge_hubs.rs","collectives.rs","coretime.rs","glutton.rs","mod.rs","penpal.rs","people.rs","rococo_parachain.rs"]]],["main.rs"]]],\
+["polkadot_parachain_lib",["",[["common",[],["aura.rs","chain_spec.rs","command.rs","mod.rs","rpc.rs","runtime.rs","spec.rs","types.rs"]],["fake_runtime_api",[],["mod.rs","utils.rs"]],["nodes",[],["aura.rs","manual_seal.rs","mod.rs"]]],["cli.rs","command.rs","lib.rs"]]],\
 ["polkadot_parachain_primitives",["",[],["lib.rs","primitives.rs"]]],\
 ["polkadot_prepare_worker",["",[],["prepare-worker.rs"]]],\
 ["polkadot_primitives",["",[["v8",[],["async_backing.rs","executor_params.rs","metrics.rs","mod.rs","signed.rs","slashing.rs"]],["vstaging",[],["async_backing.rs","mod.rs"]]],["lib.rs","runtime_api.rs"]]],\
@@ -414,8 +414,6 @@ var srcIndex = new Map(JSON.parse('[\
 ["sc_transaction_pool",["",[["graph",[],["base_pool.rs","future.rs","listener.rs","mod.rs","pool.rs","ready.rs","rotator.rs","tracked_map.rs","validated_pool.rs","watcher.rs"]]],["api.rs","enactment_state.rs","error.rs","lib.rs","metrics.rs","revalidation.rs"]]],\
 ["sc_transaction_pool_api",["",[],["error.rs","lib.rs"]]],\
 ["sc_utils",["",[["notification",[],["registry.rs"]]],["id_sequence.rs","lib.rs","metrics.rs","mpsc.rs","notification.rs","pubsub.rs","status_sinks.rs"]]],\
-["seedling_runtime",["",[],["lib.rs"]]],\
-["shell_runtime",["",[],["lib.rs","xcm_config.rs"]]],\
 ["slot_range_helper",["",[],["lib.rs"]]],\
 ["snowbridge_beacon_primitives",["",[],["bits.rs","bls.rs","config.rs","lib.rs","merkle_proof.rs","receipt.rs","serde_utils.rs","ssz.rs","types.rs","updates.rs"]]],\
 ["snowbridge_core",["",[],["inbound.rs","lib.rs","location.rs","operating_mode.rs","outbound.rs","pricing.rs","ringbuffer.rs"]]],\

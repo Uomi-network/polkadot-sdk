@@ -230,7 +230,7 @@ crate is being built with the standard library, and is built for native. Otherwi
 for <code>no_std</code>.</p>
 <p>This can be summarized in <code>#![cfg_attr(not(feature = "std"), no_std)]</code>, which you can often find
 in any Substrate-based runtime.</p>
-<p>Substrate-based runtimes use [<code>substrate_wasm_builder</code>] in their <code>build.rs</code> to automatically
+<p>Substrate-based runtimes use <a href="../../../substrate_wasm_builder/index.html" title="mod substrate_wasm_builder"><code>substrate_wasm_builder</code></a> in their <code>build.rs</code> to automatically
 build their WASM files as a part of normal build command (e.g. <code>cargo build</code>). Once built, the
 wasm file is placed in <code>./target/{debug|release}/wbuild/{runtime_name}/{runtime_name}.wasm</code>.</p>
 <p>In order to ensure that the WASM build is <strong>deterministic</strong>, the <a href="https://github.com/paritytech/srtool">Substrate Runtime Toolbox (srtool)</a> can be used.</p>
@@ -250,7 +250,7 @@ node. Other projects typically contain a <code>build-spec</code> subcommand that
 <li><a href="https://github.com/paritytech/polkadot-sdk/tree/master/substrate/bin/node"><code>node_template</code></a>:
 a template node that contains a minimal set of features and can act as a starting point of a
 project.</li>
-<li>[<code>subkey</code>]: Substrate’s key management utility.</li>
+<li><a href="../../../subkey/index.html" title="mod subkey"><code>subkey</code></a>: Substrate’s key management utility.</li>
 </ul>
 <h4 id="anatomy-of-a-binary-crate"><a class="doc-anchor" href="#anatomy-of-a-binary-crate">§</a>Anatomy of a Binary Crate</h4>
 <p>From the above, <a href="../../../staging_node_cli/index.html" title="mod staging_node_cli"><code>node_cli</code></a>/[<code>kitchensink_runtime</code>] and <code>node-template</code> are essentially
