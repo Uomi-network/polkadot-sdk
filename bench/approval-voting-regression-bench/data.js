@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1727983692632,
+  "lastUpdate": 1727993119975,
   "repoUrl": "https://github.com/paritytech/polkadot-sdk",
   "entries": {
     "approval-voting-regression-bench": [
@@ -21436,6 +21436,105 @@ window.BENCHMARK_DATA = {
           {
             "name": "test-environment",
             "value": 3.3651790262323202,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "bkontur@gmail.com",
+            "name": "Branislav Kontur",
+            "username": "bkontur"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "a995caf789a10b5be8a740bcf5c203d0e2154486",
+          "message": "Simplify bridges relayer cli configuration (#5912)\n\nThis PR removes the requirement to set the `LaneId` in the relayer CLI\nconfiguration where it was not really necessary.\n\n---------\n\nCo-authored-by: command-bot <>",
+          "timestamp": "2024-10-03T20:52:22Z",
+          "tree_id": "c7e3859893688f752ff6d4dd73651facb8271a2e",
+          "url": "https://github.com/paritytech/polkadot-sdk/commit/a995caf789a10b5be8a740bcf5c203d0e2154486"
+        },
+        "date": 1727993101315,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "Sent to peers",
+            "value": 63635.04,
+            "unit": "KiB"
+          },
+          {
+            "name": "Received from peers",
+            "value": 52939.59999999999,
+            "unit": "KiB"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-2",
+            "value": 2.450759251330001,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-subsystem",
+            "value": 0.49289523738001445,
+            "unit": "seconds"
+          },
+          {
+            "name": "test-environment",
+            "value": 3.3998301030722806,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-distribution",
+            "value": 0.000019513099999999998,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting",
+            "value": 0.000017560999999999997,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel",
+            "value": 12.325818338770018,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-0",
+            "value": 2.4243452141699975,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-distribution/test-environment",
+            "value": 0.000019513099999999998,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-1",
+            "value": 2.4039234897499995,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-db",
+            "value": 2.136172206010005,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-3",
+            "value": 2.4115630684299996,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting/test-environment",
+            "value": 0.000017560999999999997,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-gather-signatures",
+            "value": 0.006159871699999997,
             "unit": "seconds"
           }
         ]
