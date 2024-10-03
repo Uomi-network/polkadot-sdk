@@ -1542,72 +1542,6 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 <a href="#1392" id="1392">1392</a>
 <a href="#1393" id="1393">1393</a>
 <a href="#1394" id="1394">1394</a>
-<a href="#1395" id="1395">1395</a>
-<a href="#1396" id="1396">1396</a>
-<a href="#1397" id="1397">1397</a>
-<a href="#1398" id="1398">1398</a>
-<a href="#1399" id="1399">1399</a>
-<a href="#1400" id="1400">1400</a>
-<a href="#1401" id="1401">1401</a>
-<a href="#1402" id="1402">1402</a>
-<a href="#1403" id="1403">1403</a>
-<a href="#1404" id="1404">1404</a>
-<a href="#1405" id="1405">1405</a>
-<a href="#1406" id="1406">1406</a>
-<a href="#1407" id="1407">1407</a>
-<a href="#1408" id="1408">1408</a>
-<a href="#1409" id="1409">1409</a>
-<a href="#1410" id="1410">1410</a>
-<a href="#1411" id="1411">1411</a>
-<a href="#1412" id="1412">1412</a>
-<a href="#1413" id="1413">1413</a>
-<a href="#1414" id="1414">1414</a>
-<a href="#1415" id="1415">1415</a>
-<a href="#1416" id="1416">1416</a>
-<a href="#1417" id="1417">1417</a>
-<a href="#1418" id="1418">1418</a>
-<a href="#1419" id="1419">1419</a>
-<a href="#1420" id="1420">1420</a>
-<a href="#1421" id="1421">1421</a>
-<a href="#1422" id="1422">1422</a>
-<a href="#1423" id="1423">1423</a>
-<a href="#1424" id="1424">1424</a>
-<a href="#1425" id="1425">1425</a>
-<a href="#1426" id="1426">1426</a>
-<a href="#1427" id="1427">1427</a>
-<a href="#1428" id="1428">1428</a>
-<a href="#1429" id="1429">1429</a>
-<a href="#1430" id="1430">1430</a>
-<a href="#1431" id="1431">1431</a>
-<a href="#1432" id="1432">1432</a>
-<a href="#1433" id="1433">1433</a>
-<a href="#1434" id="1434">1434</a>
-<a href="#1435" id="1435">1435</a>
-<a href="#1436" id="1436">1436</a>
-<a href="#1437" id="1437">1437</a>
-<a href="#1438" id="1438">1438</a>
-<a href="#1439" id="1439">1439</a>
-<a href="#1440" id="1440">1440</a>
-<a href="#1441" id="1441">1441</a>
-<a href="#1442" id="1442">1442</a>
-<a href="#1443" id="1443">1443</a>
-<a href="#1444" id="1444">1444</a>
-<a href="#1445" id="1445">1445</a>
-<a href="#1446" id="1446">1446</a>
-<a href="#1447" id="1447">1447</a>
-<a href="#1448" id="1448">1448</a>
-<a href="#1449" id="1449">1449</a>
-<a href="#1450" id="1450">1450</a>
-<a href="#1451" id="1451">1451</a>
-<a href="#1452" id="1452">1452</a>
-<a href="#1453" id="1453">1453</a>
-<a href="#1454" id="1454">1454</a>
-<a href="#1455" id="1455">1455</a>
-<a href="#1456" id="1456">1456</a>
-<a href="#1457" id="1457">1457</a>
-<a href="#1458" id="1458">1458</a>
-<a href="#1459" id="1459">1459</a>
-<a href="#1460" id="1460">1460</a>
 </pre></div><pre class="rust"><code><span class="comment">// This file is part of Substrate.
 
 // Copyright (C) Parity Technologies (UK) Ltd.
@@ -1629,18 +1563,25 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 </span><span class="kw">use </span>futures::channel::oneshot;
 <span class="kw">use </span>parking_lot::Mutex;
 <span class="kw">use </span>sc_client_api::Backend;
-<span class="kw">use </span>sc_utils::mpsc::{tracing_unbounded, TracingUnboundedReceiver, TracingUnboundedSender};
 <span class="kw">use </span>sp_runtime::traits::Block <span class="kw">as </span>BlockT;
 <span class="kw">use </span>std::{
 	collections::{hash_map::Entry, HashMap, HashSet},
-	sync::{atomic::AtomicBool, Arc},
+	sync::Arc,
 	time::{Duration, Instant},
 };
 
-<span class="kw">use </span><span class="kw">crate</span>::chain_head::{subscription::SubscriptionManagementError, FollowEvent};
+<span class="kw">use </span><span class="kw">crate</span>::chain_head::{
+	subscription::SubscriptionManagementError, FollowEventReceiver, FollowEventSender,
+};
 
-<span class="doccomment">/// The queue size after which the `sc_utils::mpsc::tracing_unbounded` would produce warnings.
-</span><span class="kw">const </span>QUEUE_SIZE_WARNING: usize = <span class="number">512</span>;
+<span class="kw">type </span>NotifyOnDrop = tokio::sync::mpsc::Receiver&lt;()&gt;;
+<span class="kw">type </span>SharedOperations = Arc&lt;Mutex&lt;HashMap&lt;String, (NotifyOnDrop, StopHandle)&gt;&gt;&gt;;
+
+<span class="doccomment">/// The buffer capacity for each subscription
+///
+/// Beware of that the JSON-RPC server has a global
+/// buffer per connection and this a extra buffer.
+</span><span class="kw">const </span>BUF_CAP_PER_SUBSCRIPTION: usize = <span class="number">16</span>;
 
 <span class="doccomment">/// The state machine of a block of a single subscription ID.
 ///
@@ -1748,7 +1689,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 			.try_acquire_many_owned(num_ops.try_into().ok()<span class="question-mark">?</span>)
 			.ok()<span class="question-mark">?</span>;
 
-		<span class="prelude-val">Some</span>(PermitOperations { num_ops, _permit: permits })
+		<span class="prelude-val">Some</span>(permits)
 	}
 }
 
@@ -1758,79 +1699,36 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 /// to guarantee the RPC server can execute the number of operations.
 ///
 /// The number of reserved items are given back to the [`LimitOperations`] on drop.
-</span><span class="kw">struct </span>PermitOperations {
-	<span class="doccomment">/// The number of operations permitted (reserved).
-	</span>num_ops: usize,
-	<span class="doccomment">/// The permit for these operations.
-	</span>_permit: tokio::sync::OwnedSemaphorePermit,
-}
+</span><span class="kw">type </span>PermitOperations = tokio::sync::OwnedSemaphorePermit;
 
-<span class="doccomment">/// The state of one operation.
-///
-/// This is directly exposed to users via `chain_head_unstable_continue` and
-/// `chain_head_unstable_stop_operation`.
+<span class="doccomment">/// Stop handle for the operation.
 </span><span class="attr">#[derive(Clone)]
-</span><span class="kw">pub struct </span>OperationState {
-	<span class="doccomment">/// The shared operation state that holds information about the
-	/// `waitingForContinue` event and cancellation.
-	</span>shared_state: Arc&lt;SharedOperationState&gt;,
-	<span class="doccomment">/// Send notifications when the user calls `chainHead_continue` method.
-	</span>send_continue: tokio::sync::mpsc::Sender&lt;()&gt;,
-}
+</span><span class="kw">pub struct </span>StopHandle(tokio::sync::mpsc::Sender&lt;()&gt;);
 
-<span class="kw">impl </span>OperationState {
-	<span class="doccomment">/// Returns true if `chainHead_continue` is called after the
-	/// `waitingForContinue` event was emitted for the associated
-	/// operation ID.
-	</span><span class="kw">pub fn </span>submit_continue(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
-		<span class="comment">// `waitingForContinue` not generated.
-		</span><span class="kw">if </span>!<span class="self">self</span>.shared_state.requested_continue.load(std::sync::atomic::Ordering::Acquire) {
-			<span class="kw">return </span><span class="bool-val">false
-		</span>}
-
-		<span class="comment">// Has enough capacity for 1 message.
-		// Can fail if the `stop_operation` propagated the stop first.
-		</span><span class="self">self</span>.send_continue.try_send(()).is_ok()
+<span class="kw">impl </span>StopHandle {
+	<span class="kw">pub async fn </span>stopped(<span class="kw-2">&amp;</span><span class="self">self</span>) {
+		<span class="self">self</span>.<span class="number">0</span>.closed().<span class="kw">await</span>;
 	}
 
-	<span class="doccomment">/// Stops the operation if `waitingForContinue` event was emitted for the associated
-	/// operation ID.
-	///
-	/// Returns nothing in accordance with `chainHead_v1_stopOperation`.
-	</span><span class="kw">pub fn </span>stop_operation(<span class="kw-2">&amp;</span><span class="self">self</span>) {
-		<span class="comment">// `waitingForContinue` not generated.
-		</span><span class="kw">if </span>!<span class="self">self</span>.shared_state.requested_continue.load(std::sync::atomic::Ordering::Acquire) {
-			<span class="kw">return
-		</span>}
-
-		<span class="self">self</span>.shared_state
-			.operation_stopped
-			.store(<span class="bool-val">true</span>, std::sync::atomic::Ordering::Release);
-
-		<span class="comment">// Send might not have enough capacity if `submit_continue` was sent first.
-		// However, the `operation_stopped` boolean was set.
-		</span><span class="kw">let _ </span>= <span class="self">self</span>.send_continue.try_send(());
+	<span class="kw">pub fn </span>is_stopped(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+		<span class="self">self</span>.<span class="number">0</span>.is_closed()
 	}
 }
 
 <span class="doccomment">/// The shared operation state between the backend [`RegisteredOperation`] and frontend
 /// [`RegisteredOperation`].
-</span><span class="kw">struct </span>SharedOperationState {
-	<span class="doccomment">/// True if the `chainHead` generated `waitingForContinue` event.
-	</span>requested_continue: AtomicBool,
-	<span class="doccomment">/// True if the operation was cancelled by the user.
-	</span>operation_stopped: AtomicBool,
+</span><span class="attr">#[derive(Clone)]
+</span><span class="kw">pub struct </span>OperationState {
+	stop: StopHandle,
+	operations: SharedOperations,
+	operation_id: String,
 }
 
-<span class="kw">impl </span>SharedOperationState {
-	<span class="doccomment">/// Constructs a new [`SharedOperationState`].
-	///
-	/// This is efficiently cloned under a single heap allocation.
-	</span><span class="kw">fn </span>new() -&gt; Arc&lt;<span class="self">Self</span>&gt; {
-		Arc::new(SharedOperationState {
-			requested_continue: AtomicBool::new(<span class="bool-val">false</span>),
-			operation_stopped: AtomicBool::new(<span class="bool-val">false</span>),
-		})
+<span class="kw">impl </span>OperationState {
+	<span class="kw">pub fn </span>stop(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
+		<span class="kw">if </span>!<span class="self">self</span>.stop.is_stopped() {
+			<span class="self">self</span>.operations.lock().remove(<span class="kw-2">&amp;</span><span class="self">self</span>.operation_id);
+		}
 	}
 }
 
@@ -1838,59 +1736,31 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 ///
 /// This is used internally by the `chainHead` methods.
 </span><span class="kw">pub struct </span>RegisteredOperation {
-	<span class="doccomment">/// The shared operation state that holds information about the
-	/// `waitingForContinue` event and cancellation.
-	</span>shared_state: Arc&lt;SharedOperationState&gt;,
-	<span class="doccomment">/// Receive notifications when the user calls `chainHead_continue` method.
-	</span>recv_continue: tokio::sync::mpsc::Receiver&lt;()&gt;,
+	<span class="doccomment">/// Stop handle for the operation.
+	</span>stop_handle: StopHandle,
+	<span class="doccomment">/// Track the operations ID of this subscription.
+	</span>operations: SharedOperations,
 	<span class="doccomment">/// The operation ID of the request.
 	</span>operation_id: String,
-	<span class="doccomment">/// Track the operations ID of this subscription.
-	</span>operations: Arc&lt;Mutex&lt;HashMap&lt;String, OperationState&gt;&gt;&gt;,
 	<span class="doccomment">/// Permit a number of items to be executed by this operation.
-	</span>permit: PermitOperations,
+	</span>_permit: PermitOperations,
 }
 
 <span class="kw">impl </span>RegisteredOperation {
-	<span class="doccomment">/// Wait until the user calls `chainHead_continue` or the operation
-	/// is cancelled via `chainHead_stopOperation`.
-	</span><span class="kw">pub async fn </span>wait_for_continue(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
-		<span class="self">self</span>.shared_state
-			.requested_continue
-			.store(<span class="bool-val">true</span>, std::sync::atomic::Ordering::Release);
-
-		<span class="comment">// The sender part of this channel is around for as long as this object exists,
-		// because it is stored in the `OperationState` of the `operations` field.
-		// The sender part is removed from tracking when this object is dropped.
-		</span><span class="kw">let _ </span>= <span class="self">self</span>.recv_continue.recv().<span class="kw">await</span>;
-
-		<span class="self">self</span>.shared_state
-			.requested_continue
-			.store(<span class="bool-val">false</span>, std::sync::atomic::Ordering::Release);
-	}
-
-	<span class="doccomment">/// Returns true if the current operation was stopped.
-	</span><span class="kw">pub fn </span>was_stopped(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
-		<span class="self">self</span>.shared_state.operation_stopped.load(std::sync::atomic::Ordering::Acquire)
+	<span class="doccomment">/// Stop handle for the operation.
+	</span><span class="kw">pub fn </span>stop_handle(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>StopHandle {
+		<span class="kw-2">&amp;</span><span class="self">self</span>.stop_handle
 	}
 
 	<span class="doccomment">/// Get the operation ID.
 	</span><span class="kw">pub fn </span>operation_id(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; String {
 		<span class="self">self</span>.operation_id.clone()
 	}
-
-	<span class="doccomment">/// Returns the number of reserved elements for this permit.
-	///
-	/// This can be smaller than the number of items requested via [`LimitOperations::reserve()`].
-	</span><span class="kw">pub fn </span>num_reserved(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; usize {
-		<span class="self">self</span>.permit.num_ops
-	}
 }
 
 <span class="kw">impl </span>Drop <span class="kw">for </span>RegisteredOperation {
 	<span class="kw">fn </span>drop(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
-		<span class="kw">let </span><span class="kw-2">mut </span>operations = <span class="self">self</span>.operations.lock();
-		operations.remove(<span class="kw-2">&amp;</span><span class="self">self</span>.operation_id);
+		<span class="self">self</span>.operations.lock().remove(<span class="kw-2">&amp;</span><span class="self">self</span>.operation_id);
 	}
 }
 
@@ -1901,7 +1771,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 	<span class="doccomment">/// Limit the number of ongoing operations.
 	</span>limits: LimitOperations,
 	<span class="doccomment">/// Track the operations ID of this subscription.
-	</span>operations: Arc&lt;Mutex&lt;HashMap&lt;String, OperationState&gt;&gt;&gt;,
+	</span>operations: SharedOperations,
 }
 
 <span class="kw">impl </span>Operations {
@@ -1917,25 +1787,25 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 	<span class="doccomment">/// Register a new operation.
 	</span><span class="kw">pub fn </span>register_operation(<span class="kw-2">&amp;mut </span><span class="self">self</span>, to_reserve: usize) -&gt; <span class="prelude-ty">Option</span>&lt;RegisteredOperation&gt; {
 		<span class="kw">let </span>permit = <span class="self">self</span>.limits.reserve_at_most(to_reserve)<span class="question-mark">?</span>;
-
 		<span class="kw">let </span>operation_id = <span class="self">self</span>.next_operation_id();
 
-		<span class="comment">// At most one message can be sent.
-		</span><span class="kw">let </span>(send_continue, recv_continue) = tokio::sync::mpsc::channel(<span class="number">1</span>);
-		<span class="kw">let </span>shared_state = SharedOperationState::new();
+		<span class="kw">let </span>(tx, rx) = tokio::sync::mpsc::channel(<span class="number">1</span>);
+		<span class="kw">let </span>stop_handle = StopHandle(tx);
+		<span class="kw">let </span>operations = <span class="self">self</span>.operations.clone();
+		operations.lock().insert(operation_id.clone(), (rx, stop_handle.clone()));
 
-		<span class="kw">let </span>state = OperationState { send_continue, shared_state: shared_state.clone() };
-
-		<span class="comment">// Cloned operations for removing the current ID on drop.
-		</span><span class="kw">let </span>operations = <span class="self">self</span>.operations.clone();
-		operations.lock().insert(operation_id.clone(), state);
-
-		<span class="prelude-val">Some</span>(RegisteredOperation { shared_state, operation_id, recv_continue, operations, permit })
+		<span class="prelude-val">Some</span>(RegisteredOperation { stop_handle, operation_id, operations, _permit: permit })
 	}
 
 	<span class="doccomment">/// Get the associated operation state with the ID.
 	</span><span class="kw">pub fn </span>get_operation(<span class="kw-2">&amp;</span><span class="self">self</span>, id: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Option</span>&lt;OperationState&gt; {
-		<span class="self">self</span>.operations.lock().get(id).map(|state| state.clone())
+		<span class="kw">let </span>stop = <span class="self">self</span>.operations.lock().get(id).map(|(<span class="kw">_</span>, stop)| stop.clone())<span class="question-mark">?</span>;
+
+		<span class="prelude-val">Some</span>(OperationState {
+			stop,
+			operations: <span class="self">self</span>.operations.clone(),
+			operation_id: id.to_string(),
+		})
 	}
 
 	<span class="doccomment">/// Generate the next operation ID for this subscription.
@@ -1962,7 +1832,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 	<span class="doccomment">/// The sender of message responses to the `chainHead_follow` events.
 	///
 	/// This object is cloned between methods.
-	</span>response_sender: TracingUnboundedSender&lt;FollowEvent&lt;Block::Hash&gt;&gt;,
+	</span>response_sender: FollowEventSender&lt;Block::Hash&gt;,
 	<span class="doccomment">/// The ongoing operations of a subscription.
 	</span>operations: Operations,
 	<span class="doccomment">/// Track the block hashes available for this subscription.
@@ -2096,7 +1966,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 </span><span class="kw">pub struct </span>BlockGuard&lt;Block: BlockT, BE: Backend&lt;Block&gt;&gt; {
 	hash: Block::Hash,
 	with_runtime: bool,
-	response_sender: TracingUnboundedSender&lt;FollowEvent&lt;Block::Hash&gt;&gt;,
+	response_sender: FollowEventSender&lt;Block::Hash&gt;,
 	operation: RegisteredOperation,
 	backend: Arc&lt;BE&gt;,
 }
@@ -2114,7 +1984,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 	</span><span class="kw">fn </span>new(
 		hash: Block::Hash,
 		with_runtime: bool,
-		response_sender: TracingUnboundedSender&lt;FollowEvent&lt;Block::Hash&gt;&gt;,
+		response_sender: FollowEventSender&lt;Block::Hash&gt;,
 		operation: RegisteredOperation,
 		backend: Arc&lt;BE&gt;,
 	) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, SubscriptionManagementError&gt; {
@@ -2131,7 +2001,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 	}
 
 	<span class="doccomment">/// Send message responses from the `chainHead` methods to `chainHead_follow`.
-	</span><span class="kw">pub fn </span>response_sender(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; TracingUnboundedSender&lt;FollowEvent&lt;Block::Hash&gt;&gt; {
+	</span><span class="kw">pub fn </span>response_sender(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; FollowEventSender&lt;Block::Hash&gt; {
 		<span class="self">self</span>.response_sender.clone()
 	}
 
@@ -2153,7 +2023,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 	<span class="doccomment">/// Signal that the subscription must stop.
 	</span><span class="kw">pub </span>rx_stop: oneshot::Receiver&lt;()&gt;,
 	<span class="doccomment">/// Receive message responses from the `chainHead` methods.
-	</span><span class="kw">pub </span>response_receiver: TracingUnboundedReceiver&lt;FollowEvent&lt;Block::Hash&gt;&gt;,
+	</span><span class="kw">pub </span>response_receiver: FollowEventReceiver&lt;Block::Hash&gt;,
 }
 
 <span class="kw">pub struct </span>SubscriptionsInner&lt;Block: BlockT, BE: Backend&lt;Block&gt;&gt; {
@@ -2204,7 +2074,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 		<span class="kw">if let </span>Entry::Vacant(entry) = <span class="self">self</span>.subs.entry(sub_id) {
 			<span class="kw">let </span>(tx_stop, rx_stop) = oneshot::channel();
 			<span class="kw">let </span>(response_sender, response_receiver) =
-				tracing_unbounded(<span class="string">"chain-head-method-responses"</span>, QUEUE_SIZE_WARNING);
+				futures::channel::mpsc::channel(BUF_CAP_PER_SUBSCRIPTION);
 			<span class="kw">let </span>state = SubscriptionState::&lt;Block&gt; {
 				with_runtime,
 				tx_stop: <span class="prelude-val">Some</span>(tx_stop),
@@ -2582,8 +2452,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 
 	<span class="attr">#[test]
 	</span><span class="kw">fn </span>sub_state_register_twice() {
-		<span class="kw">let </span>(response_sender, _response_receiver) =
-			tracing_unbounded(<span class="string">"test-chain-head-method-responses"</span>, QUEUE_SIZE_WARNING);
+		<span class="kw">let </span>(response_sender, _response_receiver) = futures::channel::mpsc::channel(<span class="number">1</span>);
 		<span class="kw">let </span><span class="kw-2">mut </span>sub_state = SubscriptionState::&lt;Block&gt; {
 			with_runtime: <span class="bool-val">false</span>,
 			tx_stop: <span class="prelude-val">None</span>,
@@ -2611,8 +2480,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 
 	<span class="attr">#[test]
 	</span><span class="kw">fn </span>sub_state_register_unregister() {
-		<span class="kw">let </span>(response_sender, _response_receiver) =
-			tracing_unbounded(<span class="string">"test-chain-head-method-responses"</span>, QUEUE_SIZE_WARNING);
+		<span class="kw">let </span>(response_sender, _response_receiver) = futures::channel::mpsc::channel(<span class="number">1</span>);
 		<span class="kw">let </span><span class="kw-2">mut </span>sub_state = SubscriptionState::&lt;Block&gt; {
 			with_runtime: <span class="bool-val">false</span>,
 			tx_stop: <span class="prelude-val">None</span>,
@@ -2959,12 +2827,12 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 
 		<span class="comment">// One operation is reserved.
 		</span><span class="kw">let </span>permit_one = ops.reserve_at_most(<span class="number">1</span>).unwrap();
-		<span class="macro">assert_eq!</span>(permit_one.num_ops, <span class="number">1</span>);
+		<span class="macro">assert_eq!</span>(permit_one.num_permits(), <span class="number">1</span>);
 
 		<span class="comment">// Request 2 operations, however there is capacity only for one.
 		</span><span class="kw">let </span>permit_two = ops.reserve_at_most(<span class="number">2</span>).unwrap();
 		<span class="comment">// Number of reserved permits is smaller than provided.
-		</span><span class="macro">assert_eq!</span>(permit_two.num_ops, <span class="number">1</span>);
+		</span><span class="macro">assert_eq!</span>(permit_two.num_permits(), <span class="number">1</span>);
 
 		<span class="comment">// Try to reserve operations when there's no space.
 		</span><span class="kw">let </span>permit = ops.reserve_at_most(<span class="number">1</span>);
@@ -2975,7 +2843,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 
 		<span class="comment">// Can reserve again
 		</span><span class="kw">let </span>permit_three = ops.reserve_at_most(<span class="number">1</span>).unwrap();
-		<span class="macro">assert_eq!</span>(permit_three.num_ops, <span class="number">1</span>);
+		<span class="macro">assert_eq!</span>(permit_three.num_permits(), <span class="number">1</span>);
 	}
 
 	<span class="attr">#[test]

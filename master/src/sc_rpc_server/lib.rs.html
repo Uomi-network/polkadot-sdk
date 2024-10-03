@@ -456,6 +456,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 <a href="#306" id="306">306</a>
 <a href="#307" id="307">307</a>
 <a href="#308" id="308">308</a>
+<a href="#309" id="309">309</a>
 </pre></div><pre class="rust"><code><span class="comment">// This file is part of Substrate.
 
 // Copyright (C) Parity Technologies (UK) Ltd.
@@ -713,8 +714,9 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 							),
 						};
 
-						<span class="kw">let </span>rpc_middleware =
-							RpcServiceBuilder::new().option_layer(middleware_layer.clone());
+						<span class="kw">let </span>rpc_middleware = RpcServiceBuilder::new()
+							.rpc_logger(<span class="number">1024</span>)
+							.option_layer(middleware_layer.clone());
 						<span class="kw">let </span><span class="kw-2">mut </span>svc = service_builder
 							.set_rpc_middleware(rpc_middleware)
 							.build(methods, stop_handle);

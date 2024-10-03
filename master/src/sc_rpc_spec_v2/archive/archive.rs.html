@@ -428,6 +428,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 <a href="#278" id="278">278</a>
 <a href="#279" id="279">279</a>
 <a href="#280" id="280">280</a>
+<a href="#281" id="281">281</a>
 </pre></div><pre class="rust"><code><span class="comment">// This file is part of Substrate.
 
 // Copyright (C) Parity Technologies (UK) Ltd.
@@ -705,6 +706,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 			<span class="self">self</span>.storage_max_descendant_responses,
 			<span class="self">self</span>.storage_max_queried_items,
 		);
+
 		<span class="prelude-val">Ok</span>(storage_client.handle_query(hash, items, child_trie))
 	}
 }

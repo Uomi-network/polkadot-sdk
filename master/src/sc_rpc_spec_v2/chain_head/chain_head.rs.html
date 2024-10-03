@@ -807,6 +807,41 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 <a href="#657" id="657">657</a>
 <a href="#658" id="658">658</a>
 <a href="#659" id="659">659</a>
+<a href="#660" id="660">660</a>
+<a href="#661" id="661">661</a>
+<a href="#662" id="662">662</a>
+<a href="#663" id="663">663</a>
+<a href="#664" id="664">664</a>
+<a href="#665" id="665">665</a>
+<a href="#666" id="666">666</a>
+<a href="#667" id="667">667</a>
+<a href="#668" id="668">668</a>
+<a href="#669" id="669">669</a>
+<a href="#670" id="670">670</a>
+<a href="#671" id="671">671</a>
+<a href="#672" id="672">672</a>
+<a href="#673" id="673">673</a>
+<a href="#674" id="674">674</a>
+<a href="#675" id="675">675</a>
+<a href="#676" id="676">676</a>
+<a href="#677" id="677">677</a>
+<a href="#678" id="678">678</a>
+<a href="#679" id="679">679</a>
+<a href="#680" id="680">680</a>
+<a href="#681" id="681">681</a>
+<a href="#682" id="682">682</a>
+<a href="#683" id="683">683</a>
+<a href="#684" id="684">684</a>
+<a href="#685" id="685">685</a>
+<a href="#686" id="686">686</a>
+<a href="#687" id="687">687</a>
+<a href="#688" id="688">688</a>
+<a href="#689" id="689">689</a>
+<a href="#690" id="690">690</a>
+<a href="#691" id="691">691</a>
+<a href="#692" id="692">692</a>
+<a href="#693" id="693">693</a>
+<a href="#694" id="694">694</a>
 </pre></div><pre class="rust"><code><span class="comment">// This file is part of Substrate.
 
 // Copyright (C) Parity Technologies (UK) Ltd.
@@ -836,14 +871,15 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 		api::ChainHeadApiServer,
 		chain_head_follow::ChainHeadFollower,
 		error::Error <span class="kw">as </span>ChainHeadRpcError,
-		event::{FollowEvent, MethodResponse, OperationError},
-		subscription::{SubscriptionManagement, SubscriptionManagementError},
+		event::{FollowEvent, MethodResponse, OperationError, OperationId, OperationStorageItems},
+		subscription::{StopHandle, SubscriptionManagement, SubscriptionManagementError},
+		FollowEventSendError, FollowEventSender,
 	},
-	common::events::StorageQuery,
+	common::{events::StorageQuery, storage::QueryResult},
 	hex_string, SubscriptionTaskExecutor,
 };
 <span class="kw">use </span>codec::Encode;
-<span class="kw">use </span>futures::{channel::oneshot, future::FutureExt};
+<span class="kw">use </span>futures::{channel::oneshot, future::FutureExt, SinkExt};
 <span class="kw">use </span>jsonrpsee::{
 	core::async_trait, server::ResponsePayload, types::SubscriptionId, ConnectionId, Extensions,
 	MethodResponseFuture, PendingSubscriptionSink,
@@ -860,8 +896,15 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 <span class="kw">use </span>sp_rpc::list::ListOrValue;
 <span class="kw">use </span>sp_runtime::traits::Block <span class="kw">as </span>BlockT;
 <span class="kw">use </span>std::{marker::PhantomData, sync::Arc, time::Duration};
+<span class="kw">use </span>tokio::sync::mpsc;
 
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">const </span>LOG_TARGET: <span class="kw-2">&amp;</span>str = <span class="string">"rpc-spec-v2"</span>;
+
+<span class="doccomment">/// The buffer capacity for each storage query.
+///
+/// This is small because the underlying JSON-RPC server has
+/// its down buffer capacity per connection as well.
+</span><span class="kw">const </span>STORAGE_QUERY_BUF: usize = <span class="number">16</span>;
 
 <span class="doccomment">/// The configuration of [`ChainHead`].
 </span><span class="kw">pub struct </span>ChainHeadConfig {
@@ -874,9 +917,6 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 	<span class="doccomment">/// Stop all subscriptions if the distance between the leaves and the current finalized
 	/// block is larger than this value.
 	</span><span class="kw">pub </span>max_lagging_distance: usize,
-	<span class="doccomment">/// The maximum number of items reported by the `chainHead_storage` before
-	/// pagination is required.
-	</span><span class="kw">pub </span>operation_max_storage_items: usize,
 	<span class="doccomment">/// The maximum number of `chainHead_follow` subscriptions per connection.
 	</span><span class="kw">pub </span>max_follow_subscriptions_per_connection: usize,
 }
@@ -896,10 +936,6 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 /// Note: The lower limit imposed by the spec is 16.
 </span><span class="kw">const </span>MAX_ONGOING_OPERATIONS: usize = <span class="number">16</span>;
 
-<span class="doccomment">/// The maximum number of items the `chainHead_storage` can return
-/// before paginations is required.
-</span><span class="kw">const </span>MAX_STORAGE_ITER_ITEMS: usize = <span class="number">5</span>;
-
 <span class="doccomment">/// Stop all subscriptions if the distance between the leaves and the current finalized
 /// block is larger than this value.
 </span><span class="kw">const </span>MAX_LAGGING_DISTANCE: usize = <span class="number">128</span>;
@@ -914,7 +950,6 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 			subscription_max_pinned_duration: MAX_PINNED_DURATION,
 			subscription_max_ongoing_operations: MAX_ONGOING_OPERATIONS,
 			max_lagging_distance: MAX_LAGGING_DISTANCE,
-			operation_max_storage_items: MAX_STORAGE_ITER_ITEMS,
 			max_follow_subscriptions_per_connection: MAX_FOLLOW_SUBSCRIPTIONS_PER_CONNECTION,
 		}
 	}
@@ -930,9 +965,6 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 	</span>executor: SubscriptionTaskExecutor,
 	<span class="doccomment">/// Keep track of the pinned blocks for each subscription.
 	</span>subscriptions: SubscriptionManagement&lt;Block, BE&gt;,
-	<span class="doccomment">/// The maximum number of items reported by the `chainHead_storage` before
-	/// pagination is required.
-	</span>operation_max_storage_items: usize,
 	<span class="doccomment">/// Stop all subscriptions if the distance between the leaves and the current finalized
 	/// block is larger than this value.
 	</span>max_lagging_distance: usize,
@@ -959,7 +991,6 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 				config.max_follow_subscriptions_per_connection,
 				backend,
 			),
-			operation_max_storage_items: config.operation_max_storage_items,
 			max_lagging_distance: config.max_lagging_distance,
 			_phantom: PhantomData,
 		}
@@ -1123,7 +1154,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 				}),
 			};
 
-			<span class="kw">let </span>(rp, rp_fut) = method_started_response(operation_id, <span class="prelude-val">None</span>);
+			<span class="kw">let </span>(rp, rp_fut) = method_started_response(operation_id);
 			<span class="kw">let </span>fut = <span class="kw">async move </span>{
 				<span class="comment">// Wait for the server to send out the response and if it produces an error no event
 				// should be generated.
@@ -1131,7 +1162,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 					<span class="kw">return</span>;
 				}
 
-				<span class="kw">let _ </span>= block_guard.response_sender().unbounded_send(event);
+				<span class="kw">let _ </span>= block_guard.response_sender().send(event).<span class="kw">await</span>;
 			};
 			executor.spawn_blocking(<span class="string">"substrate-rpc-subscription"</span>, <span class="prelude-val">Some</span>(<span class="string">"rpc"</span>), fut.boxed());
 
@@ -1235,20 +1266,10 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 				<span class="prelude-val">Err</span>(<span class="kw">_</span>) =&gt; <span class="kw">return </span>ResponsePayload::error(ChainHeadRpcError::InvalidBlock),
 			};
 
-		<span class="kw">let </span><span class="kw-2">mut </span>storage_client = ChainHeadStorage::&lt;Client, Block, BE&gt;::new(
-			<span class="self">self</span>.client.clone(),
-			<span class="self">self</span>.operation_max_storage_items,
-		);
-		<span class="kw">let </span>operation = block_guard.operation();
-		<span class="kw">let </span>operation_id = operation.operation_id();
+		<span class="kw">let </span><span class="kw-2">mut </span>storage_client = ChainHeadStorage::&lt;Client, Block, BE&gt;::new(<span class="self">self</span>.client.clone());
 
-		<span class="comment">// The number of operations we are allowed to execute.
-		</span><span class="kw">let </span>num_operations = operation.num_reserved();
-		<span class="kw">let </span>discarded = items.len().saturating_sub(num_operations);
-		<span class="kw">let </span><span class="kw-2">mut </span>items = items;
-		items.truncate(num_operations);
+		<span class="kw">let </span>(rp, rp_fut) = method_started_response(block_guard.operation().operation_id());
 
-		<span class="kw">let </span>(rp, rp_fut) = method_started_response(operation_id, <span class="prelude-val">Some</span>(discarded));
 		<span class="kw">let </span>fut = <span class="kw">async move </span>{
 			<span class="comment">// Wait for the server to send out the response and if it produces an error no event
 			// should be generated.
@@ -1256,10 +1277,20 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 				<span class="kw">return</span>;
 			}
 
-			storage_client.generate_events(block_guard, hash, items, child_trie).<span class="kw">await</span>;
+			<span class="kw">let </span>(tx, rx) = tokio::sync::mpsc::channel(STORAGE_QUERY_BUF);
+			<span class="kw">let </span>operation_id = block_guard.operation().operation_id();
+			<span class="kw">let </span>stop_handle = block_guard.operation().stop_handle().clone();
+			<span class="kw">let </span>response_sender = block_guard.response_sender();
+
+			<span class="comment">// May fail if the channel is closed or the connection is closed.
+			// which is okay to ignore.
+			</span><span class="kw">let _ </span>= futures::future::join(
+				storage_client.generate_events(hash, items, child_trie, tx),
+				process_storage_items(rx, response_sender, operation_id, <span class="kw-2">&amp;</span>stop_handle),
+			)
+			.<span class="kw">await</span>;
 		};
-		<span class="self">self</span>.executor
-			.spawn_blocking(<span class="string">"substrate-rpc-subscription"</span>, <span class="prelude-val">Some</span>(<span class="string">"rpc"</span>), fut.boxed());
+		<span class="self">self</span>.executor.spawn(<span class="string">"substrate-rpc-subscription"</span>, <span class="prelude-val">Some</span>(<span class="string">"rpc"</span>), fut.boxed());
 
 		rp
 	}
@@ -1312,7 +1343,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 		<span class="kw">let </span>operation_id = block_guard.operation().operation_id();
 		<span class="kw">let </span>client = <span class="self">self</span>.client.clone();
 
-		<span class="kw">let </span>(rp, rp_fut) = method_started_response(operation_id.clone(), <span class="prelude-val">None</span>);
+		<span class="kw">let </span>(rp, rp_fut) = method_started_response(operation_id.clone());
 		<span class="kw">let </span>fut = <span class="kw">async move </span>{
 			<span class="comment">// Wait for the server to send out the response and if it produces an error no event
 			// should be generated.
@@ -1336,7 +1367,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 					})
 				});
 
-			<span class="kw">let _ </span>= block_guard.response_sender().unbounded_send(event);
+			<span class="kw">let _ </span>= block_guard.response_sender().send(event).<span class="kw">await</span>;
 		};
 		<span class="self">self</span>.executor
 			.spawn_blocking(<span class="string">"substrate-rpc-subscription"</span>, <span class="prelude-val">Some</span>(<span class="string">"rpc"</span>), fut.boxed());
@@ -1397,14 +1428,10 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 			<span class="kw">return </span><span class="prelude-val">Ok</span>(())
 		}
 
-		<span class="kw">let </span><span class="prelude-val">Some</span>(operation) = <span class="self">self</span>.subscriptions.get_operation(<span class="kw-2">&amp;</span>follow_subscription, <span class="kw-2">&amp;</span>operation_id)
-		<span class="kw">else </span>{
-			<span class="kw">return </span><span class="prelude-val">Ok</span>(())
-		};
-
-		<span class="kw">if </span>!operation.submit_continue() {
-			<span class="comment">// Continue called without generating a `WaitingForContinue` event.
-			</span><span class="prelude-val">Err</span>(ChainHeadRpcError::InvalidContinue.into())
+		<span class="comment">// WaitingForContinue event is never emitted, in such cases
+		// emit an `InvalidContinue error`.
+		</span><span class="kw">if </span><span class="self">self</span>.subscriptions.get_operation(<span class="kw-2">&amp;</span>follow_subscription, <span class="kw-2">&amp;</span>operation_id).is_some() {
+			<span class="prelude-val">Err</span>(ChainHeadRpcError::InvalidContinue.into())
 		} <span class="kw">else </span>{
 			<span class="prelude-val">Ok</span>(())
 		}
@@ -1425,12 +1452,13 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 			<span class="kw">return </span><span class="prelude-val">Ok</span>(())
 		}
 
-		<span class="kw">let </span><span class="prelude-val">Some</span>(operation) = <span class="self">self</span>.subscriptions.get_operation(<span class="kw-2">&amp;</span>follow_subscription, <span class="kw-2">&amp;</span>operation_id)
+		<span class="kw">let </span><span class="prelude-val">Some</span>(<span class="kw-2">mut </span>operation) =
+			<span class="self">self</span>.subscriptions.get_operation(<span class="kw-2">&amp;</span>follow_subscription, <span class="kw-2">&amp;</span>operation_id)
 		<span class="kw">else </span>{
 			<span class="kw">return </span><span class="prelude-val">Ok</span>(())
 		};
 
-		operation.stop_operation();
+		operation.stop();
 
 		<span class="prelude-val">Ok</span>(())
 	}
@@ -1438,9 +1466,8 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 
 <span class="kw">fn </span>method_started_response(
 	operation_id: String,
-	discarded_items: <span class="prelude-ty">Option</span>&lt;usize&gt;,
 ) -&gt; (ResponsePayload&lt;<span class="lifetime">'static</span>, MethodResponse&gt;, MethodResponseFuture) {
-	<span class="kw">let </span>rp = MethodResponse::Started(MethodResponseStarted { operation_id, discarded_items });
+	<span class="kw">let </span>rp = MethodResponse::Started(MethodResponseStarted { operation_id, discarded_items: <span class="prelude-val">None </span>});
 	ResponsePayload::success(rp).notify_on_completion()
 }
 
@@ -1465,6 +1492,49 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 	executor.spawn_blocking(<span class="string">"substrate-rpc-subscription"</span>, <span class="prelude-val">Some</span>(<span class="string">"rpc"</span>), blocking_fut.boxed());
 
 	rx
+}
+
+<span class="kw">async fn </span>process_storage_items&lt;Hash&gt;(
+	<span class="kw-2">mut </span>storage_query_stream: mpsc::Receiver&lt;QueryResult&gt;,
+	<span class="kw-2">mut </span>sender: FollowEventSender&lt;Hash&gt;,
+	operation_id: String,
+	stop_handle: <span class="kw-2">&amp;</span>StopHandle,
+) -&gt; <span class="prelude-ty">Result</span>&lt;(), FollowEventSendError&gt; {
+	<span class="kw">loop </span>{
+		<span class="macro">tokio::select!</span> {
+			<span class="kw">_ </span>= stop_handle.stopped() =&gt; {
+				<span class="kw">break</span>;
+			},
+
+			maybe_storage = storage_query_stream.recv() =&gt; {
+				<span class="kw">let </span><span class="prelude-val">Some</span>(storage) = maybe_storage <span class="kw">else </span>{
+					<span class="kw">break</span>;
+				};
+
+				<span class="kw">let </span>item = <span class="kw">match </span>storage {
+					QueryResult::Err(error) =&gt; {
+						<span class="kw">return </span>sender
+						.send(FollowEvent::OperationError(OperationError { operation_id, error }))
+						.<span class="kw">await
+					</span>}
+					QueryResult::Ok(<span class="prelude-val">Some</span>(v)) =&gt; v,
+					QueryResult::Ok(<span class="prelude-val">None</span>) =&gt; <span class="kw">continue</span>,
+				};
+
+				sender
+					.send(FollowEvent::OperationStorageItems(OperationStorageItems {
+						operation_id: operation_id.clone(),
+						items: <span class="macro">vec!</span>[item],
+				})).<span class="kw">await</span><span class="question-mark">?</span>;
+			},
+		}
+	}
+
+	sender
+		.send(FollowEvent::OperationStorageDone(OperationId { operation_id }))
+		.<span class="kw">await</span><span class="question-mark">?</span>;
+
+	<span class="prelude-val">Ok</span>(())
 }
 </code></pre></div></section></main><script> mermaid.init({ startOnLoad: true, theme: "dark" }, "pre.language-mermaid > code");</script>
 
