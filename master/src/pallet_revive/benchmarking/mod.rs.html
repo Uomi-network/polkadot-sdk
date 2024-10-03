@@ -1892,8 +1892,6 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 <a href="#1742" id="1742">1742</a>
 <a href="#1743" id="1743">1743</a>
 <a href="#1744" id="1744">1744</a>
-<a href="#1745" id="1745">1745</a>
-<a href="#1746" id="1746">1746</a>
 </pre></div><pre class="rust"><code><span class="comment">// This file is part of Substrate.
 
 // Copyright (C) Parity Technologies (UK) Ltd.
@@ -3623,11 +3621,9 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 	<span class="comment">// Benchmark the execution of instructions.
 	</span><span class="attr">#[benchmark(pov_mode = Ignored)]
 	</span><span class="kw">fn </span>instr(r: Linear&lt;<span class="number">0</span>, INSTR_BENCHMARK_RUNS&gt;) {
-		<span class="comment">// (round, start, div, mult, add)
-		</span><span class="kw">let </span>input = (r, <span class="number">1_000u32</span>, <span class="number">2u32</span>, <span class="number">3u32</span>, <span class="number">100u32</span>).encode();
 		<span class="kw">let </span><span class="kw-2">mut </span>setup = CallSetup::&lt;T&gt;::new(WasmModule::instr());
 		<span class="kw">let </span>(<span class="kw-2">mut </span>ext, module) = setup.ext();
-		<span class="kw">let </span>prepared = CallSetup::&lt;T&gt;::prepare_call(<span class="kw-2">&amp;mut </span>ext, module, input);
+		<span class="kw">let </span>prepared = CallSetup::&lt;T&gt;::prepare_call(<span class="kw-2">&amp;mut </span>ext, module, r.encode());
 		<span class="attr">#[block]
 		</span>{
 			prepared.call().unwrap();

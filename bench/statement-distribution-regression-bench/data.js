@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1727979163088,
+  "lastUpdate": 1727983718700,
   "repoUrl": "https://github.com/paritytech/polkadot-sdk",
   "entries": {
     "statement-distribution-regression-bench": [
@@ -13063,6 +13063,50 @@ window.BENCHMARK_DATA = {
           {
             "name": "test-environment",
             "value": 0.04482411716799994,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "niklasadolfsson1@gmail.com",
+            "name": "Niklas Adolfsson",
+            "username": "niklasad1"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "3313163485c4d4946ea97477407107796469f1c4",
+          "message": "rpc v2: backpressure chainHead_v1_storage (#5741)\n\nClose https://github.com/paritytech/polkadot-sdk/issues/5589\n\nThis PR makes it possible for `rpc_v2::Storage::query_iter_paginated` to\nbe \"backpressured\" which is achieved by having a channel where the\nresult is sent back and when this channel is \"full\" we pause the\niteration.\n\nThe chainHead_follow has an internal channel which doesn't represent the\nactual connection and that is set to a very small number (16). Recall\nthat the JSON-RPC server has a dedicate buffer for each connection by\ndefault of 64.\n\n#### Notes\n\n- Because `archive_storage` also depends on\n`rpc_v2::Storage::query_iter_paginated` I had to tweak the method to\nsupport limits as well. The reason is that archive_storage won't get\nbackpressured properly because it's not an subscription. (it would much\neasier if it would be a subscription in rpc v2 spec because nothing\nagainst querying huge amount storage keys)\n- `query_iter_paginated` doesn't necessarily return the storage \"in\norder\" such as\n- `query_iter_paginated(vec![(\"key1\", hash), (\"key2\", value)], ...)`\ncould return them in arbitrary order because it's wrapped in\nFuturesUnordered but I could change that if we want to process it\ninorder (it's slower)\n- there is technically no limit on the number of storage queries in each\n`chainHead_v1_storage call` rather than the rpc max message limit which\n10MB and only allowed to max 16 calls `chainHead_v1_x` concurrently\n(this should be fine)\n\n#### Benchmarks using subxt on localhost\n\n- Iterate over 10 accounts on westend-dev -> ~2-3x faster \n- Fetch 1024 storage values (i.e, not descedant values) -> ~50x faster\n- Fetch 1024 descendant values -> ~500x faster\n\nThe reason for this is because as Josep explained in the issue is that\none is only allowed query five storage items per call and clients has\nmake lots of calls to drive it forward..\n\n---------\n\nCo-authored-by: command-bot <>\nCo-authored-by: James Wilson <james@jsdw.me>",
+          "timestamp": "2024-10-03T18:04:27Z",
+          "tree_id": "22a18815e1ae928d0fc5047f2cc776369ffc0a79",
+          "url": "https://github.com/paritytech/polkadot-sdk/commit/3313163485c4d4946ea97477407107796469f1c4"
+        },
+        "date": 1727983700255,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "Received from peers",
+            "value": 106.39999999999996,
+            "unit": "KiB"
+          },
+          {
+            "name": "Sent to peers",
+            "value": 127.93999999999994,
+            "unit": "KiB"
+          },
+          {
+            "name": "test-environment",
+            "value": 0.04493429323999993,
+            "unit": "seconds"
+          },
+          {
+            "name": "statement-distribution",
+            "value": 0.035695216547999994,
             "unit": "seconds"
           }
         ]

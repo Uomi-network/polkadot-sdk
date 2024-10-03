@@ -562,8 +562,6 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 <a href="#412" id="412">412</a>
 <a href="#413" id="413">413</a>
 <a href="#414" id="414">414</a>
-<a href="#415" id="415">415</a>
-<a href="#416" id="416">416</a>
 </pre></div><pre class="rust"><code><span class="comment">// This file is part of Substrate.
 
 // Copyright (C) Parity Technologies (UK) Ltd.
@@ -642,9 +640,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 		<span class="comment">// We execute 6 different instructions therefore we have to divide the actual
 		// computed gas costs by 6 to have a rough estimate as to how expensive each
 		// single executed instruction is going to be.
-		</span><span class="kw">let </span>instr_cost = T::WeightInfo::instr_i64_load_store(<span class="number">1</span>)
-			.saturating_sub(T::WeightInfo::instr_i64_load_store(<span class="number">0</span>))
-			.ref_time();
+		</span><span class="kw">let </span>instr_cost = T::WeightInfo::instr(<span class="number">1</span>).saturating_sub(T::WeightInfo::instr(<span class="number">0</span>)).ref_time();
 		instr_cost / <span class="number">6
 	</span>}
 }

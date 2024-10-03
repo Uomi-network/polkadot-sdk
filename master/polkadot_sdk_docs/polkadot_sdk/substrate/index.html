@@ -213,7 +213,7 @@ categories:</p>
 <ul>
 <li><code>sc-*</code> (short for <em>Substrate-client</em>) crates, located under <code>./client</code> folder. These are all
 the crates that lead to the node software. Notable examples are <a href="../../../sc_network/index.html" title="mod sc_network"><code>sc_network</code></a>, various
-consensus crates, RPC (<a href="../../../sc_rpc_api/index.html" title="mod sc_rpc_api"><code>sc_rpc_api</code></a>) and database ([<code>sc_client_db</code>]), all of which are
+consensus crates, RPC (<a href="../../../sc_rpc_api/index.html" title="mod sc_rpc_api"><code>sc_rpc_api</code></a>) and database (<a href="../../../sc_client_db/index.html" title="mod sc_client_db"><code>sc_client_db</code></a>), all of which are
 expected to reside in the node side.</li>
 <li><code>sp-*</code> (short for <em>substrate-primitives</em>) crates, located under <code>./primitives</code> folder. These
 are crates that facilitate both the node and the runtime, but are not opinionated about what
@@ -230,7 +230,7 @@ crate is being built with the standard library, and is built for native. Otherwi
 for <code>no_std</code>.</p>
 <p>This can be summarized in <code>#![cfg_attr(not(feature = "std"), no_std)]</code>, which you can often find
 in any Substrate-based runtime.</p>
-<p>Substrate-based runtimes use <a href="../../../substrate_wasm_builder/index.html" title="mod substrate_wasm_builder"><code>substrate_wasm_builder</code></a> in their <code>build.rs</code> to automatically
+<p>Substrate-based runtimes use [<code>substrate_wasm_builder</code>] in their <code>build.rs</code> to automatically
 build their WASM files as a part of normal build command (e.g. <code>cargo build</code>). Once built, the
 wasm file is placed in <code>./target/{debug|release}/wbuild/{runtime_name}/{runtime_name}.wasm</code>.</p>
 <p>In order to ensure that the WASM build is <strong>deterministic</strong>, the <a href="https://github.com/paritytech/srtool">Substrate Runtime Toolbox (srtool)</a> can be used.</p>
@@ -286,7 +286,7 @@ top of Substrate, empowering any substrate-based chain to be a Polkadot parachai
 <p>Additional noteworthy crates within substrate:</p>
 <ul>
 <li>RPC APIs of a Substrate node: <a href="../../../sc_rpc_api/index.html" title="mod sc_rpc_api"><code>sc_rpc_api</code></a>/<a href="../../../sc_rpc/index.html" title="mod sc_rpc"><code>sc_rpc</code></a></li>
-<li>CLI Options of a Substrate node: [<code>sc_cli</code>]</li>
+<li>CLI Options of a Substrate node: <a href="../../../sc_cli/index.html" title="mod sc_cli"><code>sc_cli</code></a></li>
 <li>All of the consensus related crates provided by Substrate:
 <ul>
 <li><a href="../../../sc_consensus_aura/index.html" title="mod sc_consensus_aura"><code>sc_consensus_aura</code></a></li>

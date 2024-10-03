@@ -2243,7 +2243,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 		/// only be instantiated by permissioned entities. The same is true when uploading
 		/// through [`Self::instantiate_with_code`].
 		</span><span class="attr">#[pallet::call_index(<span class="number">3</span>)]
-		#[pallet::weight(T::WeightInfo::upload_code_determinism_enforced(code.len() <span class="kw">as </span>u32))]
+		#[pallet::weight(T::WeightInfo::upload_code(code.len() <span class="kw">as </span>u32))]
 		</span><span class="kw">pub fn </span>upload_code(
 			origin: OriginFor&lt;T&gt;,
 			code: Vec&lt;u8&gt;,

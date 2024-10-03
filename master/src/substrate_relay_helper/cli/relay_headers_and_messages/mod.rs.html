@@ -674,6 +674,14 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 <a href="#524" id="524">524</a>
 <a href="#525" id="525">525</a>
 <a href="#526" id="526">526</a>
+<a href="#527" id="527">527</a>
+<a href="#528" id="528">528</a>
+<a href="#529" id="529">529</a>
+<a href="#530" id="530">530</a>
+<a href="#531" id="531">531</a>
+<a href="#532" id="532">532</a>
+<a href="#533" id="533">533</a>
+<a href="#534" id="534">534</a>
 </pre></div><pre class="rust"><code><span class="comment">// Copyright 2019-2022 Parity Technologies (UK) Ltd.
 // This file is part of Parity Bridges Common.
 
@@ -707,7 +715,6 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 </span><span class="kw">pub mod </span>relay_to_parachain;
 
 <span class="kw">use </span>async_trait::async_trait;
-<span class="kw">use </span>codec::{Codec, EncodeLike};
 <span class="kw">use </span>std::{fmt::Debug, marker::PhantomData, sync::Arc};
 <span class="kw">use </span>structopt::StructOpt;
 
@@ -723,7 +730,6 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 	HeadersToRelay, TaggedAccount, TransactionParams,
 };
 <span class="kw">use </span>bp_runtime::BalanceOf;
-<span class="kw">use </span>messages_relay::Labeled;
 <span class="kw">use </span>relay_substrate_client::{
 	AccountIdOf, AccountKeyPairOf, Chain, ChainWithBalances, ChainWithMessages,
 	ChainWithRuntimeVersion, ChainWithTransactions,
@@ -915,20 +921,9 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 		+ ChainWithRuntimeVersion;
 
 	<span class="doccomment">/// Left to Right bridge.
-	</span><span class="kw">type </span>L2R: MessagesCliBridge&lt;Source = <span class="self">Self</span>::Left, Target = <span class="self">Self</span>::Right, LaneId = <span class="self">Self</span>::LaneId&gt;;
+	</span><span class="kw">type </span>L2R: MessagesCliBridge&lt;Source = <span class="self">Self</span>::Left, Target = <span class="self">Self</span>::Right&gt;;
 	<span class="doccomment">/// Right to Left bridge
-	</span><span class="kw">type </span>R2L: MessagesCliBridge&lt;Source = <span class="self">Self</span>::Right, Target = <span class="self">Self</span>::Left, LaneId = <span class="self">Self</span>::LaneId&gt;;
-	<span class="doccomment">/// Lane identifier type.
-	</span><span class="kw">type </span>LaneId: Clone
-		+ Copy
-		+ Debug
-		+ Codec
-		+ EncodeLike
-		+ Send
-		+ Sync
-		+ Labeled
-		+ TryFrom&lt;Vec&lt;u8&gt;&gt;
-		+ Default;
+	</span><span class="kw">type </span>R2L: MessagesCliBridge&lt;Source = <span class="self">Self</span>::Right, Target = <span class="self">Self</span>::Left&gt;;
 
 	<span class="doccomment">/// Construct new bridge.
 	</span><span class="kw">fn </span>new(params: &lt;<span class="self">Self</span>::Base <span class="kw">as </span>Full2WayBridgeBase&gt;::Params) -&gt; anyhow::Result&lt;<span class="self">Self</span>&gt;;
@@ -979,7 +974,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 			<span class="self">self</span>.mut_base().start_on_demand_headers_relayers().<span class="kw">await</span><span class="question-mark">?</span>;
 
 		<span class="comment">// add balance-related metrics
-		</span><span class="kw">let </span>lanes: Vec&lt;<span class="self">Self</span>::LaneId&gt; = <span class="self">self
+		</span><span class="kw">let </span>lanes_l2r: Vec&lt;MessagesLaneIdOf&lt;<span class="self">Self</span>::L2R&gt;&gt; = <span class="self">self
 			</span>.base()
 			.common()
 			.shared
@@ -988,28 +983,48 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 			.cloned()
 			.map(HexLaneId::try_convert)
 			.collect::&lt;<span class="prelude-ty">Result</span>&lt;Vec&lt;<span class="kw">_</span>&gt;, HexLaneId&gt;&gt;()
-			.expect(<span class="string">""</span>);
+			.map_err(|e| {
+				<span class="macro">anyhow::format_err!</span>(<span class="string">"Conversion failed for L2R lanes with error: {:?}!"</span>, e)
+			})<span class="question-mark">?</span>;
+		<span class="kw">let </span>lanes_r2l: Vec&lt;MessagesLaneIdOf&lt;<span class="self">Self</span>::R2L&gt;&gt; = <span class="self">self
+			</span>.base()
+			.common()
+			.shared
+			.lane
+			.iter()
+			.cloned()
+			.map(HexLaneId::try_convert)
+			.collect::&lt;<span class="prelude-ty">Result</span>&lt;Vec&lt;<span class="kw">_</span>&gt;, HexLaneId&gt;&gt;()
+			.map_err(|e| {
+				<span class="macro">anyhow::format_err!</span>(<span class="string">"Conversion failed for R2L lanes with error: {:?}!"</span>, e)
+			})<span class="question-mark">?</span>;
 		{
 			<span class="kw">let </span>common = <span class="self">self</span>.mut_base().mut_common();
 			<span class="kw">crate</span>::messages::metrics::add_relay_balances_metrics::&lt;
 				<span class="kw">_</span>,
 				<span class="self">Self</span>::Right,
 				MessagesLaneIdOf&lt;<span class="self">Self</span>::L2R&gt;,
-			&gt;(common.left.client.clone(), <span class="kw-2">&amp;</span>common.metrics_params, <span class="kw-2">&amp;</span>common.left.accounts, <span class="kw-2">&amp;</span>lanes)
+			&gt;(
+				common.left.client.clone(), <span class="kw-2">&amp;</span>common.metrics_params, <span class="kw-2">&amp;</span>common.left.accounts, <span class="kw-2">&amp;</span>lanes_l2r
+			)
 			.<span class="kw">await</span><span class="question-mark">?</span>;
 			<span class="kw">crate</span>::messages::metrics::add_relay_balances_metrics::&lt;
 				<span class="kw">_</span>,
 				<span class="self">Self</span>::Left,
 				MessagesLaneIdOf&lt;<span class="self">Self</span>::R2L&gt;,
 			&gt;(
-				common.right.client.clone(), <span class="kw-2">&amp;</span>common.metrics_params, <span class="kw-2">&amp;</span>common.right.accounts, <span class="kw-2">&amp;</span>lanes
+				common.right.client.clone(),
+				<span class="kw-2">&amp;</span>common.metrics_params,
+				<span class="kw-2">&amp;</span>common.right.accounts,
+				<span class="kw-2">&amp;</span>lanes_r2l,
 			)
 			.<span class="kw">await</span><span class="question-mark">?</span>;
 		}
 
 		<span class="comment">// Need 2x capacity since we consider both directions for each lane
-		</span><span class="kw">let </span><span class="kw-2">mut </span>message_relays = Vec::with_capacity(lanes.len() * <span class="number">2</span>);
-		<span class="kw">for </span>lane <span class="kw">in </span>lanes {
+		</span><span class="kw">let </span><span class="kw-2">mut </span>message_relays =
+			Vec::with_capacity(lanes_l2r.len().saturating_add(lanes_r2l.len()));
+		<span class="kw">for </span>lane <span class="kw">in </span>lanes_l2r {
 			<span class="kw">let </span>left_to_right_messages =
 				<span class="kw">crate</span>::messages::run::&lt;&lt;<span class="self">Self</span>::L2R <span class="kw">as </span>MessagesCliBridge&gt;::MessagesLane, <span class="kw">_</span>, <span class="kw">_</span>&gt;(
 					<span class="self">self</span>.left_to_right().messages_relay_params(
@@ -1022,7 +1037,8 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 				.map_err(|e| <span class="macro">anyhow::format_err!</span>(<span class="string">"{}"</span>, e))
 				.boxed();
 			message_relays.push(left_to_right_messages);
-
+		}
+		<span class="kw">for </span>lane <span class="kw">in </span>lanes_r2l {
 			<span class="kw">let </span>right_to_left_messages =
 				<span class="kw">crate</span>::messages::run::&lt;&lt;<span class="self">Self</span>::R2L <span class="kw">as </span>MessagesCliBridge&gt;::MessagesLane, <span class="kw">_</span>, <span class="kw">_</span>&gt;(
 					<span class="self">self</span>.right_to_left().messages_relay_params(

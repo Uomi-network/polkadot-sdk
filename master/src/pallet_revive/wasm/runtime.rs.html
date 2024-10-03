@@ -2502,8 +2502,8 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 	</span>CallerIsRoot,
 	<span class="doccomment">/// Weight of calling `seal_address`.
 	</span>Address,
-	<span class="doccomment">/// Weight of calling `seal_gas_left`.
-	</span>GasLeft,
+	<span class="doccomment">/// Weight of calling `seal_weight_left`.
+	</span>WeightLeft,
 	<span class="doccomment">/// Weight of calling `seal_balance`.
 	</span>Balance,
 	<span class="doccomment">/// Weight of calling `seal_balance_of`.
@@ -2649,7 +2649,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 			CallerIsOrigin =&gt; T::WeightInfo::seal_caller_is_origin(),
 			CallerIsRoot =&gt; T::WeightInfo::seal_caller_is_root(),
 			Address =&gt; T::WeightInfo::seal_address(),
-			GasLeft =&gt; T::WeightInfo::seal_gas_left(),
+			WeightLeft =&gt; T::WeightInfo::seal_weight_left(),
 			Balance =&gt; T::WeightInfo::seal_balance(),
 			BalanceOf =&gt; T::WeightInfo::seal_balance_of(),
 			ValueTransferred =&gt; T::WeightInfo::seal_value_transferred(),
@@ -3693,7 +3693,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 		out_ptr: u32,
 		out_len_ptr: u32,
 	) -&gt; <span class="prelude-ty">Result</span>&lt;(), TrapReason&gt; {
-		<span class="self">self</span>.charge_gas(RuntimeCosts::GasLeft)<span class="question-mark">?</span>;
+		<span class="self">self</span>.charge_gas(RuntimeCosts::WeightLeft)<span class="question-mark">?</span>;
 		<span class="kw">let </span>gas_left = <span class="kw-2">&amp;</span><span class="self">self</span>.ext.gas_meter().gas_left().encode();
 		<span class="prelude-val">Ok</span>(<span class="self">self</span>.write_sandbox_output(
 			memory,
