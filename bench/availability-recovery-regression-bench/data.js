@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1727983640486,
+  "lastUpdate": 1727993068031,
   "repoUrl": "https://github.com/paritytech/polkadot-sdk",
   "entries": {
     "availability-recovery-regression-bench": [
@@ -22475,6 +22475,50 @@ window.BENCHMARK_DATA = {
           {
             "name": "test-environment",
             "value": 0.2311372452,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "bkontur@gmail.com",
+            "name": "Branislav Kontur",
+            "username": "bkontur"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "a995caf789a10b5be8a740bcf5c203d0e2154486",
+          "message": "Simplify bridges relayer cli configuration (#5912)\n\nThis PR removes the requirement to set the `LaneId` in the relayer CLI\nconfiguration where it was not really necessary.\n\n---------\n\nCo-authored-by: command-bot <>",
+          "timestamp": "2024-10-03T20:52:22Z",
+          "tree_id": "c7e3859893688f752ff6d4dd73651facb8271a2e",
+          "url": "https://github.com/paritytech/polkadot-sdk/commit/a995caf789a10b5be8a740bcf5c203d0e2154486"
+        },
+        "date": 1727993049326,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "Sent to peers",
+            "value": 1.6666666666666665,
+            "unit": "KiB"
+          },
+          {
+            "name": "Received from peers",
+            "value": 307203,
+            "unit": "KiB"
+          },
+          {
+            "name": "availability-recovery",
+            "value": 11.638554351766668,
+            "unit": "seconds"
+          },
+          {
+            "name": "test-environment",
+            "value": 0.24268755173333328,
             "unit": "seconds"
           }
         ]
