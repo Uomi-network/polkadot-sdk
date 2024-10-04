@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1727993068031,
+  "lastUpdate": 1728031550811,
   "repoUrl": "https://github.com/paritytech/polkadot-sdk",
   "entries": {
     "availability-recovery-regression-bench": [
@@ -22519,6 +22519,50 @@ window.BENCHMARK_DATA = {
           {
             "name": "test-environment",
             "value": 0.24268755173333328,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "serban@parity.io",
+            "name": "Serban Iorga",
+            "username": "serban300"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "261b3daebd6231462e06f9c787e170aef48857f5",
+          "message": "polkadot-parachain: Remove shell node (#5911)\n\nRemoving the shell node variant for the polkadot-parachain as discussed\nhere:\nhttps://github.com/paritytech/polkadot-sdk/pull/5586#discussion_r1752635254\n\nResolves https://github.com/paritytech/polkadot-sdk/issues/5898",
+          "timestamp": "2024-10-04T07:37:25Z",
+          "tree_id": "ad9878a17946582d5030af7070bf2698e442839c",
+          "url": "https://github.com/paritytech/polkadot-sdk/commit/261b3daebd6231462e06f9c787e170aef48857f5"
+        },
+        "date": 1728031531381,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "Received from peers",
+            "value": 307203,
+            "unit": "KiB"
+          },
+          {
+            "name": "Sent to peers",
+            "value": 1.6666666666666665,
+            "unit": "KiB"
+          },
+          {
+            "name": "test-environment",
+            "value": 0.2365807057333334,
+            "unit": "seconds"
+          },
+          {
+            "name": "availability-recovery",
+            "value": 11.801568324300003,
             "unit": "seconds"
           }
         ]
