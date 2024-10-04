@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1728033886753,
+  "lastUpdate": 1728037051085,
   "repoUrl": "https://github.com/paritytech/polkadot-sdk",
   "entries": {
     "statement-distribution-regression-bench": [
@@ -13239,6 +13239,50 @@ window.BENCHMARK_DATA = {
           {
             "name": "statement-distribution",
             "value": 0.035924528232,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "bkontur@gmail.com",
+            "name": "Branislav Kontur",
+            "username": "bkontur"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "88570c263f1835780f446b9fd2814134a927f8b0",
+          "message": "Update \"@polkadot/api\": \"^14.0\" for bridges zombienet tests (#5918)\n\nRelates to: https://github.com/paritytech/polkadot-sdk/pull/5916\nRelates to: https://github.com/polkadot-js/api/pull/5976\n\n---------\n\nCo-authored-by: Javier Viola <javier@parity.io>",
+          "timestamp": "2024-10-04T09:02:53Z",
+          "tree_id": "c3595cda902f1a8471b89da4f4fa64b6d8677fd9",
+          "url": "https://github.com/paritytech/polkadot-sdk/commit/88570c263f1835780f446b9fd2814134a927f8b0"
+        },
+        "date": 1728037032444,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "Received from peers",
+            "value": 106.39999999999996,
+            "unit": "KiB"
+          },
+          {
+            "name": "Sent to peers",
+            "value": 127.93599999999996,
+            "unit": "KiB"
+          },
+          {
+            "name": "test-environment",
+            "value": 0.04474126176999996,
+            "unit": "seconds"
+          },
+          {
+            "name": "statement-distribution",
+            "value": 0.035813265065999994,
             "unit": "seconds"
           }
         ]

@@ -555,6 +555,8 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 <a href="#405" id="405">405</a>
 <a href="#406" id="406">406</a>
 <a href="#407" id="407">407</a>
+<a href="#408" id="408">408</a>
+<a href="#409" id="409">409</a>
 </pre></div><pre class="rust"><code><span class="comment">// SPDX-License-Identifier: Apache-2.0
 // SPDX-FileCopyrightText: 2023 Snowfork &lt;hello@snowfork.com&gt;
 </span><span class="doccomment">//! Converts XCM messages into simpler commands that can be processed by the Gateway contract
@@ -626,13 +628,15 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 			<span class="kw">return </span><span class="prelude-val">Err</span>(SendError::NotApplicable)
 		}
 
-		<span class="kw">let </span>dest = destination.take().ok_or(SendError::MissingArgument)<span class="question-mark">?</span>;
+		<span class="comment">// Cloning destination to avoid modifying the value so subsequent exporters can use it.
+		</span><span class="kw">let </span>dest = destination.clone().take().ok_or(SendError::MissingArgument)<span class="question-mark">?</span>;
 		<span class="kw">if </span>dest != Here {
 			<span class="macro">log::trace!</span>(target: <span class="string">"xcm::ethereum_blob_exporter"</span>, <span class="string">"skipped due to unmatched remote destination {dest:?}."</span>);
 			<span class="kw">return </span><span class="prelude-val">Err</span>(SendError::NotApplicable)
 		}
 
-		<span class="kw">let </span>(local_net, local_sub) = universal_source
+		<span class="comment">// Cloning universal_source to avoid modifying the value so subsequent exporters can use it.
+		</span><span class="kw">let </span>(local_net, local_sub) = universal_source.clone()
 			.take()
 			.ok_or_else(|| {
 				<span class="macro">log::error!</span>(target: <span class="string">"xcm::ethereum_blob_exporter"</span>, <span class="string">"universal source not provided."</span>);
@@ -641,7 +645,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 			</span>.split_global()
 			.map_err(|()| {
 				<span class="macro">log::error!</span>(target: <span class="string">"xcm::ethereum_blob_exporter"</span>, <span class="string">"could not get global consensus from universal source '{universal_source:?}'."</span>);
-				SendError::Unroutable
+				SendError::NotApplicable
 			})<span class="question-mark">?</span>;
 
 		<span class="kw">if </span><span class="prelude-val">Ok</span>(local_net) != universal_location.global_consensus() {
@@ -653,14 +657,9 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 			[Parachain(para_id)] =&gt; <span class="kw-2">*</span>para_id,
 			<span class="kw">_ </span>=&gt; {
 				<span class="macro">log::error!</span>(target: <span class="string">"xcm::ethereum_blob_exporter"</span>, <span class="string">"could not get parachain id from universal source '{local_sub:?}'."</span>);
-				<span class="kw">return </span><span class="prelude-val">Err</span>(SendError::MissingArgument)
+				<span class="kw">return </span><span class="prelude-val">Err</span>(SendError::NotApplicable)
 			},
 		};
-
-		<span class="kw">let </span>message = message.take().ok_or_else(|| {
-			<span class="macro">log::error!</span>(target: <span class="string">"xcm::ethereum_blob_exporter"</span>, <span class="string">"xcm message not provided."</span>);
-			SendError::MissingArgument
-		})<span class="question-mark">?</span>;
 
 		<span class="kw">let </span>source_location = Location::new(<span class="number">1</span>, local_sub.clone());
 
@@ -668,9 +667,14 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 			<span class="prelude-val">Some</span>(id) =&gt; id,
 			<span class="prelude-val">None </span>=&gt; {
 				<span class="macro">log::error!</span>(target: <span class="string">"xcm::ethereum_blob_exporter"</span>, <span class="string">"unroutable due to not being able to create agent id. '{source_location:?}'"</span>);
-				<span class="kw">return </span><span class="prelude-val">Err</span>(SendError::Unroutable)
+				<span class="kw">return </span><span class="prelude-val">Err</span>(SendError::NotApplicable)
 			},
 		};
+
+		<span class="kw">let </span>message = message.take().ok_or_else(|| {
+			<span class="macro">log::error!</span>(target: <span class="string">"xcm::ethereum_blob_exporter"</span>, <span class="string">"xcm message not provided."</span>);
+			SendError::MissingArgument
+		})<span class="question-mark">?</span>;
 
 		<span class="kw">let </span><span class="kw-2">mut </span>converter =
 			XcmConverter::&lt;ConvertAssetId, ()&gt;::new(<span class="kw-2">&amp;</span>message, expected_network, agent_id);
