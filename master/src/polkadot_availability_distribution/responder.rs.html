@@ -444,14 +444,6 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 <a href="#294" id="294">294</a>
 <a href="#295" id="295">295</a>
 <a href="#296" id="296">296</a>
-<a href="#297" id="297">297</a>
-<a href="#298" id="298">298</a>
-<a href="#299" id="299">299</a>
-<a href="#300" id="300">300</a>
-<a href="#301" id="301">301</a>
-<a href="#302" id="302">302</a>
-<a href="#303" id="303">303</a>
-<a href="#304" id="304">304</a>
 </pre></div><pre class="rust"><code><span class="comment">// Copyright (C) Parity Technologies (UK) Ltd.
 // This file is part of Polkadot.
 
@@ -481,7 +473,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 	UnifiedReputationChange <span class="kw">as </span>Rep,
 };
 <span class="kw">use </span>polkadot_node_primitives::{AvailableData, ErasureChunk};
-<span class="kw">use </span>polkadot_node_subsystem::{jaeger, messages::AvailabilityStoreMessage, SubsystemSender};
+<span class="kw">use </span>polkadot_node_subsystem::{messages::AvailabilityStoreMessage, SubsystemSender};
 <span class="kw">use </span>polkadot_primitives::{CandidateHash, ValidatorIndex};
 
 <span class="kw">use crate</span>::{
@@ -647,8 +639,6 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 <span class="kw">where
 	</span>Sender: SubsystemSender&lt;AvailabilityStoreMessage&gt;,
 {
-	<span class="kw">let </span>_span = jaeger::Span::new(req.payload.candidate_hash, <span class="string">"answer-pov-request"</span>);
-
 	<span class="kw">let </span>av_data = query_available_data(sender, req.payload.candidate_hash).<span class="kw">await</span><span class="question-mark">?</span>;
 
 	<span class="kw">let </span>result = av_data.is_some();
@@ -682,12 +672,6 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 	<span class="comment">// V1 and V2 requests have the same payload, so decoding into either one will work. It's the
 	// responses that differ, hence the `MakeResp` generic.
 	</span><span class="kw">let </span>payload: v1::ChunkFetchingRequest = req.payload.into();
-	<span class="kw">let </span>span = jaeger::Span::new(payload.candidate_hash, <span class="string">"answer-chunk-request"</span>);
-
-	<span class="kw">let </span>_child_span = span
-		.child(<span class="string">"answer-chunk-request"</span>)
-		.with_trace_id(payload.candidate_hash)
-		.with_validator_index(payload.index);
 
 	<span class="kw">let </span>chunk = query_chunk(sender, payload.candidate_hash, payload.index).<span class="kw">await</span><span class="question-mark">?</span>;
 

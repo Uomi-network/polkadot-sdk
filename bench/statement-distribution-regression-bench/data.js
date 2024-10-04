@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1728037051085,
+  "lastUpdate": 1728040090988,
   "repoUrl": "https://github.com/paritytech/polkadot-sdk",
   "entries": {
     "statement-distribution-regression-bench": [
@@ -13283,6 +13283,50 @@ window.BENCHMARK_DATA = {
           {
             "name": "statement-distribution",
             "value": 0.035813265065999994,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "claravanstaden64@gmail.com",
+            "name": "Clara van Staden",
+            "username": "claravanstaden"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": false,
+          "id": "111b2447a0ce9122a31ad67c4a8ad1479db159a0",
+          "message": "Prevents EthereumBlobExporter from consuming dest when returning NotApplicable (#5789)\n\n# Description\n\nThe EthereumBlobExporter consumes the `dest` parameter when the\ndestination is not `Here`. Subsequent exporters will receive a `None`\nvalue for the destination instead of the original destination value,\nwhich is incorrect.\n \nCloses #5788\n\n## Integration\n\nMinor fix related to the exporter behaviour.\n\n## Review Notes\n\nVerified that tests\n`exporter_validate_with_invalid_dest_does_not_alter_destination` and\n`exporter_validate_with_invalid_universal_source_does_not_alter_universal_source`\nfail without the fix in the exporter.\n\n---------\n\nCo-authored-by: Adrian Catangiu <adrian@parity.io>",
+          "timestamp": "2024-10-04T09:55:18Z",
+          "tree_id": "6a43756baa6156ecf648c239ce075ce3bd47486a",
+          "url": "https://github.com/paritytech/polkadot-sdk/commit/111b2447a0ce9122a31ad67c4a8ad1479db159a0"
+        },
+        "date": 1728040072209,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "Received from peers",
+            "value": 106.39999999999996,
+            "unit": "KiB"
+          },
+          {
+            "name": "Sent to peers",
+            "value": 127.93599999999995,
+            "unit": "KiB"
+          },
+          {
+            "name": "test-environment",
+            "value": 0.04483521877399998,
+            "unit": "seconds"
+          },
+          {
+            "name": "statement-distribution",
+            "value": 0.03598257403999999,
             "unit": "seconds"
           }
         ]

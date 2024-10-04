@@ -620,21 +620,6 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 <a href="#470" id="470">470</a>
 <a href="#471" id="471">471</a>
 <a href="#472" id="472">472</a>
-<a href="#473" id="473">473</a>
-<a href="#474" id="474">474</a>
-<a href="#475" id="475">475</a>
-<a href="#476" id="476">476</a>
-<a href="#477" id="477">477</a>
-<a href="#478" id="478">478</a>
-<a href="#479" id="479">479</a>
-<a href="#480" id="480">480</a>
-<a href="#481" id="481">481</a>
-<a href="#482" id="482">482</a>
-<a href="#483" id="483">483</a>
-<a href="#484" id="484">484</a>
-<a href="#485" id="485">485</a>
-<a href="#486" id="486">486</a>
-<a href="#487" id="487">487</a>
 </pre></div><pre class="rust"><code><span class="comment">// Copyright (C) Parity Technologies (UK) Ltd.
 // This file is part of Polkadot.
 
@@ -660,14 +645,15 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 	benchmarking::{benchmark_inherent_data, RemarkBuilder, TransferKeepAliveBuilder},
 	HeaderBackend, IdentifyVariant,
 };
+<span class="attr">#[cfg(feature = <span class="string">"pyroscope"</span>)]
+</span><span class="kw">use </span>pyroscope_pprofrs::{pprof_backend, PprofConfig};
 <span class="kw">use </span>sc_cli::SubstrateCli;
 <span class="kw">use </span>sp_core::crypto::Ss58AddressFormatRegistry;
 <span class="kw">use </span>sp_keyring::Sr25519Keyring;
-<span class="kw">use </span>std::net::ToSocketAddrs;
 
 <span class="kw">pub use </span><span class="kw">crate</span>::error::Error;
 <span class="attr">#[cfg(feature = <span class="string">"pyroscope"</span>)]
-</span><span class="kw">use </span>pyroscope_pprofrs::{pprof_backend, PprofConfig};
+</span><span class="kw">use </span>std::net::ToSocketAddrs;
 
 <span class="kw">type </span><span class="prelude-ty">Result</span>&lt;T&gt; = std::result::Result&lt;T, Error&gt;;
 
@@ -832,18 +818,6 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 		<span class="macro">info!</span>(<span class="string">"----------------------------"</span>);
 	}
 
-	<span class="kw">let </span>jaeger_agent = <span class="kw">if let </span><span class="prelude-val">Some</span>(<span class="kw-2">ref </span>jaeger_agent) = cli.run.jaeger_agent {
-		<span class="prelude-val">Some</span>(
-			jaeger_agent
-				.to_socket_addrs()
-				.map_err(Error::AddressResolutionFailure)<span class="question-mark">?
-				</span>.next()
-				.ok_or_else(|| Error::AddressResolutionMissing)<span class="question-mark">?</span>,
-		)
-	} <span class="kw">else </span>{
-		<span class="prelude-val">None
-	</span>};
-
 	<span class="kw">let </span>node_version =
 		<span class="kw">if </span>cli.run.disable_worker_version_check { <span class="prelude-val">None </span>} <span class="kw">else </span>{ <span class="prelude-val">Some</span>(NODE_VERSION.to_string()) };
 
@@ -864,7 +838,6 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 				is_parachain_node: polkadot_service::IsParachainNode::No,
 				enable_beefy,
 				force_authoring_backoff: cli.run.force_authoring_backoff,
-				jaeger_agent,
 				telemetry_worker_handle: <span class="prelude-val">None</span>,
 				node_version,
 				secure_validator_mode,
@@ -943,7 +916,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 
 			runner.async_run(|<span class="kw-2">mut </span>config| {
 				<span class="kw">let </span>(client, <span class="kw">_</span>, import_queue, task_manager) =
-					polkadot_service::new_chain_ops(<span class="kw-2">&amp;mut </span>config, <span class="prelude-val">None</span>)<span class="question-mark">?</span>;
+					polkadot_service::new_chain_ops(<span class="kw-2">&amp;mut </span>config)<span class="question-mark">?</span>;
 				<span class="prelude-val">Ok</span>((cmd.run(client, import_queue).map_err(Error::SubstrateCli), task_manager))
 			})
 		},
@@ -955,8 +928,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 
 			<span class="prelude-val">Ok</span>(runner.async_run(|<span class="kw-2">mut </span>config| {
 				<span class="kw">let </span>(client, <span class="kw">_</span>, <span class="kw">_</span>, task_manager) =
-					polkadot_service::new_chain_ops(<span class="kw-2">&amp;mut </span>config, <span class="prelude-val">None</span>)
-						.map_err(Error::PolkadotService)<span class="question-mark">?</span>;
+					polkadot_service::new_chain_ops(<span class="kw-2">&amp;mut </span>config).map_err(Error::PolkadotService)<span class="question-mark">?</span>;
 				<span class="prelude-val">Ok</span>((cmd.run(client, config.database).map_err(Error::SubstrateCli), task_manager))
 			})<span class="question-mark">?</span>)
 		},
@@ -967,8 +939,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 			set_default_ss58_version(chain_spec);
 
 			<span class="prelude-val">Ok</span>(runner.async_run(|<span class="kw-2">mut </span>config| {
-				<span class="kw">let </span>(client, <span class="kw">_</span>, <span class="kw">_</span>, task_manager) =
-					polkadot_service::new_chain_ops(<span class="kw-2">&amp;mut </span>config, <span class="prelude-val">None</span>)<span class="question-mark">?</span>;
+				<span class="kw">let </span>(client, <span class="kw">_</span>, <span class="kw">_</span>, task_manager) = polkadot_service::new_chain_ops(<span class="kw-2">&amp;mut </span>config)<span class="question-mark">?</span>;
 				<span class="prelude-val">Ok</span>((cmd.run(client, config.chain_spec).map_err(Error::SubstrateCli), task_manager))
 			})<span class="question-mark">?</span>)
 		},
@@ -980,7 +951,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 
 			<span class="prelude-val">Ok</span>(runner.async_run(|<span class="kw-2">mut </span>config| {
 				<span class="kw">let </span>(client, <span class="kw">_</span>, import_queue, task_manager) =
-					polkadot_service::new_chain_ops(<span class="kw-2">&amp;mut </span>config, <span class="prelude-val">None</span>)<span class="question-mark">?</span>;
+					polkadot_service::new_chain_ops(<span class="kw-2">&amp;mut </span>config)<span class="question-mark">?</span>;
 				<span class="prelude-val">Ok</span>((cmd.run(client, import_queue).map_err(Error::SubstrateCli), task_manager))
 			})<span class="question-mark">?</span>)
 		},
@@ -996,7 +967,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 
 			<span class="prelude-val">Ok</span>(runner.async_run(|<span class="kw-2">mut </span>config| {
 				<span class="kw">let </span>(client, backend, <span class="kw">_</span>, task_manager) =
-					polkadot_service::new_chain_ops(<span class="kw-2">&amp;mut </span>config, <span class="prelude-val">None</span>)<span class="question-mark">?</span>;
+					polkadot_service::new_chain_ops(<span class="kw-2">&amp;mut </span>config)<span class="question-mark">?</span>;
 				<span class="kw">let </span>task_handle = task_manager.spawn_handle();
 				<span class="kw">let </span>aux_revert = Box::new(|client, backend, blocks| {
 					polkadot_service::revert_backend(client, backend, blocks, config, task_handle)
@@ -1029,22 +1000,21 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 					.into()),
 				<span class="attr">#[cfg(feature = <span class="string">"runtime-benchmarks"</span>)]
 				</span>BenchmarkCmd::Storage(cmd) =&gt; runner.sync_run(|<span class="kw-2">mut </span>config| {
-					<span class="kw">let </span>(client, backend, <span class="kw">_</span>, <span class="kw">_</span>) =
-						polkadot_service::new_chain_ops(<span class="kw-2">&amp;mut </span>config, <span class="prelude-val">None</span>)<span class="question-mark">?</span>;
+					<span class="kw">let </span>(client, backend, <span class="kw">_</span>, <span class="kw">_</span>) = polkadot_service::new_chain_ops(<span class="kw-2">&amp;mut </span>config)<span class="question-mark">?</span>;
 					<span class="kw">let </span>db = backend.expose_db();
 					<span class="kw">let </span>storage = backend.expose_storage();
 
 					cmd.run(config, client.clone(), db, storage).map_err(Error::SubstrateCli)
 				}),
 				BenchmarkCmd::Block(cmd) =&gt; runner.sync_run(|<span class="kw-2">mut </span>config| {
-					<span class="kw">let </span>(client, <span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span>) = polkadot_service::new_chain_ops(<span class="kw-2">&amp;mut </span>config, <span class="prelude-val">None</span>)<span class="question-mark">?</span>;
+					<span class="kw">let </span>(client, <span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span>) = polkadot_service::new_chain_ops(<span class="kw-2">&amp;mut </span>config)<span class="question-mark">?</span>;
 
 					cmd.run(client.clone()).map_err(Error::SubstrateCli)
 				}),
 				<span class="comment">// These commands are very similar and can be handled in nearly the same way.
 				</span>BenchmarkCmd::Extrinsic(<span class="kw">_</span>) | BenchmarkCmd::Overhead(<span class="kw">_</span>) =&gt;
 					runner.sync_run(|<span class="kw-2">mut </span>config| {
-						<span class="kw">let </span>(client, <span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span>) = polkadot_service::new_chain_ops(<span class="kw-2">&amp;mut </span>config, <span class="prelude-val">None</span>)<span class="question-mark">?</span>;
+						<span class="kw">let </span>(client, <span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span>) = polkadot_service::new_chain_ops(<span class="kw-2">&amp;mut </span>config)<span class="question-mark">?</span>;
 						<span class="kw">let </span>header = client.header(client.info().genesis_hash).unwrap().unwrap();
 						<span class="kw">let </span>inherent_data = benchmark_inherent_data(header)
 							.map_err(|e| <span class="macro">format!</span>(<span class="string">"generating inherent data: {:?}"</span>, e))<span class="question-mark">?</span>;

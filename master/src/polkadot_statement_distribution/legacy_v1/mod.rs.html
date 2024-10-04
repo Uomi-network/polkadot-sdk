@@ -2332,28 +2332,6 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 <a href="#2182" id="2182">2182</a>
 <a href="#2183" id="2183">2183</a>
 <a href="#2184" id="2184">2184</a>
-<a href="#2185" id="2185">2185</a>
-<a href="#2186" id="2186">2186</a>
-<a href="#2187" id="2187">2187</a>
-<a href="#2188" id="2188">2188</a>
-<a href="#2189" id="2189">2189</a>
-<a href="#2190" id="2190">2190</a>
-<a href="#2191" id="2191">2191</a>
-<a href="#2192" id="2192">2192</a>
-<a href="#2193" id="2193">2193</a>
-<a href="#2194" id="2194">2194</a>
-<a href="#2195" id="2195">2195</a>
-<a href="#2196" id="2196">2196</a>
-<a href="#2197" id="2197">2197</a>
-<a href="#2198" id="2198">2198</a>
-<a href="#2199" id="2199">2199</a>
-<a href="#2200" id="2200">2200</a>
-<a href="#2201" id="2201">2201</a>
-<a href="#2202" id="2202">2202</a>
-<a href="#2203" id="2203">2203</a>
-<a href="#2204" id="2204">2204</a>
-<a href="#2205" id="2205">2205</a>
-<a href="#2206" id="2206">2206</a>
 </pre></div><pre class="rust"><code><span class="comment">// Copyright (C) Parity Technologies (UK) Ltd.
 // This file is part of Polkadot.
 
@@ -2389,9 +2367,8 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 };
 
 <span class="kw">use </span>polkadot_node_subsystem::{
-	jaeger,
 	messages::{CandidateBackingMessage, NetworkBridgeEvent, NetworkBridgeTxMessage},
-	overseer, ActivatedLeaf, PerLeafSpan, StatementDistributionSenderTrait,
+	overseer, ActivatedLeaf, StatementDistributionSenderTrait,
 };
 <span class="kw">use </span>polkadot_primitives::{
 	AuthorityDiscoveryId, CandidateHash, CommittedCandidateReceipt, CompactStatement, Hash,
@@ -2988,15 +2965,12 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 	</span>session_index: sp_staking::SessionIndex,
 	<span class="doccomment">/// How many `Seconded` statements we've seen per validator.
 	</span>seconded_counts: HashMap&lt;ValidatorIndex, usize&gt;,
-	<span class="doccomment">/// A Jaeger span for this head, so we can attach data to it.
-	</span>span: PerLeafSpan,
 }
 
 <span class="kw">impl </span>ActiveHeadData {
 	<span class="kw">fn </span>new(
 		validators: IndexedVec&lt;ValidatorIndex, ValidatorId&gt;,
 		session_index: sp_staking::SessionIndex,
-		span: PerLeafSpan,
 	) -&gt; <span class="self">Self </span>{
 		ActiveHeadData {
 			candidates: Default::default(),
@@ -3006,7 +2980,6 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 			validators,
 			session_index,
 			seconded_counts: Default::default(),
-			span,
 		}
 	}
 
@@ -3257,12 +3230,6 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 		<span class="prelude-val">None </span>=&gt; <span class="kw">return</span>,
 	};
 
-	<span class="kw">let </span>_span = active_head
-		.span
-		.child(<span class="string">"circulate-statement"</span>)
-		.with_candidate(statement.payload().candidate_hash())
-		.with_stage(jaeger::Stage::StatementDistribution);
-
 	<span class="kw">let </span>topology = topology_store
 		.get_topology_or_fallback(active_head.session_index)
 		.local_grid_neighbors();
@@ -3289,12 +3256,10 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 		}
 	};
 
-	<span class="kw">let </span>_span = _span.child(<span class="string">"send-to-peers"</span>);
 	<span class="comment">// Now send dependent statements to all peers needing them, if any.
 	</span><span class="kw">if let </span><span class="prelude-val">Some</span>((candidate_hash, peers_needing_dependents)) = outputs {
 		<span class="kw">for </span>peer <span class="kw">in </span>peers_needing_dependents {
 			<span class="kw">if let </span><span class="prelude-val">Some</span>(peer_data) = peers.get_mut(<span class="kw-2">&amp;</span>peer) {
-				<span class="kw">let </span>_span_loop = _span.child(<span class="string">"to-peer"</span>).with_peer_id(<span class="kw-2">&amp;</span>peer);
 				<span class="comment">// defensive: the peer data should always be some because the iterator
 				// of peers is derived from the set of peers.
 				</span>send_statements_about(
@@ -3869,11 +3834,6 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 
 	<span class="kw">let </span>fingerprint = message.get_fingerprint();
 	<span class="kw">let </span>candidate_hash = <span class="kw-2">*</span>fingerprint.<span class="number">0</span>.candidate_hash();
-	<span class="kw">let </span>handle_incoming_span = active_head
-		.span
-		.child(<span class="string">"handle-incoming"</span>)
-		.with_candidate(candidate_hash)
-		.with_peer_id(<span class="kw-2">&amp;</span>peer);
 
 	<span class="kw">let </span>max_message_count = active_head.validators.len() * <span class="number">2</span>;
 
@@ -4054,8 +4014,6 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 		},
 		NotedStatement::Fresh(statement) =&gt; {
 			modify_reputation(reputation, ctx.sender(), peer, BENEFIT_VALID_STATEMENT_FIRST).<span class="kw">await</span>;
-
-			<span class="kw">let </span><span class="kw-2">mut </span>_span = handle_incoming_span.child(<span class="string">"notify-backing"</span>);
 
 			<span class="comment">// When we receive a new message from a peer, we forward it to the
 			// candidate backing subsystem.
@@ -4435,7 +4393,6 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 	activated: ActivatedLeaf,
 ) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
 	<span class="kw">let </span>relay_parent = activated.hash;
-	<span class="kw">let </span>span = PerLeafSpan::new(activated.span, <span class="string">"statement-distribution-legacy"</span>);
 	<span class="macro">gum::trace!</span>(
 		target: LOG_TARGET,
 		hash = <span class="question-mark">?</span>relay_parent,
@@ -4451,11 +4408,10 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 		.<span class="kw">await</span><span class="question-mark">?</span>;
 	<span class="kw">let </span>session_info = <span class="kw-2">&amp;</span>info.session_info;
 
-	state.active_heads.entry(relay_parent).or_insert(ActiveHeadData::new(
-		session_info.validators.clone(),
-		session_index,
-		span,
-	));
+	state
+		.active_heads
+		.entry(relay_parent)
+		.or_insert(ActiveHeadData::new(session_info.validators.clone(), session_index));
 
 	<span class="prelude-val">Ok</span>(())
 }

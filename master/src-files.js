@@ -314,7 +314,6 @@ var srcIndex = new Map(JSON.parse('[\
 ["polkadot_node_core_pvf_execute_worker",["",[],["lib.rs"]]],\
 ["polkadot_node_core_pvf_prepare_worker",["",[],["lib.rs","memory_stats.rs"]]],\
 ["polkadot_node_core_runtime_api",["",[],["cache.rs","lib.rs","metrics.rs"]]],\
-["polkadot_node_jaeger",["",[],["config.rs","errors.rs","lib.rs","spans.rs"]]],\
 ["polkadot_node_metrics",["",[["runtime",[],["mod.rs","parachain.rs"]]],["lib.rs","metronome.rs"]]],\
 ["polkadot_node_network_protocol",["",[["request_response",[["incoming",[],["error.rs","mod.rs"]]],["mod.rs","outgoing.rs","v1.rs","v2.rs"]]],["authority_discovery.rs","grid_topology.rs","lib.rs","peer_set.rs","reputation.rs"]]],\
 ["polkadot_node_primitives",["",[["approval",[],["criteria.rs","mod.rs","time.rs"]],["disputes",[],["message.rs","mod.rs","status.rs"]]],["lib.rs"]]],\

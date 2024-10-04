@@ -497,40 +497,6 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 <a href="#347" id="347">347</a>
 <a href="#348" id="348">348</a>
 <a href="#349" id="349">349</a>
-<a href="#350" id="350">350</a>
-<a href="#351" id="351">351</a>
-<a href="#352" id="352">352</a>
-<a href="#353" id="353">353</a>
-<a href="#354" id="354">354</a>
-<a href="#355" id="355">355</a>
-<a href="#356" id="356">356</a>
-<a href="#357" id="357">357</a>
-<a href="#358" id="358">358</a>
-<a href="#359" id="359">359</a>
-<a href="#360" id="360">360</a>
-<a href="#361" id="361">361</a>
-<a href="#362" id="362">362</a>
-<a href="#363" id="363">363</a>
-<a href="#364" id="364">364</a>
-<a href="#365" id="365">365</a>
-<a href="#366" id="366">366</a>
-<a href="#367" id="367">367</a>
-<a href="#368" id="368">368</a>
-<a href="#369" id="369">369</a>
-<a href="#370" id="370">370</a>
-<a href="#371" id="371">371</a>
-<a href="#372" id="372">372</a>
-<a href="#373" id="373">373</a>
-<a href="#374" id="374">374</a>
-<a href="#375" id="375">375</a>
-<a href="#376" id="376">376</a>
-<a href="#377" id="377">377</a>
-<a href="#378" id="378">378</a>
-<a href="#379" id="379">379</a>
-<a href="#380" id="380">380</a>
-<a href="#381" id="381">381</a>
-<a href="#382" id="382">382</a>
-<a href="#383" id="383">383</a>
 </pre></div><pre class="rust"><code><span class="comment">// Copyright (C) Parity Technologies (UK) Ltd.
 // This file is part of Polkadot.
 
@@ -564,7 +530,6 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 
 <span class="kw">use </span>polkadot_node_network_protocol::request_response::{v1, v2, IsRequest, ReqProtocolNames};
 <span class="kw">use </span>polkadot_node_subsystem::{
-	jaeger,
 	messages::{ChainApiMessage, RuntimeApiMessage},
 	overseer, ActivatedLeaf, ActiveLeavesUpdate,
 };
@@ -572,9 +537,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 	availability_chunks::availability_chunk_index,
 	runtime::{get_occupied_cores, RuntimeInfo},
 };
-<span class="kw">use </span>polkadot_primitives::{
-	BlockNumber, CandidateHash, CoreIndex, Hash, OccupiedCore, SessionIndex,
-};
+<span class="kw">use </span>polkadot_primitives::{CandidateHash, CoreIndex, Hash, OccupiedCore, SessionIndex};
 
 <span class="kw">use super</span>::{FatalError, Metrics, <span class="prelude-ty">Result</span>, LOG_TARGET};
 
@@ -647,21 +610,13 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 		ctx: <span class="kw-2">&amp;mut </span>Context,
 		runtime: <span class="kw-2">&amp;mut </span>RuntimeInfo,
 		update: ActiveLeavesUpdate,
-		spans: <span class="kw-2">&amp;</span>HashMap&lt;Hash, (BlockNumber, jaeger::PerLeafSpan)&gt;,
 	) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
 		<span class="macro">gum::trace!</span>(target: LOG_TARGET, <span class="question-mark">?</span>update, <span class="string">"Update fetching heads"</span>);
 		<span class="kw">let </span>ActiveLeavesUpdate { activated, deactivated } = update;
 		<span class="kw">if let </span><span class="prelude-val">Some</span>(leaf) = activated {
-			<span class="kw">let </span>span = spans
-				.get(<span class="kw-2">&amp;</span>leaf.hash)
-				.map(|(<span class="kw">_</span>, span)| span.child(<span class="string">"update-fetching-heads"</span>))
-				.unwrap_or_else(|| jaeger::Span::new(<span class="kw-2">&amp;</span>leaf.hash, <span class="string">"update-fetching-heads"</span>))
-				.with_string_tag(<span class="string">"leaf"</span>, <span class="macro">format!</span>(<span class="string">"{:?}"</span>, leaf.hash))
-				.with_stage(jaeger::Stage::AvailabilityDistribution);
-
 			<span class="comment">// Order important! We need to handle activated, prior to deactivated, otherwise we
 			// might cancel still needed jobs.
-			</span><span class="self">self</span>.start_requesting_chunks(ctx, runtime, leaf, <span class="kw-2">&amp;</span>span).<span class="kw">await</span><span class="question-mark">?</span>;
+			</span><span class="self">self</span>.start_requesting_chunks(ctx, runtime, leaf).<span class="kw">await</span><span class="question-mark">?</span>;
 		}
 
 		<span class="self">self</span>.stop_requesting_chunks(deactivated.into_iter());
@@ -677,13 +632,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 		ctx: <span class="kw-2">&amp;mut </span>Context,
 		runtime: <span class="kw-2">&amp;mut </span>RuntimeInfo,
 		new_head: ActivatedLeaf,
-		span: <span class="kw-2">&amp;</span>jaeger::Span,
 	) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
-		<span class="kw">let </span><span class="kw-2">mut </span>span = span
-			.child(<span class="string">"request-chunks-new-head"</span>)
-			.with_string_tag(<span class="string">"leaf"</span>, <span class="macro">format!</span>(<span class="string">"{:?}"</span>, new_head.hash))
-			.with_stage(jaeger::Stage::AvailabilityDistribution);
-
 		<span class="kw">let </span>sender = <span class="kw-2">&amp;mut </span>ctx.sender().clone();
 		<span class="kw">let </span>ActivatedLeaf { hash: leaf, .. } = new_head;
 		<span class="kw">let </span>(leaf_session_index, ancestors_in_session) = get_block_ancestors_in_same_session(
@@ -693,15 +642,9 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 			<span class="self">Self</span>::LEAF_ANCESTRY_LEN_WITHIN_SESSION,
 		)
 		.<span class="kw">await</span><span class="question-mark">?</span>;
-		span.add_uint_tag(<span class="string">"ancestors-in-session"</span>, ancestors_in_session.len() <span class="kw">as </span>u64);
 
 		<span class="comment">// Also spawn or bump tasks for candidates in ancestry in the same session.
 		</span><span class="kw">for </span>hash <span class="kw">in </span>std::iter::once(leaf).chain(ancestors_in_session) {
-			<span class="kw">let </span>span = span
-				.child(<span class="string">"request-chunks-ancestor"</span>)
-				.with_string_tag(<span class="string">"leaf"</span>, <span class="macro">format!</span>(<span class="string">"{:?}"</span>, hash.clone()))
-				.with_stage(jaeger::Stage::AvailabilityDistribution);
-
 			<span class="kw">let </span>cores = get_occupied_cores(sender, hash).<span class="kw">await</span><span class="question-mark">?</span>;
 			<span class="macro">gum::trace!</span>(
 				target: LOG_TARGET,
@@ -715,7 +658,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 			// The next time the subsystem receives leaf update, some of spawned task will be bumped
 			// to be live in fresh relay parent, while some might get dropped due to the current
 			// leaf being deactivated.
-			</span><span class="self">self</span>.add_cores(ctx, runtime, leaf, leaf_session_index, cores, span).<span class="kw">await</span><span class="question-mark">?</span>;
+			</span><span class="self">self</span>.add_cores(ctx, runtime, leaf, leaf_session_index, cores).<span class="kw">await</span><span class="question-mark">?</span>;
 		}
 
 		<span class="prelude-val">Ok</span>(())
@@ -744,22 +687,12 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 		leaf: Hash,
 		leaf_session_index: SessionIndex,
 		cores: <span class="kw">impl </span>IntoIterator&lt;Item = (CoreIndex, OccupiedCore)&gt;,
-		span: jaeger::Span,
 	) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
 		<span class="kw">for </span>(core_index, core) <span class="kw">in </span>cores {
-			<span class="kw">let </span><span class="kw-2">mut </span>span = span
-				.child(<span class="string">"check-fetch-candidate"</span>)
-				.with_trace_id(core.candidate_hash)
-				.with_string_tag(<span class="string">"leaf"</span>, <span class="macro">format!</span>(<span class="string">"{:?}"</span>, leaf))
-				.with_candidate(core.candidate_hash)
-				.with_stage(jaeger::Stage::AvailabilityDistribution);
-
 			<span class="kw">if let </span><span class="prelude-val">Some</span>(e) = <span class="self">self</span>.fetches.get_mut(<span class="kw-2">&amp;</span>core.candidate_hash) {
 				<span class="comment">// Just book keeping - we are already requesting that chunk:
-				</span>span.add_string_tag(<span class="string">"already-requested-chunk"</span>, <span class="string">"true"</span>);
-				e.add_leaf(leaf);
+				</span>e.add_leaf(leaf);
 			} <span class="kw">else </span>{
-				span.add_string_tag(<span class="string">"already-requested-chunk"</span>, <span class="string">"false"</span>);
 				<span class="kw">let </span>tx = <span class="self">self</span>.tx.clone();
 				<span class="kw">let </span>metrics = <span class="self">self</span>.metrics.clone();
 
@@ -805,7 +738,6 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 						metrics,
 						session_info,
 						chunk_index,
-						span,
 						<span class="self">self</span>.req_protocol_names.get_name(v1::ChunkFetchingRequest::PROTOCOL),
 						<span class="self">self</span>.req_protocol_names.get_name(v2::ChunkFetchingRequest::PROTOCOL),
 					);

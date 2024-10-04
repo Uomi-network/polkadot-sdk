@@ -1104,33 +1104,6 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 <a href="#954" id="954">954</a>
 <a href="#955" id="955">955</a>
 <a href="#956" id="956">956</a>
-<a href="#957" id="957">957</a>
-<a href="#958" id="958">958</a>
-<a href="#959" id="959">959</a>
-<a href="#960" id="960">960</a>
-<a href="#961" id="961">961</a>
-<a href="#962" id="962">962</a>
-<a href="#963" id="963">963</a>
-<a href="#964" id="964">964</a>
-<a href="#965" id="965">965</a>
-<a href="#966" id="966">966</a>
-<a href="#967" id="967">967</a>
-<a href="#968" id="968">968</a>
-<a href="#969" id="969">969</a>
-<a href="#970" id="970">970</a>
-<a href="#971" id="971">971</a>
-<a href="#972" id="972">972</a>
-<a href="#973" id="973">973</a>
-<a href="#974" id="974">974</a>
-<a href="#975" id="975">975</a>
-<a href="#976" id="976">976</a>
-<a href="#977" id="977">977</a>
-<a href="#978" id="978">978</a>
-<a href="#979" id="979">979</a>
-<a href="#980" id="980">980</a>
-<a href="#981" id="981">981</a>
-<a href="#982" id="982">982</a>
-<a href="#983" id="983">983</a>
 </pre></div><pre class="rust"><code><span class="comment">// Copyright (C) Parity Technologies (UK) Ltd.
 // This file is part of Polkadot.
 
@@ -1169,8 +1142,8 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 	UnifiedReputationChange <span class="kw">as </span>Rep, Versioned, View,
 };
 <span class="kw">use </span>polkadot_node_subsystem::{
-	jaeger, messages::<span class="kw-2">*</span>, overseer, ActiveLeavesUpdate, FromOrchestra, OverseerSignal, PerLeafSpan,
-	SpawnedSubsystem, SubsystemError, SubsystemResult,
+	messages::<span class="kw-2">*</span>, overseer, ActiveLeavesUpdate, FromOrchestra, OverseerSignal, SpawnedSubsystem,
+	SubsystemError, SubsystemResult,
 };
 <span class="kw">use </span>polkadot_node_subsystem_util::{
 	<span class="self">self </span><span class="kw">as </span>util,
@@ -1310,22 +1283,14 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 	<span class="doccomment">/// Track messages that were already received by a peer
 	/// to prevent flooding.
 	</span>message_received_from_peer: HashMap&lt;PeerId, HashSet&lt;ValidatorId&gt;&gt;,
-
-	<span class="doccomment">/// The span for this leaf/relay parent.
-	</span>span: PerLeafSpan,
 }
 
 <span class="kw">impl </span>PerRelayParentData {
 	<span class="doccomment">/// Create a new instance.
-	</span><span class="kw">fn </span>new(
-		signing_context: SigningContext,
-		validator_set: Vec&lt;ValidatorId&gt;,
-		span: PerLeafSpan,
-	) -&gt; <span class="self">Self </span>{
+	</span><span class="kw">fn </span>new(signing_context: SigningContext, validator_set: Vec&lt;ValidatorId&gt;) -&gt; <span class="self">Self </span>{
 		<span class="self">Self </span>{
 			signing_context,
 			validator_set,
-			span,
 			one_per_validator: Default::default(),
 			message_sent_to_peer: Default::default(),
 			message_received_from_peer: Default::default(),
@@ -1437,8 +1402,6 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 								<span class="kw">let </span>relay_parent = activated.hash;
 
 								<span class="macro">gum::trace!</span>(target: LOG_TARGET, <span class="question-mark">?</span>relay_parent, <span class="string">"activated"</span>);
-								<span class="kw">let </span>span = PerLeafSpan::new(activated.span, <span class="string">"bitfield-distribution"</span>);
-								<span class="kw">let </span>_span = span.child(<span class="string">"query-basics"</span>);
 
 								<span class="comment">// query validator set and signing context per relay_parent once only
 								</span><span class="kw">match </span>query_basics(<span class="kw-2">&amp;mut </span>ctx, relay_parent).<span class="kw">await </span>{
@@ -1450,7 +1413,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 										// us anything to do with this relay-parent anyway.
 										</span><span class="kw">let _ </span>= state.per_relay_parent.insert(
 											relay_parent,
-											PerRelayParentData::new(signing_context, validator_set, span),
+											PerRelayParentData::new(signing_context, validator_set),
 										);
 									},
 									<span class="prelude-val">Err</span>(err) =&gt; {
@@ -1563,9 +1526,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 	rng: <span class="kw-2">&amp;mut </span>(<span class="kw">impl </span>CryptoRng + Rng),
 ) {
 	<span class="kw">let </span>relay_parent = message.relay_parent;
-	<span class="kw">let </span>span = job_data.span.child(<span class="string">"relay-msg"</span>);
 
-	<span class="kw">let </span>_span = span.child(<span class="string">"provisionable"</span>);
 	<span class="comment">// notify the overseer about a new and valid signed bitfield
 	</span>ctx.send_message(ProvisionerMessage::ProvisionableData(
 		relay_parent,
@@ -1573,11 +1534,9 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 	))
 	.<span class="kw">await</span>;
 
-	drop(_span);
 	<span class="kw">let </span>total_peers = peers.len();
 	<span class="kw">let </span><span class="kw-2">mut </span>random_routing: RandomRouting = Default::default();
 
-	<span class="kw">let </span>_span = span.child(<span class="string">"interested-peers"</span>);
 	<span class="comment">// pass on the bitfield distribution to all interested peers
 	</span><span class="kw">let </span>interested_peers = peers
 		.iter()
@@ -1620,8 +1579,6 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 			.insert(validator.clone());
 	});
 
-	drop(_span);
-
 	<span class="kw">if </span>interested_peers.is_empty() {
 		<span class="macro">gum::trace!</span>(
 			target: LOG_TARGET,
@@ -1629,8 +1586,6 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 			<span class="string">"no peers are interested in gossip for relay parent"</span>,
 		);
 	} <span class="kw">else </span>{
-		<span class="kw">let </span>_span = span.child(<span class="string">"gossip"</span>);
-
 		<span class="kw">let </span>v1_interested_peers =
 			filter_by_peer_version(<span class="kw-2">&amp;</span>interested_peers, ValidationVersion::V1.into());
 		<span class="kw">let </span>v2_interested_peers =
@@ -1726,14 +1681,6 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 	</span>};
 
 	<span class="kw">let </span>validator_index = bitfield.unchecked_validator_index();
-
-	<span class="kw">let </span><span class="kw-2">mut </span>_span = job_data
-		.span
-		.child(<span class="string">"msg-received"</span>)
-		.with_peer_id(<span class="kw-2">&amp;</span>origin)
-		.with_relay_parent(relay_parent)
-		.with_claimed_validator_index(validator_index)
-		.with_stage(jaeger::Stage::BitfieldDistribution);
 
 	<span class="kw">let </span>validator_set = <span class="kw-2">&amp;</span>job_data.validator_set;
 	<span class="kw">if </span>validator_set.is_empty() {
@@ -2047,7 +1994,6 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 		<span class="kw">return
 	</span>};
 
-	<span class="kw">let </span>_span = job_data.span.child(<span class="string">"gossip"</span>);
 	<span class="macro">gum::trace!</span>(
 		target: LOG_TARGET,
 		<span class="question-mark">?</span>dest,

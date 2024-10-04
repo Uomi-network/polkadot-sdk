@@ -347,27 +347,6 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 <a href="#197" id="197">197</a>
 <a href="#198" id="198">198</a>
 <a href="#199" id="199">199</a>
-<a href="#200" id="200">200</a>
-<a href="#201" id="201">201</a>
-<a href="#202" id="202">202</a>
-<a href="#203" id="203">203</a>
-<a href="#204" id="204">204</a>
-<a href="#205" id="205">205</a>
-<a href="#206" id="206">206</a>
-<a href="#207" id="207">207</a>
-<a href="#208" id="208">208</a>
-<a href="#209" id="209">209</a>
-<a href="#210" id="210">210</a>
-<a href="#211" id="211">211</a>
-<a href="#212" id="212">212</a>
-<a href="#213" id="213">213</a>
-<a href="#214" id="214">214</a>
-<a href="#215" id="215">215</a>
-<a href="#216" id="216">216</a>
-<a href="#217" id="217">217</a>
-<a href="#218" id="218">218</a>
-<a href="#219" id="219">219</a>
-<a href="#220" id="220">220</a>
 </pre></div><pre class="rust"><code><span class="comment">// Copyright (C) Parity Technologies (UK) Ltd.
 // This file is part of Polkadot.
 
@@ -392,11 +371,9 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 	v1, v2, IncomingRequestReceiver, ReqProtocolNames,
 };
 <span class="kw">use </span>polkadot_node_subsystem::{
-	jaeger, messages::AvailabilityDistributionMessage, overseer, FromOrchestra, OverseerSignal,
+	messages::AvailabilityDistributionMessage, overseer, FromOrchestra, OverseerSignal,
 	SpawnedSubsystem, SubsystemError,
 };
-<span class="kw">use </span>polkadot_primitives::{BlockNumber, Hash};
-<span class="kw">use </span>std::collections::HashMap;
 
 <span class="doccomment">/// Error and [`Result`] type for this subsystem.
 </span><span class="kw">mod </span>error;
@@ -474,7 +451,6 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 	<span class="doccomment">/// Start processing work as passed on from the Overseer.
 	</span><span class="kw">async fn </span>run&lt;Context&gt;(<span class="self">self</span>, <span class="kw-2">mut </span>ctx: Context) -&gt; std::result::Result&lt;(), FatalError&gt; {
 		<span class="kw">let </span><span class="self">Self </span>{ <span class="kw-2">mut </span>runtime, recvs, metrics, req_protocol_names } = <span class="self">self</span>;
-		<span class="kw">let </span><span class="kw-2">mut </span>spans: HashMap&lt;Hash, (BlockNumber, jaeger::PerLeafSpan)&gt; = HashMap::new();
 
 		<span class="kw">let </span>IncomingRequestReceivers {
 			pov_req_receiver,
@@ -526,24 +502,16 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 			};
 			<span class="kw">match </span>message {
 				FromOrchestra::Signal(OverseerSignal::ActiveLeaves(update)) =&gt; {
-					<span class="kw">let </span>cloned_leaf = <span class="kw">match </span>update.activated.clone() {
-						<span class="prelude-val">Some</span>(activated) =&gt; activated,
-						<span class="prelude-val">None </span>=&gt; <span class="kw">continue</span>,
-					};
-					<span class="kw">let </span>span =
-						jaeger::PerLeafSpan::new(cloned_leaf.span, <span class="string">"availability-distribution"</span>);
-					spans.insert(cloned_leaf.hash, (cloned_leaf.number, span));
 					log_error(
 						requester
 							.get_mut()
-							.update_fetching_heads(<span class="kw-2">&amp;mut </span>ctx, <span class="kw-2">&amp;mut </span>runtime, update, <span class="kw-2">&amp;</span>spans)
+							.update_fetching_heads(<span class="kw-2">&amp;mut </span>ctx, <span class="kw-2">&amp;mut </span>runtime, update)
 							.<span class="kw">await</span>,
 						<span class="string">"Error in Requester::update_fetching_heads"</span>,
 						<span class="kw-2">&amp;mut </span>warn_freq,
 					)<span class="question-mark">?</span>;
 				},
-				FromOrchestra::Signal(OverseerSignal::BlockFinalized(_hash, finalized_number)) =&gt; {
-					spans.retain(|_hash, (block_number, _span)| <span class="kw-2">*</span>block_number &gt; finalized_number);
+				FromOrchestra::Signal(OverseerSignal::BlockFinalized(_hash, _finalized_number)) =&gt; {
 				},
 				FromOrchestra::Signal(OverseerSignal::Conclude) =&gt; <span class="kw">return </span><span class="prelude-val">Ok</span>(()),
 				FromOrchestra::Communication {
@@ -557,15 +525,6 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 							tx,
 						},
 				} =&gt; {
-					<span class="kw">let </span>span = spans
-						.get(<span class="kw-2">&amp;</span>relay_parent)
-						.map(|(<span class="kw">_</span>, span)| span.child(<span class="string">"fetch-pov"</span>))
-						.unwrap_or_else(|| jaeger::Span::new(<span class="kw-2">&amp;</span>relay_parent, <span class="string">"fetch-pov"</span>))
-						.with_trace_id(candidate_hash)
-						.with_candidate(candidate_hash)
-						.with_relay_parent(relay_parent)
-						.with_stage(jaeger::Stage::AvailabilityDistribution);
-
 					log_error(
 						pov_requester::fetch_pov(
 							<span class="kw-2">&amp;mut </span>ctx,
@@ -577,7 +536,6 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 							pov_hash,
 							tx,
 							metrics.clone(),
-							<span class="kw-2">&amp;</span>span,
 						)
 						.<span class="kw">await</span>,
 						<span class="string">"pov_requester::fetch_pov"</span>,

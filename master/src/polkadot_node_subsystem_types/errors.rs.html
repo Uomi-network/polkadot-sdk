@@ -300,10 +300,6 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 <a href="#150" id="150">150</a>
 <a href="#151" id="151">151</a>
 <a href="#152" id="152">152</a>
-<a href="#153" id="153">153</a>
-<a href="#154" id="154">154</a>
-<a href="#155" id="155">155</a>
-<a href="#156" id="156">156</a>
 </pre></div><pre class="rust"><code><span class="comment">// Copyright (C) Parity Technologies (UK) Ltd.
 // This file is part of Polkadot.
 
@@ -322,8 +318,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 
 </span><span class="doccomment">//! Error types for the subsystem requests.
 
-</span><span class="kw">use </span><span class="kw">crate</span>::JaegerError;
-<span class="kw">use </span>::orchestra::OrchestraError <span class="kw">as </span>OverseerError;
+</span><span class="kw">use </span>::orchestra::OrchestraError <span class="kw">as </span>OverseerError;
 <span class="kw">use </span>fatality::fatality;
 
 <span class="doccomment">/// A description of an error causing the runtime API request to be unservable.
@@ -414,9 +409,6 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 
 	<span class="attr">#[error(transparent)]
 	</span>Prometheus(<span class="attr">#[from] </span>prometheus_endpoint::PrometheusError),
-
-	<span class="attr">#[error(transparent)]
-	</span>Jaeger(<span class="attr">#[from] </span>JaegerError),
 
 	<span class="attr">#[error(<span class="string">"Failed to {0}"</span>)]
 	</span>Context(String),

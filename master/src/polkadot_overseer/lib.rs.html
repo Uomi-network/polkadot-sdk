@@ -1098,24 +1098,6 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 <a href="#948" id="948">948</a>
 <a href="#949" id="949">949</a>
 <a href="#950" id="950">950</a>
-<a href="#951" id="951">951</a>
-<a href="#952" id="952">952</a>
-<a href="#953" id="953">953</a>
-<a href="#954" id="954">954</a>
-<a href="#955" id="955">955</a>
-<a href="#956" id="956">956</a>
-<a href="#957" id="957">957</a>
-<a href="#958" id="958">958</a>
-<a href="#959" id="959">959</a>
-<a href="#960" id="960">960</a>
-<a href="#961" id="961">961</a>
-<a href="#962" id="962">962</a>
-<a href="#963" id="963">963</a>
-<a href="#964" id="964">964</a>
-<a href="#965" id="965">965</a>
-<a href="#966" id="966">966</a>
-<a href="#967" id="967">967</a>
-<a href="#968" id="968">968</a>
 </pre></div><pre class="rust"><code><span class="comment">// Copyright (C) Parity Technologies (UK) Ltd.
 // This file is part of Polkadot.
 
@@ -1206,8 +1188,8 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 
 <span class="kw">pub use </span>polkadot_node_subsystem_types::{
 	errors::{SubsystemError, SubsystemResult},
-	jaeger, ActivatedLeaf, ActiveLeavesUpdate, ChainApiBackend, OverseerSignal,
-	RuntimeApiSubsystemClient, UnpinHandle,
+	ActivatedLeaf, ActiveLeavesUpdate, ChainApiBackend, OverseerSignal, RuntimeApiSubsystemClient,
+	UnpinHandle,
 };
 
 <span class="kw">pub mod </span>metrics;
@@ -1768,9 +1750,6 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 	<span class="doccomment">/// External listeners waiting for a hash to be in the active-leave set.
 	</span><span class="kw">pub </span>activation_external_listeners: HashMap&lt;Hash, Vec&lt;oneshot::Sender&lt;SubsystemResult&lt;()&gt;&gt;&gt;&gt;,
 
-	<span class="doccomment">/// Stores the [`jaeger::Span`] per active leaf.
-	</span><span class="kw">pub </span>span_per_active_leaf: HashMap&lt;Hash, Arc&lt;jaeger::Span&gt;&gt;,
-
 	<span class="doccomment">/// The set of the "active leaves".
 	</span><span class="kw">pub </span>active_leaves: HashMap&lt;Hash, BlockNumber&gt;,
 
@@ -1935,11 +1914,10 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 		};
 
 		<span class="kw">let </span><span class="kw-2">mut </span>update = <span class="kw">match </span><span class="self">self</span>.on_head_activated(<span class="kw-2">&amp;</span>block.hash, <span class="prelude-val">Some</span>(block.parent_hash)).<span class="kw">await </span>{
-			<span class="prelude-val">Some</span>(span) =&gt; ActiveLeavesUpdate::start_work(ActivatedLeaf {
+			<span class="prelude-val">Some</span>(<span class="kw">_</span>) =&gt; ActiveLeavesUpdate::start_work(ActivatedLeaf {
 				hash: block.hash,
 				number: block.number,
 				unpin_handle: block.unpin_handle,
-				span,
 			}),
 			<span class="prelude-val">None </span>=&gt; ActiveLeavesUpdate::default(),
 		};
@@ -1992,11 +1970,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 
 	<span class="doccomment">/// Handles a header activation. If the header's state doesn't support the parachains API,
 	/// this returns `None`.
-	</span><span class="kw">async fn </span>on_head_activated(
-		<span class="kw-2">&amp;mut </span><span class="self">self</span>,
-		hash: <span class="kw-2">&amp;</span>Hash,
-		parent_hash: <span class="prelude-ty">Option</span>&lt;Hash&gt;,
-	) -&gt; <span class="prelude-ty">Option</span>&lt;Arc&lt;jaeger::Span&gt;&gt; {
+	</span><span class="kw">async fn </span>on_head_activated(<span class="kw-2">&amp;mut </span><span class="self">self</span>, hash: <span class="kw-2">&amp;</span>Hash, _parent_hash: <span class="prelude-ty">Option</span>&lt;Hash&gt;) -&gt; <span class="prelude-ty">Option</span>&lt;()&gt; {
 		<span class="kw">if </span>!<span class="self">self</span>.supports_parachains.head_supports_parachains(hash).<span class="kw">await </span>{
 			<span class="kw">return </span><span class="prelude-val">None
 		</span>}
@@ -2014,22 +1988,12 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 			}
 		}
 
-		<span class="kw">let </span><span class="kw-2">mut </span>span = jaeger::Span::new(<span class="kw-2">*</span>hash, <span class="string">"leaf-activated"</span>);
-
-		<span class="kw">if let </span><span class="prelude-val">Some</span>(parent_span) = parent_hash.and_then(|h| <span class="self">self</span>.span_per_active_leaf.get(<span class="kw-2">&amp;</span>h)) {
-			span.add_follows_from(parent_span);
-		}
-
-		<span class="kw">let </span>span = Arc::new(span);
-		<span class="self">self</span>.span_per_active_leaf.insert(<span class="kw-2">*</span>hash, span.clone());
-
-		<span class="prelude-val">Some</span>(span)
+		<span class="prelude-val">Some</span>(())
 	}
 
 	<span class="kw">fn </span>on_head_deactivated(<span class="kw-2">&amp;mut </span><span class="self">self</span>, hash: <span class="kw-2">&amp;</span>Hash) {
 		<span class="self">self</span>.metrics.on_head_deactivated();
 		<span class="self">self</span>.activation_external_listeners.remove(hash);
-		<span class="self">self</span>.span_per_active_leaf.remove(hash);
 	}
 
 	<span class="kw">fn </span>clean_up_external_listeners(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {

@@ -956,9 +956,6 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 <a href="#806" id="806">806</a>
 <a href="#807" id="807">807</a>
 <a href="#808" id="808">808</a>
-<a href="#809" id="809">809</a>
-<a href="#810" id="810">810</a>
-<a href="#811" id="811">811</a>
 </pre></div><pre class="rust"><code><span class="comment">// Copyright (C) Parity Technologies (UK) Ltd.
 // This file is part of Polkadot.
 
@@ -1319,7 +1316,6 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 		.chain_selection(ChainSelectionSubsystem::new(chain_selection_config, parachains_db))
 		.prospective_parachains(ProspectiveParachainsSubsystem::new(Metrics::register(registry)<span class="question-mark">?</span>))
 		.activation_external_listeners(Default::default())
-		.span_per_active_leaf(Default::default())
 		.active_leaves(Default::default())
 		.supports_parachains(runtime_client)
 		.metrics(metrics)
@@ -1541,7 +1537,6 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 		.chain_selection(ChainSelectionSubsystem::new(chain_selection_config, parachains_db))
 		.prospective_parachains(ProspectiveParachainsSubsystem::new(Metrics::register(registry)<span class="question-mark">?</span>))
 		.activation_external_listeners(Default::default())
-		.span_per_active_leaf(Default::default())
 		.active_leaves(Default::default())
 		.supports_parachains(runtime_client)
 		.metrics(metrics)
@@ -1689,7 +1684,6 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 		.chain_selection(DummySubsystem)
 		.prospective_parachains(DummySubsystem)
 		.activation_external_listeners(Default::default())
-		.span_per_active_leaf(Default::default())
 		.active_leaves(Default::default())
 		.supports_parachains(runtime_client)
 		.metrics(Metrics::register(registry)<span class="question-mark">?</span>)

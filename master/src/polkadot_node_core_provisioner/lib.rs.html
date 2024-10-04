@@ -1078,18 +1078,6 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 <a href="#928" id="928">928</a>
 <a href="#929" id="929">929</a>
 <a href="#930" id="930">930</a>
-<a href="#931" id="931">931</a>
-<a href="#932" id="932">932</a>
-<a href="#933" id="933">933</a>
-<a href="#934" id="934">934</a>
-<a href="#935" id="935">935</a>
-<a href="#936" id="936">936</a>
-<a href="#937" id="937">937</a>
-<a href="#938" id="938">938</a>
-<a href="#939" id="939">939</a>
-<a href="#940" id="940">940</a>
-<a href="#941" id="941">941</a>
-<a href="#942" id="942">942</a>
 </pre></div><pre class="rust"><code><span class="comment">// Copyright (C) Parity Technologies (UK) Ltd.
 // This file is part of Polkadot.
 
@@ -1119,13 +1107,12 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 <span class="kw">use </span>schnellru::{ByLength, LruMap};
 
 <span class="kw">use </span>polkadot_node_subsystem::{
-	jaeger,
 	messages::{
 		Ancestors, CandidateBackingMessage, ChainApiMessage, ProspectiveParachainsMessage,
 		ProvisionableData, ProvisionerInherentData, ProvisionerMessage, RuntimeApiRequest,
 	},
-	overseer, ActivatedLeaf, ActiveLeavesUpdate, FromOrchestra, OverseerSignal, PerLeafSpan,
-	SpawnedSubsystem, SubsystemError,
+	overseer, ActivatedLeaf, ActiveLeavesUpdate, FromOrchestra, OverseerSignal, SpawnedSubsystem,
+	SubsystemError,
 };
 <span class="kw">use </span>polkadot_node_subsystem_util::{
 	has_required_runtime, request_availability_cores, request_persisted_validation_data,
@@ -1187,13 +1174,10 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 	signed_bitfields: Vec&lt;SignedAvailabilityBitfield&gt;,
 	is_inherent_ready: bool,
 	awaiting_inherent: Vec&lt;oneshot::Sender&lt;ProvisionerInherentData&gt;&gt;,
-	span: PerLeafSpan,
 }
 
 <span class="kw">impl </span>PerRelayParent {
 	<span class="kw">fn </span>new(leaf: ActivatedLeaf, per_session: <span class="kw-2">&amp;</span>PerSession) -&gt; <span class="self">Self </span>{
-		<span class="kw">let </span>span = PerLeafSpan::new(leaf.span.clone(), <span class="string">"provisioner"</span>);
-
 		<span class="self">Self </span>{
 			leaf,
 			backed_candidates: Vec::new(),
@@ -1202,7 +1186,6 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 			signed_bitfields: Vec::new(),
 			is_inherent_ready: <span class="bool-val">false</span>,
 			awaiting_inherent: Vec::new(),
-			span,
 		}
 	}
 }
@@ -1362,12 +1345,11 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 		},
 		ProvisionerMessage::ProvisionableData(relay_parent, data) =&gt; {
 			<span class="kw">if let </span><span class="prelude-val">Some</span>(state) = per_relay_parent.get_mut(<span class="kw-2">&amp;</span>relay_parent) {
-				<span class="kw">let </span>span = state.span.child(<span class="string">"provisionable-data"</span>);
 				<span class="kw">let </span>_timer = metrics.time_provisionable_data();
 
 				<span class="macro">gum::trace!</span>(target: LOG_TARGET, <span class="question-mark">?</span>relay_parent, <span class="string">"Received provisionable data: {:?}"</span>, <span class="kw-2">&amp;</span>data);
 
-				note_provisionable_data(state, <span class="kw-2">&amp;</span>span, data);
+				note_provisionable_data(state, data);
 			}
 		},
 	}
@@ -1387,12 +1369,10 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 	<span class="kw">let </span>backed_candidates = per_relay_parent.backed_candidates.clone();
 	<span class="kw">let </span>mode = per_relay_parent.prospective_parachains_mode;
 	<span class="kw">let </span>elastic_scaling_mvp = per_relay_parent.elastic_scaling_mvp;
-	<span class="kw">let </span>span = per_relay_parent.span.child(<span class="string">"req-inherent-data"</span>);
 
 	<span class="kw">let </span><span class="kw-2">mut </span>sender = ctx.sender().clone();
 
 	<span class="kw">let </span>bg = <span class="kw">async move </span>{
-		<span class="kw">let </span>_span = span;
 		<span class="kw">let </span>_timer = metrics.time_request_inherent_data();
 
 		<span class="macro">gum::trace!</span>(
@@ -1451,7 +1431,6 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 
 <span class="kw">fn </span>note_provisionable_data(
 	per_relay_parent: <span class="kw-2">&amp;mut </span>PerRelayParent,
-	span: <span class="kw-2">&amp;</span>jaeger::Span,
 	provisionable_data: ProvisionableData,
 ) {
 	<span class="kw">match </span>provisionable_data {
@@ -1465,10 +1444,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 				para = <span class="question-mark">?</span>backed_candidate.descriptor().para_id,
 				<span class="string">"noted backed candidate"</span>,
 			);
-			<span class="kw">let </span>_span = span
-				.child(<span class="string">"provisionable-backed"</span>)
-				.with_candidate(candidate_hash)
-				.with_para_id(backed_candidate.descriptor().para_id);
+
 			per_relay_parent.backed_candidates.push(backed_candidate);
 		},
 		<span class="comment">// We choose not to punish these forms of misbehavior for the time being.

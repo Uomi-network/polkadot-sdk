@@ -1696,39 +1696,6 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 <a href="#1546" id="1546">1546</a>
 <a href="#1547" id="1547">1547</a>
 <a href="#1548" id="1548">1548</a>
-<a href="#1549" id="1549">1549</a>
-<a href="#1550" id="1550">1550</a>
-<a href="#1551" id="1551">1551</a>
-<a href="#1552" id="1552">1552</a>
-<a href="#1553" id="1553">1553</a>
-<a href="#1554" id="1554">1554</a>
-<a href="#1555" id="1555">1555</a>
-<a href="#1556" id="1556">1556</a>
-<a href="#1557" id="1557">1557</a>
-<a href="#1558" id="1558">1558</a>
-<a href="#1559" id="1559">1559</a>
-<a href="#1560" id="1560">1560</a>
-<a href="#1561" id="1561">1561</a>
-<a href="#1562" id="1562">1562</a>
-<a href="#1563" id="1563">1563</a>
-<a href="#1564" id="1564">1564</a>
-<a href="#1565" id="1565">1565</a>
-<a href="#1566" id="1566">1566</a>
-<a href="#1567" id="1567">1567</a>
-<a href="#1568" id="1568">1568</a>
-<a href="#1569" id="1569">1569</a>
-<a href="#1570" id="1570">1570</a>
-<a href="#1571" id="1571">1571</a>
-<a href="#1572" id="1572">1572</a>
-<a href="#1573" id="1573">1573</a>
-<a href="#1574" id="1574">1574</a>
-<a href="#1575" id="1575">1575</a>
-<a href="#1576" id="1576">1576</a>
-<a href="#1577" id="1577">1577</a>
-<a href="#1578" id="1578">1578</a>
-<a href="#1579" id="1579">1579</a>
-<a href="#1580" id="1580">1580</a>
-<a href="#1581" id="1581">1581</a>
 </pre></div><pre class="rust"><code><span class="comment">// Copyright (C) Parity Technologies (UK) Ltd.
 // This file is part of Polkadot.
 
@@ -1790,7 +1757,6 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 	sc_client_api::BlockBackend,
 	sc_consensus_grandpa::{<span class="self">self</span>, FinalityProofProvider <span class="kw">as </span>GrandpaFinalityProofProvider},
 	sc_transaction_pool_api::OffchainTransactionPoolFactory,
-	sp_core::traits::SpawnNamed,
 };
 
 <span class="kw">use </span>polkadot_node_subsystem_util::database::Database;
@@ -1806,9 +1772,6 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 	sp_blockchain::{HeaderBackend, HeaderMetadata},
 	sp_consensus_babe::BabeApi,
 };
-
-<span class="attr">#[cfg(feature = <span class="string">"full-node"</span>)]
-</span><span class="kw">use </span>polkadot_node_subsystem::jaeger;
 
 <span class="kw">use </span>std::{collections::HashMap, path::PathBuf, sync::Arc, time::Duration};
 
@@ -1953,9 +1916,6 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 	<span class="attr">#[error(transparent)]
 	</span>Telemetry(<span class="attr">#[from] </span>sc_telemetry::Error),
 
-	<span class="attr">#[error(transparent)]
-	</span>Jaeger(<span class="attr">#[from] </span>polkadot_node_subsystem::jaeger::JaegerError),
-
 	<span class="attr">#[cfg(feature = <span class="string">"full-node"</span>)]
 	#[error(transparent)]
 	</span>Availability(<span class="attr">#[from] </span>AvailabilityError),
@@ -2096,25 +2056,6 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 	<span class="prelude-val">Ok</span>(parachains_db)
 }
 
-<span class="doccomment">/// Initialize the `Jeager` collector. The destination must listen
-/// on the given address and port for `UDP` packets.
-</span><span class="attr">#[cfg(any(test, feature = <span class="string">"full-node"</span>))]
-</span><span class="kw">fn </span>jaeger_launch_collector_with_agent(
-	spawner: <span class="kw">impl </span>SpawnNamed,
-	config: <span class="kw-2">&amp;</span>Configuration,
-	agent: <span class="prelude-ty">Option</span>&lt;std::net::SocketAddr&gt;,
-) -&gt; <span class="prelude-ty">Result</span>&lt;(), Error&gt; {
-	<span class="kw">if let </span><span class="prelude-val">Some</span>(agent) = agent {
-		<span class="kw">let </span>cfg = jaeger::JaegerConfig::builder()
-			.agent(agent)
-			.named(<span class="kw-2">&amp;</span>config.network.node_name)
-			.build();
-
-		jaeger::Jaeger::new(cfg).launch(spawner)<span class="question-mark">?</span>;
-	}
-	<span class="prelude-val">Ok</span>(())
-}
-
 <span class="attr">#[cfg(feature = <span class="string">"full-node"</span>)]
 </span><span class="kw">type </span>FullSelectChain = relay_chain_selection::SelectRelayChain&lt;FullBackend&gt;;
 <span class="attr">#[cfg(feature = <span class="string">"full-node"</span>)]
@@ -2142,7 +2083,6 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 <span class="attr">#[cfg(feature = <span class="string">"full-node"</span>)]
 </span><span class="kw">fn </span>new_partial_basics(
 	config: <span class="kw-2">&amp;mut </span>Configuration,
-	jaeger_agent: <span class="prelude-ty">Option</span>&lt;std::net::SocketAddr&gt;,
 	telemetry_worker_handle: <span class="prelude-ty">Option</span>&lt;TelemetryWorkerHandle&gt;,
 ) -&gt; <span class="prelude-ty">Result</span>&lt;Basics, Error&gt; {
 	<span class="kw">let </span>telemetry = config
@@ -2193,8 +2133,6 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 		}
 		telemetry
 	});
-
-	jaeger_launch_collector_with_agent(task_manager.spawn_handle(), <span class="kw-2">&amp;*</span>config, jaeger_agent)<span class="question-mark">?</span>;
 
 	<span class="prelude-val">Ok</span>(Basics { task_manager, client, backend, keystore_container, telemetry })
 }
@@ -2368,7 +2306,6 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 	<span class="doccomment">/// Whether to enable the block authoring backoff on production networks
 	/// where it isn't enabled by default.
 	</span><span class="kw">pub </span>force_authoring_backoff: bool,
-	<span class="kw">pub </span>jaeger_agent: <span class="prelude-ty">Option</span>&lt;std::net::SocketAddr&gt;,
 	<span class="kw">pub </span>telemetry_worker_handle: <span class="prelude-ty">Option</span>&lt;TelemetryWorkerHandle&gt;,
 	<span class="doccomment">/// The version of the node. TESTING ONLY: `None` can be passed to skip the node/worker version
 	/// check, both on startup and in the workers.
@@ -2473,7 +2410,6 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 		is_parachain_node,
 		enable_beefy,
 		force_authoring_backoff,
-		jaeger_agent,
 		telemetry_worker_handle,
 		node_version,
 		secure_validator_mode,
@@ -2529,7 +2465,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 	<span class="kw">let </span>disable_grandpa = config.disable_grandpa;
 	<span class="kw">let </span>name = config.network.node_name.clone();
 
-	<span class="kw">let </span>basics = new_partial_basics(<span class="kw-2">&amp;mut </span>config, jaeger_agent, telemetry_worker_handle)<span class="question-mark">?</span>;
+	<span class="kw">let </span>basics = new_partial_basics(<span class="kw-2">&amp;mut </span>config, telemetry_worker_handle)<span class="question-mark">?</span>;
 
 	<span class="kw">let </span>prometheus_registry = config.prometheus_registry().cloned();
 
@@ -3168,11 +3104,10 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 
 <span class="attr">#[cfg(feature = <span class="string">"full-node"</span>)]
 </span><span class="macro">macro_rules!</span> chain_ops {
-	(<span class="macro-nonterminal">$config</span>:expr, <span class="macro-nonterminal">$jaeger_agent</span>:expr, <span class="macro-nonterminal">$telemetry_worker_handle</span>:expr) =&gt; {{
+	(<span class="macro-nonterminal">$config</span>:expr, <span class="macro-nonterminal">$telemetry_worker_handle</span>:expr) =&gt; {{
 		<span class="kw">let </span>telemetry_worker_handle = <span class="macro-nonterminal">$telemetry_worker_handle</span>;
-		<span class="kw">let </span>jaeger_agent = <span class="macro-nonterminal">$jaeger_agent</span>;
 		<span class="kw">let </span><span class="kw-2">mut </span>config = <span class="macro-nonterminal">$config</span>;
-		<span class="kw">let </span>basics = new_partial_basics(config, jaeger_agent, telemetry_worker_handle)<span class="question-mark">?</span>;
+		<span class="kw">let </span>basics = new_partial_basics(config, telemetry_worker_handle)<span class="question-mark">?</span>;
 
 		<span class="kw">use </span>::sc_consensus::LongestChain;
 		<span class="comment">// use the longest chain selection, since there is no overseer available
@@ -3188,19 +3123,18 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 </span><span class="attr">#[cfg(feature = <span class="string">"full-node"</span>)]
 </span><span class="kw">pub fn </span>new_chain_ops(
 	config: <span class="kw-2">&amp;mut </span>Configuration,
-	jaeger_agent: <span class="prelude-ty">Option</span>&lt;std::net::SocketAddr&gt;,
 ) -&gt; <span class="prelude-ty">Result</span>&lt;(Arc&lt;FullClient&gt;, Arc&lt;FullBackend&gt;, sc_consensus::BasicQueue&lt;Block&gt;, TaskManager), Error&gt;
 {
 	config.keystore = sc_service::config::KeystoreConfig::InMemory;
 
 	<span class="kw">if </span>config.chain_spec.is_rococo() || config.chain_spec.is_versi() {
-		<span class="macro">chain_ops!</span>(config, jaeger_agent, <span class="prelude-val">None</span>)
+		<span class="macro">chain_ops!</span>(config, <span class="prelude-val">None</span>)
 	} <span class="kw">else if </span>config.chain_spec.is_kusama() {
-		<span class="macro">chain_ops!</span>(config, jaeger_agent, <span class="prelude-val">None</span>)
+		<span class="macro">chain_ops!</span>(config, <span class="prelude-val">None</span>)
 	} <span class="kw">else if </span>config.chain_spec.is_westend() {
-		<span class="kw">return </span><span class="macro">chain_ops!</span>(config, jaeger_agent, <span class="prelude-val">None</span>)
+		<span class="kw">return </span><span class="macro">chain_ops!</span>(config, <span class="prelude-val">None</span>)
 	} <span class="kw">else </span>{
-		<span class="macro">chain_ops!</span>(config, jaeger_agent, <span class="prelude-val">None</span>)
+		<span class="macro">chain_ops!</span>(config, <span class="prelude-val">None</span>)
 	}
 }
 

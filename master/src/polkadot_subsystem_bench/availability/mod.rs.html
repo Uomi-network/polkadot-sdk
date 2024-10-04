@@ -658,9 +658,6 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 <a href="#508" id="508">508</a>
 <a href="#509" id="509">509</a>
 <a href="#510" id="510">510</a>
-<a href="#511" id="511">511</a>
-<a href="#512" id="512">512</a>
-<a href="#513" id="513">513</a>
 </pre></div><pre class="rust"><code><span class="comment">// Copyright (C) Parity Technologies (UK) Ltd.
 // This file is part of Polkadot.
 
@@ -712,10 +709,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 	messages::{AllMessages, AvailabilityRecoveryMessage},
 	Overseer, OverseerConnector, SpawnGlue,
 };
-<span class="kw">use </span>polkadot_node_subsystem_types::{
-	messages::{AvailabilityStoreMessage, NetworkBridgeEvent},
-	Span,
-};
+<span class="kw">use </span>polkadot_node_subsystem_types::messages::{AvailabilityStoreMessage, NetworkBridgeEvent};
 <span class="kw">use </span>polkadot_overseer::{metrics::Metrics <span class="kw">as </span>OverseerMetrics, Handle <span class="kw">as </span>OverseerHandle};
 <span class="kw">use </span>polkadot_primitives::{Block, CoreIndex, GroupIndex, Hash};
 <span class="kw">use </span>sc_network::request_responses::{IncomingRequest <span class="kw">as </span>RawIncomingRequest, ProtocolConfig};
@@ -1084,7 +1078,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 
 		<span class="comment">// Inform bitfield distribution about our view of current test block
 		</span><span class="kw">let </span>message = polkadot_node_subsystem_types::messages::BitfieldDistributionMessage::NetworkBridgeUpdate(
-			NetworkBridgeEvent::OurViewChange(OurView::new(<span class="macro">vec!</span>[(relay_block_hash, Arc::new(Span::Disabled))], <span class="number">0</span>))
+			NetworkBridgeEvent::OurViewChange(OurView::new(<span class="macro">vec!</span>[relay_block_hash], <span class="number">0</span>))
 		);
 		env.send_message(AllMessages::BitfieldDistribution(message)).<span class="kw">await</span>;
 
