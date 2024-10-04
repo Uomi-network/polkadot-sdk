@@ -1031,6 +1031,12 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 <a href="#881" id="881">881</a>
 <a href="#882" id="882">882</a>
 <a href="#883" id="883">883</a>
+<a href="#884" id="884">884</a>
+<a href="#885" id="885">885</a>
+<a href="#886" id="886">886</a>
+<a href="#887" id="887">887</a>
+<a href="#888" id="888">888</a>
+<a href="#889" id="889">889</a>
 </pre></div><pre class="rust"><code><span class="comment">// This file is part of Substrate.
 
 // Copyright (C) Parity Technologies (UK) Ltd.
@@ -1707,6 +1713,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 		items: u32,
 		bytes_deposit: BalanceOf&lt;Test&gt;,
 		items_deposit: BalanceOf&lt;Test&gt;,
+		immutable_data_len: u32,
 	}
 
 	<span class="kw">fn </span>new_info(info: StorageInfo) -&gt; ContractInfo&lt;Test&gt; {
@@ -1719,6 +1726,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 			storage_item_deposit: info.items_deposit,
 			storage_base_deposit: Default::default(),
 			delegate_dependencies: Default::default(),
+			immutable_data_len: info.immutable_data_len,
 		}
 	}
 
@@ -1806,6 +1814,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 				items: <span class="number">5</span>,
 				bytes_deposit: <span class="number">100</span>,
 				items_deposit: <span class="number">10</span>,
+				immutable_data_len: <span class="number">0</span>,
 			});
 			<span class="kw">let </span><span class="kw-2">mut </span>nested0 = meter.nested(BalanceOf::&lt;Test&gt;::zero());
 			nested0.charge(<span class="kw-2">&amp;</span>Diff {
@@ -1821,6 +1830,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 				items: <span class="number">10</span>,
 				bytes_deposit: <span class="number">100</span>,
 				items_deposit: <span class="number">20</span>,
+				immutable_data_len: <span class="number">0</span>,
 			});
 			<span class="kw">let </span><span class="kw-2">mut </span>nested1 = nested0.nested(BalanceOf::&lt;Test&gt;::zero());
 			nested1.charge(<span class="kw-2">&amp;</span>Diff { items_removed: <span class="number">5</span>, ..Default::default() });
@@ -1831,6 +1841,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 				items: <span class="number">7</span>,
 				bytes_deposit: <span class="number">100</span>,
 				items_deposit: <span class="number">20</span>,
+				immutable_data_len: <span class="number">0</span>,
 			});
 			<span class="kw">let </span><span class="kw-2">mut </span>nested2 = nested0.nested(BalanceOf::&lt;Test&gt;::zero());
 			nested2.charge(<span class="kw-2">&amp;</span>Diff { items_removed: <span class="number">7</span>, ..Default::default() });
@@ -1900,6 +1911,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 				items: <span class="number">10</span>,
 				bytes_deposit: <span class="number">100</span>,
 				items_deposit: <span class="number">20</span>,
+				immutable_data_len: <span class="number">0</span>,
 			});
 			<span class="kw">let </span><span class="kw-2">mut </span>nested1 = nested0.nested(BalanceOf::&lt;Test&gt;::zero());
 			nested1.charge(<span class="kw-2">&amp;</span>Diff { items_removed: <span class="number">5</span>, ..Default::default() });

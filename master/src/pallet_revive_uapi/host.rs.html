@@ -790,6 +790,30 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 <a href="#640" id="640">640</a>
 <a href="#641" id="641">641</a>
 <a href="#642" id="642">642</a>
+<a href="#643" id="643">643</a>
+<a href="#644" id="644">644</a>
+<a href="#645" id="645">645</a>
+<a href="#646" id="646">646</a>
+<a href="#647" id="647">647</a>
+<a href="#648" id="648">648</a>
+<a href="#649" id="649">649</a>
+<a href="#650" id="650">650</a>
+<a href="#651" id="651">651</a>
+<a href="#652" id="652">652</a>
+<a href="#653" id="653">653</a>
+<a href="#654" id="654">654</a>
+<a href="#655" id="655">655</a>
+<a href="#656" id="656">656</a>
+<a href="#657" id="657">657</a>
+<a href="#658" id="658">658</a>
+<a href="#659" id="659">659</a>
+<a href="#660" id="660">660</a>
+<a href="#661" id="661">661</a>
+<a href="#662" id="662">662</a>
+<a href="#663" id="663">663</a>
+<a href="#664" id="664">664</a>
+<a href="#665" id="665">665</a>
+<a href="#666" id="666">666</a>
 </pre></div><pre class="rust"><code><span class="comment">// Copyright (C) Parity Technologies (UK) Ltd.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -847,6 +871,30 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 	/// - `code_hash`: The code hash of the dependency. Should be decodable as an `T::Hash`. Traps
 	///   otherwise.
 	</span><span class="kw">fn </span>lock_delegate_dependency(code_hash: <span class="kw-2">&amp;</span>[u8; <span class="number">32</span>]);
+
+	<span class="doccomment">/// Get the contract immutable data.
+	///
+	/// Traps if:
+	/// - Called from within the deploy export.
+	/// - Called by contracts that didn't set immutable data by calling `set_immutable_data` during
+	///   their constructor execution.
+	///
+	/// # Parameters
+	/// - `output`: A reference to the output buffer to write the immutable bytes.
+	</span><span class="kw">fn </span>get_immutable_data(output: <span class="kw-2">&amp;mut &amp;mut </span>[u8]);
+
+	<span class="doccomment">/// Set the contract immutable data.
+	///
+	/// It is only valid to set non-empty immutable data in the constructor once.
+	///
+	/// Traps if:
+	/// - Called from within the call export.
+	/// - Called more than once.
+	/// - The provided data was empty.
+	///
+	/// # Parameters
+	/// - `data`: A reference to the data to be stored as immutable bytes.
+	</span><span class="kw">fn </span>set_immutable_data(data: <span class="kw-2">&amp;</span>[u8]);
 
 	<span class="doccomment">/// Stores the **reducible** balance of the current account into the supplied buffer.
 	///

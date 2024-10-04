@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":["development_config"],"type":["ChainSpec"]};
+window.SIDEBAR_ITEMS = {"fn":["development_chain_spec"],"type":["ChainSpec"]};

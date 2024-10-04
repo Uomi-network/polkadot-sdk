@@ -471,6 +471,93 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 <a href="#321" id="321">321</a>
 <a href="#322" id="322">322</a>
 <a href="#323" id="323">323</a>
+<a href="#324" id="324">324</a>
+<a href="#325" id="325">325</a>
+<a href="#326" id="326">326</a>
+<a href="#327" id="327">327</a>
+<a href="#328" id="328">328</a>
+<a href="#329" id="329">329</a>
+<a href="#330" id="330">330</a>
+<a href="#331" id="331">331</a>
+<a href="#332" id="332">332</a>
+<a href="#333" id="333">333</a>
+<a href="#334" id="334">334</a>
+<a href="#335" id="335">335</a>
+<a href="#336" id="336">336</a>
+<a href="#337" id="337">337</a>
+<a href="#338" id="338">338</a>
+<a href="#339" id="339">339</a>
+<a href="#340" id="340">340</a>
+<a href="#341" id="341">341</a>
+<a href="#342" id="342">342</a>
+<a href="#343" id="343">343</a>
+<a href="#344" id="344">344</a>
+<a href="#345" id="345">345</a>
+<a href="#346" id="346">346</a>
+<a href="#347" id="347">347</a>
+<a href="#348" id="348">348</a>
+<a href="#349" id="349">349</a>
+<a href="#350" id="350">350</a>
+<a href="#351" id="351">351</a>
+<a href="#352" id="352">352</a>
+<a href="#353" id="353">353</a>
+<a href="#354" id="354">354</a>
+<a href="#355" id="355">355</a>
+<a href="#356" id="356">356</a>
+<a href="#357" id="357">357</a>
+<a href="#358" id="358">358</a>
+<a href="#359" id="359">359</a>
+<a href="#360" id="360">360</a>
+<a href="#361" id="361">361</a>
+<a href="#362" id="362">362</a>
+<a href="#363" id="363">363</a>
+<a href="#364" id="364">364</a>
+<a href="#365" id="365">365</a>
+<a href="#366" id="366">366</a>
+<a href="#367" id="367">367</a>
+<a href="#368" id="368">368</a>
+<a href="#369" id="369">369</a>
+<a href="#370" id="370">370</a>
+<a href="#371" id="371">371</a>
+<a href="#372" id="372">372</a>
+<a href="#373" id="373">373</a>
+<a href="#374" id="374">374</a>
+<a href="#375" id="375">375</a>
+<a href="#376" id="376">376</a>
+<a href="#377" id="377">377</a>
+<a href="#378" id="378">378</a>
+<a href="#379" id="379">379</a>
+<a href="#380" id="380">380</a>
+<a href="#381" id="381">381</a>
+<a href="#382" id="382">382</a>
+<a href="#383" id="383">383</a>
+<a href="#384" id="384">384</a>
+<a href="#385" id="385">385</a>
+<a href="#386" id="386">386</a>
+<a href="#387" id="387">387</a>
+<a href="#388" id="388">388</a>
+<a href="#389" id="389">389</a>
+<a href="#390" id="390">390</a>
+<a href="#391" id="391">391</a>
+<a href="#392" id="392">392</a>
+<a href="#393" id="393">393</a>
+<a href="#394" id="394">394</a>
+<a href="#395" id="395">395</a>
+<a href="#396" id="396">396</a>
+<a href="#397" id="397">397</a>
+<a href="#398" id="398">398</a>
+<a href="#399" id="399">399</a>
+<a href="#400" id="400">400</a>
+<a href="#401" id="401">401</a>
+<a href="#402" id="402">402</a>
+<a href="#403" id="403">403</a>
+<a href="#404" id="404">404</a>
+<a href="#405" id="405">405</a>
+<a href="#406" id="406">406</a>
+<a href="#407" id="407">407</a>
+<a href="#408" id="408">408</a>
+<a href="#409" id="409">409</a>
+<a href="#410" id="410">410</a>
 </pre></div><pre class="rust"><code><span class="comment">// Copyright 2019-2021 Parity Technologies (UK) Ltd.
 // This file is part of Parity Bridges Common.
 
@@ -509,8 +596,9 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 <span class="kw">use </span>async_trait::async_trait;
 <span class="kw">use </span>bp_messages::{
 	source_chain::FromBridgedChainMessagesDeliveryProof, storage_keys::inbound_lane_data_key,
-	ChainWithMessages <span class="kw">as _</span>, InboundLaneData, MessageNonce, UnrewardedRelayersState,
+	ChainWithMessages <span class="kw">as _</span>, LaneState, MessageNonce, UnrewardedRelayer, UnrewardedRelayersState,
 };
+<span class="kw">use </span>codec::Decode;
 <span class="kw">use </span>messages_relay::{
 	message_lane::{MessageLane, SourceHeaderIdOf, TargetHeaderIdOf},
 	message_lane_loop::{NoncesSubmitArtifacts, TargetClient, TargetClientState},
@@ -521,11 +609,51 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 };
 <span class="kw">use </span>relay_utils::relay_loop::Client <span class="kw">as </span>RelayClient;
 <span class="kw">use </span>sp_core::Pair;
-<span class="kw">use </span>std::{convert::TryFrom, ops::RangeInclusive};
+<span class="kw">use </span>std::{collections::VecDeque, convert::TryFrom, ops::RangeInclusive};
 
 <span class="doccomment">/// Message receiving proof returned by the target Substrate node.
 </span><span class="kw">pub type </span>SubstrateMessagesDeliveryProof&lt;C, L&gt; =
 	(UnrewardedRelayersState, FromBridgedChainMessagesDeliveryProof&lt;HashOf&lt;C&gt;, L&gt;);
+
+<span class="doccomment">/// Inbound lane data - for backwards compatibility with `bp_messages::InboundLaneData` which has
+/// additional `lane_state` attribute.
+///
+/// TODO: remove - https://github.com/paritytech/polkadot-sdk/issues/5923
+</span><span class="attr">#[derive(Decode)]
+</span><span class="kw">struct </span>LegacyInboundLaneData&lt;RelayerId&gt; {
+	relayers: VecDeque&lt;UnrewardedRelayer&lt;RelayerId&gt;&gt;,
+	last_confirmed_nonce: MessageNonce,
+}
+<span class="kw">impl</span>&lt;RelayerId&gt; Default <span class="kw">for </span>LegacyInboundLaneData&lt;RelayerId&gt; {
+	<span class="kw">fn </span>default() -&gt; <span class="self">Self </span>{
+		<span class="kw">let </span>full = bp_messages::InboundLaneData::default();
+		<span class="self">Self </span>{ relayers: full.relayers, last_confirmed_nonce: full.last_confirmed_nonce }
+	}
+}
+
+<span class="kw">impl</span>&lt;RelayerId&gt; LegacyInboundLaneData&lt;RelayerId&gt; {
+	<span class="kw">pub fn </span>last_delivered_nonce(<span class="self">self</span>) -&gt; MessageNonce {
+		bp_messages::InboundLaneData {
+			relayers: <span class="self">self</span>.relayers,
+			last_confirmed_nonce: <span class="self">self</span>.last_confirmed_nonce,
+			<span class="comment">// we don't care about the state here
+			</span>state: LaneState::Opened,
+		}
+		.last_delivered_nonce()
+	}
+}
+
+<span class="kw">impl</span>&lt;RelayerId&gt; From&lt;LegacyInboundLaneData&lt;RelayerId&gt;&gt; <span class="kw">for </span>UnrewardedRelayersState {
+	<span class="kw">fn </span>from(value: LegacyInboundLaneData&lt;RelayerId&gt;) -&gt; <span class="self">Self </span>{
+		(<span class="kw-2">&amp;</span>bp_messages::InboundLaneData {
+			relayers: value.relayers,
+			last_confirmed_nonce: value.last_confirmed_nonce,
+			<span class="comment">// we don't care about the state here
+			</span>state: LaneState::Opened,
+		})
+			.into()
+	}
+}
 
 <span class="doccomment">/// Substrate client as Substrate messages target.
 </span><span class="kw">pub struct </span>SubstrateMessagesTarget&lt;P: SubstrateMessageLane, SourceClnt, TargetClnt&gt; {
@@ -567,7 +695,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 	</span><span class="kw">async fn </span>inbound_lane_data(
 		<span class="kw-2">&amp;</span><span class="self">self</span>,
 		id: TargetHeaderIdOf&lt;MessageLaneAdapter&lt;P&gt;&gt;,
-	) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="prelude-ty">Option</span>&lt;InboundLaneData&lt;AccountIdOf&lt;P::SourceChain&gt;&gt;&gt;, SubstrateError&gt; {
+	) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="prelude-ty">Option</span>&lt;LegacyInboundLaneData&lt;AccountIdOf&lt;P::SourceChain&gt;&gt;&gt;, SubstrateError&gt; {
 		<span class="self">self</span>.target_client
 			.storage_value(
 				id.hash(),
@@ -690,8 +818,8 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 	) -&gt; <span class="prelude-ty">Result</span>&lt;(TargetHeaderIdOf&lt;MessageLaneAdapter&lt;P&gt;&gt;, UnrewardedRelayersState), SubstrateError&gt;
 	{
 		<span class="kw">let </span>inbound_lane_data =
-			<span class="self">self</span>.inbound_lane_data(id).<span class="kw">await</span><span class="question-mark">?</span>.unwrap_or(InboundLaneData::default());
-		<span class="prelude-val">Ok</span>((id, (<span class="kw-2">&amp;</span>inbound_lane_data).into()))
+			<span class="self">self</span>.inbound_lane_data(id).<span class="kw">await</span><span class="question-mark">?</span>.unwrap_or(LegacyInboundLaneData::default());
+		<span class="prelude-val">Ok</span>((id, inbound_lane_data.into()))
 	}
 
 	<span class="kw">async fn </span>prove_messages_receiving(
@@ -793,6 +921,52 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 		dispatch_weight,
 		trace_call,
 	)
+}
+
+<span class="attr">#[cfg(test)]
+</span><span class="kw">mod </span>tests {
+	<span class="kw">use super</span>::<span class="kw-2">*</span>;
+	<span class="kw">use </span>bp_messages::{DeliveredMessages, UnrewardedRelayer};
+	<span class="kw">use </span>codec::Encode;
+
+	<span class="attr">#[test]
+	</span><span class="kw">fn </span>inbound_lane_data_wrapper_is_compatible() {
+		<span class="kw">let </span>bytes_without_state =
+			<span class="macro">vec!</span>[<span class="number">4</span>, <span class="number">0</span>, <span class="number">2</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">5</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">6</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>];
+		<span class="kw">let </span>bytes_with_state = {
+			<span class="comment">// add state byte `bp_messages::LaneState::Opened`
+			</span><span class="kw">let </span><span class="kw-2">mut </span>b = bytes_without_state.clone();
+			b.push(<span class="number">0</span>);
+			b
+		};
+
+		<span class="kw">let </span>full = bp_messages::InboundLaneData::&lt;u8&gt; {
+			relayers: <span class="macro">vec!</span>[UnrewardedRelayer {
+				relayer: Default::default(),
+				messages: DeliveredMessages { begin: <span class="number">2</span>, end: <span class="number">5 </span>},
+			}]
+			.into_iter()
+			.collect(),
+			last_confirmed_nonce: <span class="number">6</span>,
+			state: bp_messages::LaneState::Opened,
+		};
+		<span class="macro">assert_eq!</span>(full.encode(), bytes_with_state);
+		<span class="macro">assert_ne!</span>(full.encode(), bytes_without_state);
+
+		<span class="comment">// decode from `bytes_with_state`
+		</span><span class="kw">let </span>decoded: LegacyInboundLaneData&lt;u8&gt; =
+			Decode::decode(<span class="kw-2">&amp;mut &amp;</span>bytes_with_state[..]).unwrap();
+		<span class="macro">assert_eq!</span>(full.relayers, decoded.relayers);
+		<span class="macro">assert_eq!</span>(full.last_confirmed_nonce, decoded.last_confirmed_nonce);
+		<span class="macro">assert_eq!</span>(full.last_delivered_nonce(), decoded.last_delivered_nonce());
+
+		<span class="comment">// decode from `bytes_without_state`
+		</span><span class="kw">let </span>decoded: LegacyInboundLaneData&lt;u8&gt; =
+			Decode::decode(<span class="kw-2">&amp;mut &amp;</span>bytes_without_state[..]).unwrap();
+		<span class="macro">assert_eq!</span>(full.relayers, decoded.relayers);
+		<span class="macro">assert_eq!</span>(full.last_confirmed_nonce, decoded.last_confirmed_nonce);
+		<span class="macro">assert_eq!</span>(full.last_delivered_nonce(), decoded.last_delivered_nonce());
+	}
 }
 </code></pre></div></section></main><script> mermaid.init({ startOnLoad: true, theme: "dark" }, "pre.language-mermaid > code");</script>
 

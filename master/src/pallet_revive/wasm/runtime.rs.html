@@ -2190,6 +2190,44 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 <a href="#2040" id="2040">2040</a>
 <a href="#2041" id="2041">2041</a>
 <a href="#2042" id="2042">2042</a>
+<a href="#2043" id="2043">2043</a>
+<a href="#2044" id="2044">2044</a>
+<a href="#2045" id="2045">2045</a>
+<a href="#2046" id="2046">2046</a>
+<a href="#2047" id="2047">2047</a>
+<a href="#2048" id="2048">2048</a>
+<a href="#2049" id="2049">2049</a>
+<a href="#2050" id="2050">2050</a>
+<a href="#2051" id="2051">2051</a>
+<a href="#2052" id="2052">2052</a>
+<a href="#2053" id="2053">2053</a>
+<a href="#2054" id="2054">2054</a>
+<a href="#2055" id="2055">2055</a>
+<a href="#2056" id="2056">2056</a>
+<a href="#2057" id="2057">2057</a>
+<a href="#2058" id="2058">2058</a>
+<a href="#2059" id="2059">2059</a>
+<a href="#2060" id="2060">2060</a>
+<a href="#2061" id="2061">2061</a>
+<a href="#2062" id="2062">2062</a>
+<a href="#2063" id="2063">2063</a>
+<a href="#2064" id="2064">2064</a>
+<a href="#2065" id="2065">2065</a>
+<a href="#2066" id="2066">2066</a>
+<a href="#2067" id="2067">2067</a>
+<a href="#2068" id="2068">2068</a>
+<a href="#2069" id="2069">2069</a>
+<a href="#2070" id="2070">2070</a>
+<a href="#2071" id="2071">2071</a>
+<a href="#2072" id="2072">2072</a>
+<a href="#2073" id="2073">2073</a>
+<a href="#2074" id="2074">2074</a>
+<a href="#2075" id="2075">2075</a>
+<a href="#2076" id="2076">2076</a>
+<a href="#2077" id="2077">2077</a>
+<a href="#2078" id="2078">2078</a>
+<a href="#2079" id="2079">2079</a>
+<a href="#2080" id="2080">2080</a>
 </pre></div><pre class="rust"><code><span class="comment">// This file is part of Substrate.
 
 // Copyright (C) Parity Technologies (UK) Ltd.
@@ -2582,6 +2620,10 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 	</span>LockDelegateDependency,
 	<span class="doccomment">/// Weight of calling `unlock_delegate_dependency`
 	</span>UnlockDelegateDependency,
+	<span class="doccomment">/// Weight of calling `get_immutable_dependency`
+	</span>GetImmutableData(u32),
+	<span class="doccomment">/// Weight of calling `set_immutable_dependency`
+	</span>SetImmutableData(u32),
 }
 
 <span class="doccomment">/// For functions that modify storage, benchmarks are performed with one item in the
@@ -2699,6 +2741,8 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 			EcdsaToEthAddress =&gt; T::WeightInfo::seal_ecdsa_to_eth_address(),
 			LockDelegateDependency =&gt; T::WeightInfo::lock_delegate_dependency(),
 			UnlockDelegateDependency =&gt; T::WeightInfo::unlock_delegate_dependency(),
+			GetImmutableData(len) =&gt; T::WeightInfo::seal_get_immutable_data(len),
+			SetImmutableData(len) =&gt; T::WeightInfo::seal_set_immutable_data(len),
 		}
 	}
 }
@@ -3705,6 +3749,36 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 		)<span class="question-mark">?</span>)
 	}
 
+	<span class="doccomment">/// Stores the immutable data into the supplied buffer.
+	/// See [`pallet_revive_uapi::HostFn::get_immutable_data`].
+	</span><span class="attr">#[api_version(<span class="number">0</span>)]
+	</span><span class="kw">fn </span>get_immutable_data(
+		<span class="kw-2">&amp;mut </span><span class="self">self</span>,
+		memory: <span class="kw-2">&amp;mut </span>M,
+		out_ptr: u32,
+		out_len_ptr: u32,
+	) -&gt; <span class="prelude-ty">Result</span>&lt;(), TrapReason&gt; {
+		<span class="kw">let </span>charged = <span class="self">self</span>.charge_gas(RuntimeCosts::GetImmutableData(limits::IMMUTABLE_BYTES))<span class="question-mark">?</span>;
+		<span class="kw">let </span>data = <span class="self">self</span>.ext.get_immutable_data()<span class="question-mark">?</span>;
+		<span class="self">self</span>.adjust_gas(charged, RuntimeCosts::GetImmutableData(data.len() <span class="kw">as </span>u32));
+		<span class="self">self</span>.write_sandbox_output(memory, out_ptr, out_len_ptr, <span class="kw-2">&amp;</span>data, <span class="bool-val">false</span>, already_charged)<span class="question-mark">?</span>;
+		<span class="prelude-val">Ok</span>(())
+	}
+
+	<span class="doccomment">/// Attaches the supplied immutable data to the currently executing contract.
+	/// See [`pallet_revive_uapi::HostFn::set_immutable_data`].
+	</span><span class="attr">#[api_version(<span class="number">0</span>)]
+	</span><span class="kw">fn </span>set_immutable_data(<span class="kw-2">&amp;mut </span><span class="self">self</span>, memory: <span class="kw-2">&amp;mut </span>M, ptr: u32, len: u32) -&gt; <span class="prelude-ty">Result</span>&lt;(), TrapReason&gt; {
+		<span class="kw">if </span>len &gt; limits::IMMUTABLE_BYTES {
+			<span class="kw">return </span><span class="prelude-val">Err</span>(Error::&lt;E::T&gt;::OutOfBounds.into());
+		}
+		<span class="self">self</span>.charge_gas(RuntimeCosts::SetImmutableData(len))<span class="question-mark">?</span>;
+		<span class="kw">let </span>buf = memory.read(ptr, len)<span class="question-mark">?</span>;
+		<span class="kw">let </span>data = buf.try_into().expect(<span class="string">"bailed out earlier; qed"</span>);
+		<span class="self">self</span>.ext.set_immutable_data(data)<span class="question-mark">?</span>;
+		<span class="prelude-val">Ok</span>(())
+	}
+
 	<span class="doccomment">/// Stores the *free* balance of the current account into the supplied buffer.
 	/// See [`pallet_revive_uapi::HostFn::balance`].
 	</span><span class="attr">#[api_version(<span class="number">0</span>)]
@@ -4122,8 +4196,10 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 
 	<span class="doccomment">/// Replace the contract code at the specified address with new code.
 	/// See [`pallet_revive_uapi::HostFn::set_code_hash`].
-	</span><span class="attr">#[api_version(<span class="number">0</span>)]
-	#[mutating]
+	///
+	/// Disabled until the internal implementation takes care of collecting
+	/// the immutable data of the new code hash.
+	</span><span class="attr">#[mutating]
 	</span><span class="kw">fn </span>set_code_hash(
 		<span class="kw-2">&amp;mut </span><span class="self">self</span>,
 		memory: <span class="kw-2">&amp;mut </span>M,

@@ -246,7 +246,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 	}
 }
 
-<span class="kw">pub fn </span>development_config() -&gt; ChainSpec {
+<span class="kw">pub fn </span>development_chain_spec() -&gt; ChainSpec {
 	<span class="comment">// Give your base currency a unit name and decimal places
 	</span><span class="kw">let </span><span class="kw-2">mut </span>properties = sc_chain_spec::Properties::new();
 	properties.insert(<span class="string">"tokenSymbol"</span>.into(), <span class="string">"UNIT"</span>.into());
@@ -268,7 +268,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 	.build()
 }
 
-<span class="kw">pub fn </span>local_testnet_config() -&gt; ChainSpec {
+<span class="kw">pub fn </span>local_chain_spec() -&gt; ChainSpec {
 	<span class="comment">// Give your base currency a unit name and decimal places
 	</span><span class="kw">let </span><span class="kw-2">mut </span>properties = sc_chain_spec::Properties::new();
 	properties.insert(<span class="string">"tokenSymbol"</span>.into(), <span class="string">"UNIT"</span>.into());

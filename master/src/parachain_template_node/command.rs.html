@@ -547,9 +547,9 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 
 <span class="kw">fn </span>load_spec(id: <span class="kw-2">&amp;</span>str) -&gt; std::result::Result&lt;Box&lt;<span class="kw">dyn </span>ChainSpec&gt;, String&gt; {
 	<span class="prelude-val">Ok</span>(<span class="kw">match </span>id {
-		<span class="string">"dev" </span>=&gt; Box::new(chain_spec::development_config()),
-		<span class="string">"template-rococo" </span>=&gt; Box::new(chain_spec::local_testnet_config()),
-		<span class="string">"" </span>| <span class="string">"local" </span>=&gt; Box::new(chain_spec::local_testnet_config()),
+		<span class="string">"dev" </span>=&gt; Box::new(chain_spec::development_chain_spec()),
+		<span class="string">"template-rococo" </span>=&gt; Box::new(chain_spec::local_chain_spec()),
+		<span class="string">"" </span>| <span class="string">"local" </span>=&gt; Box::new(chain_spec::local_chain_spec()),
 		path =&gt; Box::new(chain_spec::ChainSpec::from_json_file(std::path::PathBuf::from(path))<span class="question-mark">?</span>),
 	})
 }

@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":["development_config","local_testnet_config"],"struct":["Extensions","ExtensionsFork"],"type":["ChainSpec"]};
+window.SIDEBAR_ITEMS = {"fn":["development_chain_spec","local_chain_spec"],"struct":["Extensions","ExtensionsFork"],"type":["ChainSpec"]};
