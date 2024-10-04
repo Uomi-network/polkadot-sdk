@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1728037024917,
+  "lastUpdate": 1728040064692,
   "repoUrl": "https://github.com/paritytech/polkadot-sdk",
   "entries": {
     "approval-voting-regression-bench": [
@@ -21832,6 +21832,105 @@ window.BENCHMARK_DATA = {
           {
             "name": "approval-distribution/test-environment",
             "value": 0.00002030733,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "claravanstaden64@gmail.com",
+            "name": "Clara van Staden",
+            "username": "claravanstaden"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": false,
+          "id": "111b2447a0ce9122a31ad67c4a8ad1479db159a0",
+          "message": "Prevents EthereumBlobExporter from consuming dest when returning NotApplicable (#5789)\n\n# Description\n\nThe EthereumBlobExporter consumes the `dest` parameter when the\ndestination is not `Here`. Subsequent exporters will receive a `None`\nvalue for the destination instead of the original destination value,\nwhich is incorrect.\n \nCloses #5788\n\n## Integration\n\nMinor fix related to the exporter behaviour.\n\n## Review Notes\n\nVerified that tests\n`exporter_validate_with_invalid_dest_does_not_alter_destination` and\n`exporter_validate_with_invalid_universal_source_does_not_alter_universal_source`\nfail without the fix in the exporter.\n\n---------\n\nCo-authored-by: Adrian Catangiu <adrian@parity.io>",
+          "timestamp": "2024-10-04T09:55:18Z",
+          "tree_id": "6a43756baa6156ecf648c239ce075ce3bd47486a",
+          "url": "https://github.com/paritytech/polkadot-sdk/commit/111b2447a0ce9122a31ad67c4a8ad1479db159a0"
+        },
+        "date": 1728040045580,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "Sent to peers",
+            "value": 63624.42999999999,
+            "unit": "KiB"
+          },
+          {
+            "name": "Received from peers",
+            "value": 52939,
+            "unit": "KiB"
+          },
+          {
+            "name": "approval-distribution",
+            "value": 0.00001893817,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting",
+            "value": 0.00001778249,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel",
+            "value": 12.453571554240034,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-1",
+            "value": 2.4583870246999995,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-gather-signatures",
+            "value": 0.0056540880500000066,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-subsystem",
+            "value": 0.49446142068002413,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-2",
+            "value": 2.471646218180001,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting/test-environment",
+            "value": 0.00001778249,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-3",
+            "value": 2.4253515386700006,
+            "unit": "seconds"
+          },
+          {
+            "name": "test-environment",
+            "value": 3.343510888772083,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-db",
+            "value": 2.143876483350006,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-distribution/test-environment",
+            "value": 0.00001893817,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-0",
+            "value": 2.4541947806100017,
             "unit": "seconds"
           }
         ]
