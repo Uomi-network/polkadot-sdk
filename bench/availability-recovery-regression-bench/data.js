@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1728031550811,
+  "lastUpdate": 1728033807262,
   "repoUrl": "https://github.com/paritytech/polkadot-sdk",
   "entries": {
     "availability-recovery-regression-bench": [
@@ -22563,6 +22563,50 @@ window.BENCHMARK_DATA = {
           {
             "name": "availability-recovery",
             "value": 11.801568324300003,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "egor@parity.io",
+            "name": "Egor_P",
+            "username": "EgorPopelyaev"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": false,
+          "id": "826f16f31693c6080fc1c94f37fba61c240243fb",
+          "message": "Add stable-rc tags to the docker images (#5896)\n\nThis PR adds the `stableYYMM-rcX` or `stableYYMM-X-rcX` tags to the\ndocker images, so that they could be published with the new tag naming\nscheme.\n\nCloses: https://github.com/paritytech/release-engineering/issues/224",
+          "timestamp": "2024-10-04T08:19:33Z",
+          "tree_id": "d196345b68ca649ca09090d4d06b7d060e3022b8",
+          "url": "https://github.com/paritytech/polkadot-sdk/commit/826f16f31693c6080fc1c94f37fba61c240243fb"
+        },
+        "date": 1728033787718,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "Received from peers",
+            "value": 307203,
+            "unit": "KiB"
+          },
+          {
+            "name": "Sent to peers",
+            "value": 1.6666666666666665,
+            "unit": "KiB"
+          },
+          {
+            "name": "availability-recovery",
+            "value": 11.941917971600002,
+            "unit": "seconds"
+          },
+          {
+            "name": "test-environment",
+            "value": 0.23692161876666668,
             "unit": "seconds"
           }
         ]
