@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1728033807262,
+  "lastUpdate": 1728036972651,
   "repoUrl": "https://github.com/paritytech/polkadot-sdk",
   "entries": {
     "availability-recovery-regression-bench": [
@@ -22607,6 +22607,50 @@ window.BENCHMARK_DATA = {
           {
             "name": "test-environment",
             "value": 0.23692161876666668,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "bkontur@gmail.com",
+            "name": "Branislav Kontur",
+            "username": "bkontur"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "88570c263f1835780f446b9fd2814134a927f8b0",
+          "message": "Update \"@polkadot/api\": \"^14.0\" for bridges zombienet tests (#5918)\n\nRelates to: https://github.com/paritytech/polkadot-sdk/pull/5916\nRelates to: https://github.com/polkadot-js/api/pull/5976\n\n---------\n\nCo-authored-by: Javier Viola <javier@parity.io>",
+          "timestamp": "2024-10-04T09:02:53Z",
+          "tree_id": "c3595cda902f1a8471b89da4f4fa64b6d8677fd9",
+          "url": "https://github.com/paritytech/polkadot-sdk/commit/88570c263f1835780f446b9fd2814134a927f8b0"
+        },
+        "date": 1728036954042,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "Sent to peers",
+            "value": 1.6666666666666665,
+            "unit": "KiB"
+          },
+          {
+            "name": "Received from peers",
+            "value": 307203,
+            "unit": "KiB"
+          },
+          {
+            "name": "test-environment",
+            "value": 0.23616510650000003,
+            "unit": "seconds"
+          },
+          {
+            "name": "availability-recovery",
+            "value": 11.62153941773333,
             "unit": "seconds"
           }
         ]
