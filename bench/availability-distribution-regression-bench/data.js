@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1728033833325,
+  "lastUpdate": 1728036998919,
   "repoUrl": "https://github.com/paritytech/polkadot-sdk",
   "entries": {
     "availability-distribution-regression-bench": [
@@ -28321,6 +28321,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "availability-store",
             "value": 0.17937606373333334,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "bkontur@gmail.com",
+            "name": "Branislav Kontur",
+            "username": "bkontur"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "88570c263f1835780f446b9fd2814134a927f8b0",
+          "message": "Update \"@polkadot/api\": \"^14.0\" for bridges zombienet tests (#5918)\n\nRelates to: https://github.com/paritytech/polkadot-sdk/pull/5916\nRelates to: https://github.com/polkadot-js/api/pull/5976\n\n---------\n\nCo-authored-by: Javier Viola <javier@parity.io>",
+          "timestamp": "2024-10-04T09:02:53Z",
+          "tree_id": "c3595cda902f1a8471b89da4f4fa64b6d8677fd9",
+          "url": "https://github.com/paritytech/polkadot-sdk/commit/88570c263f1835780f446b9fd2814134a927f8b0"
+        },
+        "date": 1728036980213,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "Sent to peers",
+            "value": 18481.666666666653,
+            "unit": "KiB"
+          },
+          {
+            "name": "Received from peers",
+            "value": 433.3333333333332,
+            "unit": "KiB"
+          },
+          {
+            "name": "availability-store",
+            "value": 0.18025965256666654,
+            "unit": "seconds"
+          },
+          {
+            "name": "availability-distribution",
+            "value": 0.01664756860666666,
+            "unit": "seconds"
+          },
+          {
+            "name": "bitfield-distribution",
+            "value": 0.02385969747999999,
+            "unit": "seconds"
+          },
+          {
+            "name": "test-environment",
+            "value": 0.008522200093333415,
             "unit": "seconds"
           }
         ]
