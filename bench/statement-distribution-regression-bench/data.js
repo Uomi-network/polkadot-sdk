@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1727993146128,
+  "lastUpdate": 1728031630002,
   "repoUrl": "https://github.com/paritytech/polkadot-sdk",
   "entries": {
     "statement-distribution-regression-bench": [
@@ -13151,6 +13151,50 @@ window.BENCHMARK_DATA = {
           {
             "name": "test-environment",
             "value": 0.044474263129999914,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "serban@parity.io",
+            "name": "Serban Iorga",
+            "username": "serban300"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "261b3daebd6231462e06f9c787e170aef48857f5",
+          "message": "polkadot-parachain: Remove shell node (#5911)\n\nRemoving the shell node variant for the polkadot-parachain as discussed\nhere:\nhttps://github.com/paritytech/polkadot-sdk/pull/5586#discussion_r1752635254\n\nResolves https://github.com/paritytech/polkadot-sdk/issues/5898",
+          "timestamp": "2024-10-04T07:37:25Z",
+          "tree_id": "ad9878a17946582d5030af7070bf2698e442839c",
+          "url": "https://github.com/paritytech/polkadot-sdk/commit/261b3daebd6231462e06f9c787e170aef48857f5"
+        },
+        "date": 1728031611148,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "Received from peers",
+            "value": 106.39999999999996,
+            "unit": "KiB"
+          },
+          {
+            "name": "Sent to peers",
+            "value": 127.93399999999995,
+            "unit": "KiB"
+          },
+          {
+            "name": "statement-distribution",
+            "value": 0.035578545053999974,
+            "unit": "seconds"
+          },
+          {
+            "name": "test-environment",
+            "value": 0.044575470395999954,
             "unit": "seconds"
           }
         ]
