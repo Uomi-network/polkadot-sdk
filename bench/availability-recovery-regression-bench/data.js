@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1728040013121,
+  "lastUpdate": 1728066451642,
   "repoUrl": "https://github.com/paritytech/polkadot-sdk",
   "entries": {
     "availability-recovery-regression-bench": [
@@ -22695,6 +22695,50 @@ window.BENCHMARK_DATA = {
           {
             "name": "availability-recovery",
             "value": 11.702214407766665,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "49718502+alexggh@users.noreply.github.com",
+            "name": "Alexandru Gheorghe",
+            "username": "alexggh"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": false,
+          "id": "dada6cea6447ce2730a3f3b43a3b48b7a5c26cf6",
+          "message": "Remove jaeger everywhere (#5875)\n\nJaeger tracing went mostly unused and it created bigger problems like\nwasting CPU or memory leaks, so remove it entirely.\n\nFixes: https://github.com/paritytech/polkadot-sdk/issues/4995\n\n---------\n\nSigned-off-by: Alexandru Gheorghe <alexandru.gheorghe@parity.io>",
+          "timestamp": "2024-10-04T14:18:40Z",
+          "tree_id": "3791933a30b6054bc14d88c8c6e09b1f17b19d6b",
+          "url": "https://github.com/paritytech/polkadot-sdk/commit/dada6cea6447ce2730a3f3b43a3b48b7a5c26cf6"
+        },
+        "date": 1728066431805,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "Received from peers",
+            "value": 307203,
+            "unit": "KiB"
+          },
+          {
+            "name": "Sent to peers",
+            "value": 1.6666666666666665,
+            "unit": "KiB"
+          },
+          {
+            "name": "availability-recovery",
+            "value": 11.347846012633333,
+            "unit": "seconds"
+          },
+          {
+            "name": "test-environment",
+            "value": 0.2322727727333334,
             "unit": "seconds"
           }
         ]
