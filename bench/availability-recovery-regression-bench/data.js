@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1728147314987,
+  "lastUpdate": 1728152306061,
   "repoUrl": "https://github.com/paritytech/polkadot-sdk",
   "entries": {
     "availability-recovery-regression-bench": [
@@ -22827,6 +22827,50 @@ window.BENCHMARK_DATA = {
           {
             "name": "test-environment",
             "value": 0.23487419699999995,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "363911+pepoviola@users.noreply.github.com",
+            "name": "Javier Viola",
+            "username": "pepoviola"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "a4abcbdd89952f188ee6418da152d6bfe26e55b4",
+          "message": "bump zombienet version `v1.3.113` (#5935)\n\nBump zombienet version. Including fixes for `ci` failures like \n\nhttps://gitlab.parity.io/parity/mirrors/polkadot-sdk/-/jobs/7511363\nhttps://gitlab.parity.io/parity/mirrors/polkadot-sdk/-/jobs/7511379",
+          "timestamp": "2024-10-05T17:14:40Z",
+          "tree_id": "a47d1d8df192fbeb42169641a673ce42c61af3c3",
+          "url": "https://github.com/paritytech/polkadot-sdk/commit/a4abcbdd89952f188ee6418da152d6bfe26e55b4"
+        },
+        "date": 1728152287180,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "Received from peers",
+            "value": 307203,
+            "unit": "KiB"
+          },
+          {
+            "name": "Sent to peers",
+            "value": 1.6666666666666665,
+            "unit": "KiB"
+          },
+          {
+            "name": "test-environment",
+            "value": 0.23376986363333335,
+            "unit": "seconds"
+          },
+          {
+            "name": "availability-recovery",
+            "value": 11.340458936800001,
             "unit": "seconds"
           }
         ]
