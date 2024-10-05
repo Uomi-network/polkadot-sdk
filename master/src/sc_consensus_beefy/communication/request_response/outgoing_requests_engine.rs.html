@@ -430,6 +430,8 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 <a href="#280" id="280">280</a>
 <a href="#281" id="281">281</a>
 <a href="#282" id="282">282</a>
+<a href="#283" id="283">283</a>
+<a href="#284" id="284">284</a>
 </pre></div><pre class="rust"><code><span class="comment">// This file is part of Substrate.
 
 // Copyright (C) Parity Technologies (UK) Ltd.
@@ -470,7 +472,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 		request_response::{Error, JustificationRequest, BEEFY_SYNC_LOG_TARGET},
 	},
 	justification::{decode_and_verify_finality_proof, BeefyVersionedFinalityProof},
-	metric_inc,
+	metric_inc, metric_set,
 	metrics::{register_metrics, OnDemandOutgoingRequestsMetrics},
 	KnownPeers,
 };
@@ -673,6 +675,8 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 		<span class="comment">// We received the awaited response. Our 'receiver' will never generate any other response,
 		// meaning we're done with current state. Move the engine to `State::Idle`.
 		</span><span class="self">self</span>.state = State::Idle;
+
+		<span class="macro">metric_set!</span>(<span class="self">self</span>.metrics, beefy_on_demand_live_peers, <span class="self">self</span>.live_peers.lock().len() <span class="kw">as </span>u64);
 
 		<span class="kw">let </span>block = req_info.block;
 		<span class="kw">match </span><span class="self">self</span>.process_response(<span class="kw-2">&amp;</span>peer, <span class="kw-2">&amp;</span>req_info, resp) {

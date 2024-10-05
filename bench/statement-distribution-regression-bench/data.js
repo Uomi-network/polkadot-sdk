@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1728147393369,
+  "lastUpdate": 1728152383199,
   "repoUrl": "https://github.com/paritytech/polkadot-sdk",
   "entries": {
     "statement-distribution-regression-bench": [
@@ -13459,6 +13459,50 @@ window.BENCHMARK_DATA = {
           {
             "name": "test-environment",
             "value": 0.0451773989059999,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "363911+pepoviola@users.noreply.github.com",
+            "name": "Javier Viola",
+            "username": "pepoviola"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "a4abcbdd89952f188ee6418da152d6bfe26e55b4",
+          "message": "bump zombienet version `v1.3.113` (#5935)\n\nBump zombienet version. Including fixes for `ci` failures like \n\nhttps://gitlab.parity.io/parity/mirrors/polkadot-sdk/-/jobs/7511363\nhttps://gitlab.parity.io/parity/mirrors/polkadot-sdk/-/jobs/7511379",
+          "timestamp": "2024-10-05T17:14:40Z",
+          "tree_id": "a47d1d8df192fbeb42169641a673ce42c61af3c3",
+          "url": "https://github.com/paritytech/polkadot-sdk/commit/a4abcbdd89952f188ee6418da152d6bfe26e55b4"
+        },
+        "date": 1728152363989,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "Sent to peers",
+            "value": 127.94999999999996,
+            "unit": "KiB"
+          },
+          {
+            "name": "Received from peers",
+            "value": 106.39999999999996,
+            "unit": "KiB"
+          },
+          {
+            "name": "test-environment",
+            "value": 0.044709014555999974,
+            "unit": "seconds"
+          },
+          {
+            "name": "statement-distribution",
+            "value": 0.03550327446600001,
             "unit": "seconds"
           }
         ]

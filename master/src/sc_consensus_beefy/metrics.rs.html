@@ -493,6 +493,15 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 <a href="#343" id="343">343</a>
 <a href="#344" id="344">344</a>
 <a href="#345" id="345">345</a>
+<a href="#346" id="346">346</a>
+<a href="#347" id="347">347</a>
+<a href="#348" id="348">348</a>
+<a href="#349" id="349">349</a>
+<a href="#350" id="350">350</a>
+<a href="#351" id="351">351</a>
+<a href="#352" id="352">352</a>
+<a href="#353" id="353">353</a>
+<a href="#354" id="354">354</a>
 </pre></div><pre class="rust"><code><span class="comment">// This file is part of Substrate.
 
 // Copyright (C) Parity Technologies (UK) Ltd.
@@ -731,6 +740,8 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 	</span><span class="kw">pub </span>beefy_on_demand_justification_invalid_proof: Counter&lt;U64&gt;,
 	<span class="doccomment">/// Number of on-demand justification good proof
 	</span><span class="kw">pub </span>beefy_on_demand_justification_good_proof: Counter&lt;U64&gt;,
+	<span class="doccomment">/// Number of live beefy peers available for requests.
+	</span><span class="kw">pub </span>beefy_on_demand_live_peers: Gauge&lt;U64&gt;,
 }
 
 <span class="kw">impl </span>PrometheusRegister <span class="kw">for </span>OnDemandOutgoingRequestsMetrics {
@@ -769,6 +780,13 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 				Counter::new(
 					<span class="string">"substrate_beefy_on_demand_justification_good_proof"</span>,
 					<span class="string">"Number of on-demand justification good proof"</span>,
+				)<span class="question-mark">?</span>,
+				registry,
+			)<span class="question-mark">?</span>,
+			beefy_on_demand_live_peers: register(
+				Gauge::new(
+					<span class="string">"substrate_beefy_on_demand_live_peers"</span>,
+					<span class="string">"Number of live beefy peers available for requests."</span>,
 				)<span class="question-mark">?</span>,
 				registry,
 			)<span class="question-mark">?</span>,
