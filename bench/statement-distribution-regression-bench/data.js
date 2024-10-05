@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1728137864149,
+  "lastUpdate": 1728147393369,
   "repoUrl": "https://github.com/paritytech/polkadot-sdk",
   "entries": {
     "statement-distribution-regression-bench": [
@@ -13415,6 +13415,50 @@ window.BENCHMARK_DATA = {
           {
             "name": "statement-distribution",
             "value": 0.03556689485000001,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "1177472+mordamax@users.noreply.github.com",
+            "name": "Maksym H",
+            "username": "mordamax"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "cb8f4665bce0f6d856c05154369e9d6b0dc76ced",
+          "message": "update runners for cmd and docs (#5938)\n\nUpdated runners for CMD and Docs",
+          "timestamp": "2024-10-05T15:51:39Z",
+          "tree_id": "d9b30ab264b1c62e398777892f5e89b15f3d019c",
+          "url": "https://github.com/paritytech/polkadot-sdk/commit/cb8f4665bce0f6d856c05154369e9d6b0dc76ced"
+        },
+        "date": 1728147374584,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "Sent to peers",
+            "value": 127.92799999999995,
+            "unit": "KiB"
+          },
+          {
+            "name": "Received from peers",
+            "value": 106.39999999999996,
+            "unit": "KiB"
+          },
+          {
+            "name": "statement-distribution",
+            "value": 0.036166221543999996,
+            "unit": "seconds"
+          },
+          {
+            "name": "test-environment",
+            "value": 0.0451773989059999,
             "unit": "seconds"
           }
         ]
