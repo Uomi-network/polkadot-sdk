@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1728137813279,
+  "lastUpdate": 1728147340685,
   "repoUrl": "https://github.com/paritytech/polkadot-sdk",
   "entries": {
     "availability-distribution-regression-bench": [
@@ -28537,6 +28537,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "availability-store",
             "value": 0.1796201056533333,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "1177472+mordamax@users.noreply.github.com",
+            "name": "Maksym H",
+            "username": "mordamax"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "cb8f4665bce0f6d856c05154369e9d6b0dc76ced",
+          "message": "update runners for cmd and docs (#5938)\n\nUpdated runners for CMD and Docs",
+          "timestamp": "2024-10-05T15:51:39Z",
+          "tree_id": "d9b30ab264b1c62e398777892f5e89b15f3d019c",
+          "url": "https://github.com/paritytech/polkadot-sdk/commit/cb8f4665bce0f6d856c05154369e9d6b0dc76ced"
+        },
+        "date": 1728147321701,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "Received from peers",
+            "value": 433.3333333333332,
+            "unit": "KiB"
+          },
+          {
+            "name": "Sent to peers",
+            "value": 18481.666666666653,
+            "unit": "KiB"
+          },
+          {
+            "name": "availability-store",
+            "value": 0.17960703825999996,
+            "unit": "seconds"
+          },
+          {
+            "name": "availability-distribution",
+            "value": 0.016543432913333333,
+            "unit": "seconds"
+          },
+          {
+            "name": "bitfield-distribution",
+            "value": 0.02467381982000001,
+            "unit": "seconds"
+          },
+          {
+            "name": "test-environment",
+            "value": 0.008736018300000082,
             "unit": "seconds"
           }
         ]
