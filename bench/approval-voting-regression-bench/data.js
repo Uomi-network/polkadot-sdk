@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1728147367111,
+  "lastUpdate": 1728152356986,
   "repoUrl": "https://github.com/paritytech/polkadot-sdk",
   "entries": {
     "approval-voting-regression-bench": [
@@ -22228,6 +22228,105 @@ window.BENCHMARK_DATA = {
           {
             "name": "approval-voting-parallel/approval-voting-parallel-subsystem",
             "value": 0.4875409872000228,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "363911+pepoviola@users.noreply.github.com",
+            "name": "Javier Viola",
+            "username": "pepoviola"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "a4abcbdd89952f188ee6418da152d6bfe26e55b4",
+          "message": "bump zombienet version `v1.3.113` (#5935)\n\nBump zombienet version. Including fixes for `ci` failures like \n\nhttps://gitlab.parity.io/parity/mirrors/polkadot-sdk/-/jobs/7511363\nhttps://gitlab.parity.io/parity/mirrors/polkadot-sdk/-/jobs/7511379",
+          "timestamp": "2024-10-05T17:14:40Z",
+          "tree_id": "a47d1d8df192fbeb42169641a673ce42c61af3c3",
+          "url": "https://github.com/paritytech/polkadot-sdk/commit/a4abcbdd89952f188ee6418da152d6bfe26e55b4"
+        },
+        "date": 1728152338270,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "Sent to peers",
+            "value": 63636.46,
+            "unit": "KiB"
+          },
+          {
+            "name": "Received from peers",
+            "value": 52944.2,
+            "unit": "KiB"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-db",
+            "value": 2.1060313658199967,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel",
+            "value": 12.14222091678996,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-3",
+            "value": 2.3632504011399997,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-distribution",
+            "value": 0.00001949038,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting/test-environment",
+            "value": 0.00001877516,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-subsystem",
+            "value": 0.4974773940699624,
+            "unit": "seconds"
+          },
+          {
+            "name": "test-environment",
+            "value": 3.462557370871848,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-distribution/test-environment",
+            "value": 0.00001949038,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting",
+            "value": 0.00001877516,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-gather-signatures",
+            "value": 0.005985122680000005,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-0",
+            "value": 2.3794604343400003,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-2",
+            "value": 2.4201134450700015,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-1",
+            "value": 2.36990275367,
             "unit": "seconds"
           }
         ]
