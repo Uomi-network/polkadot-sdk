@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1728066478621,
+  "lastUpdate": 1728137813279,
   "repoUrl": "https://github.com/paritytech/polkadot-sdk",
   "entries": {
     "availability-distribution-regression-bench": [
@@ -28483,6 +28483,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "bitfield-distribution",
             "value": 0.024628261300000003,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "cyrill@parity.io",
+            "name": "Cyrill Leutwiler",
+            "username": "xermicus"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "a8ebe9af23df6c4dddddf74eb21255231331c5df",
+          "message": "[pallet-revive] immutable data storage (#5861)\n\nThis PR introduces the concept of immutable storage data, used for\n[Solidity immutable\nvariables](https://docs.soliditylang.org/en/latest/contracts.html#immutable).\n\nThis is a minimal implementation. Immutable data is attached to a\ncontract; to keep `ContractInfo` fixed in size, we only store the length\nthere, and store the immutable data in a dedicated storage map instead.\nWhich comes at the cost of requiring an additional storage read (costly)\nfor contracts using this feature.\n\nWe discussed more optimal solutions not requiring any additional storage\naccesses internally, but they turned out to be non-trivial to implement.\nAnother optimization benefiting multiple calls to the same contract in a\nsingle call stack would be to cache the immutable data in `Stack`.\nHowever, this potential creates a DOS vulnerability (the attack vector\nis to call into as many contracts in a single stack as possible, where\nthey all have maximum immutable data to fill the cache as efficiently as\npossible). So this either has to be guaranteed to be a non-issue by\nlimits, or, more likely, to have some logic to bound the cache.\nEventually, we should think about introducing the concept of warm and\ncold storage reads (akin to EVM). Since immutable variables are commonly\nused in contracts, this change is blocking our initial launch and we\nshould only optimize it properly in follow-ups.\n\nThis PR also disables the `set_code_hash` API (which isn't usable for\nSolidity contracts without pre-compiles anyways). With immutable storage\nattached to contracts, we now want to run the constructor of the new\ncode hash to collect the immutable data during `set_code_hash`. This\nwill be implemented in a follow up PR.\n\n---------\n\nSigned-off-by: Cyrill Leutwiler <bigcyrill@hotmail.com>\nSigned-off-by: xermicus <cyrill@parity.io>\nCo-authored-by: command-bot <>\nCo-authored-by: Alexander Theißen <alex.theissen@me.com>\nCo-authored-by: PG Herveou <pgherveou@gmail.com>",
+          "timestamp": "2024-10-05T13:14:14Z",
+          "tree_id": "67556329b5c17ccd10f8661eaf573442581f7157",
+          "url": "https://github.com/paritytech/polkadot-sdk/commit/a8ebe9af23df6c4dddddf74eb21255231331c5df"
+        },
+        "date": 1728137794052,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "Received from peers",
+            "value": 433.3333333333332,
+            "unit": "KiB"
+          },
+          {
+            "name": "Sent to peers",
+            "value": 18481.666666666653,
+            "unit": "KiB"
+          },
+          {
+            "name": "test-environment",
+            "value": 0.008579862926666763,
+            "unit": "seconds"
+          },
+          {
+            "name": "bitfield-distribution",
+            "value": 0.024705067286666663,
+            "unit": "seconds"
+          },
+          {
+            "name": "availability-distribution",
+            "value": 0.01631295032000001,
+            "unit": "seconds"
+          },
+          {
+            "name": "availability-store",
+            "value": 0.1796201056533333,
             "unit": "seconds"
           }
         ]
