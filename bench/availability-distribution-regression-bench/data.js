@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1728152331624,
+  "lastUpdate": 1728221083406,
   "repoUrl": "https://github.com/paritytech/polkadot-sdk",
   "entries": {
     "availability-distribution-regression-bench": [
@@ -28645,6 +28645,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "test-environment",
             "value": 0.008666268040000091,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "jonathan@dwellir.com",
+            "name": "Jonathan Udd",
+            "username": "jonathanudd"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "ec73ea95d67d4f315d4117c9207455bec548659a",
+          "message": "Added people-polkadot Dwellir bootnodes (#5893)\n\n# Description\n\nAdding Dwellir bootnodes in the `people-polkadot.json` spec file.",
+          "timestamp": "2024-10-06T12:23:45Z",
+          "tree_id": "f38029d29b6b99a155ab7e55364966cf4707e058",
+          "url": "https://github.com/paritytech/polkadot-sdk/commit/ec73ea95d67d4f315d4117c9207455bec548659a"
+        },
+        "date": 1728221064729,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "Received from peers",
+            "value": 433.3333333333332,
+            "unit": "KiB"
+          },
+          {
+            "name": "Sent to peers",
+            "value": 18481.666666666653,
+            "unit": "KiB"
+          },
+          {
+            "name": "test-environment",
+            "value": 0.008554587346666746,
+            "unit": "seconds"
+          },
+          {
+            "name": "bitfield-distribution",
+            "value": 0.024654917346666673,
+            "unit": "seconds"
+          },
+          {
+            "name": "availability-store",
+            "value": 0.17911891979333322,
+            "unit": "seconds"
+          },
+          {
+            "name": "availability-distribution",
+            "value": 0.016304502420000012,
             "unit": "seconds"
           }
         ]
