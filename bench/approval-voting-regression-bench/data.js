@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1728152356986,
+  "lastUpdate": 1728221108787,
   "repoUrl": "https://github.com/paritytech/polkadot-sdk",
   "entries": {
     "approval-voting-regression-bench": [
@@ -22327,6 +22327,105 @@ window.BENCHMARK_DATA = {
           {
             "name": "approval-voting-parallel/approval-voting-parallel-1",
             "value": 2.36990275367,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "jonathan@dwellir.com",
+            "name": "Jonathan Udd",
+            "username": "jonathanudd"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "ec73ea95d67d4f315d4117c9207455bec548659a",
+          "message": "Added people-polkadot Dwellir bootnodes (#5893)\n\n# Description\n\nAdding Dwellir bootnodes in the `people-polkadot.json` spec file.",
+          "timestamp": "2024-10-06T12:23:45Z",
+          "tree_id": "f38029d29b6b99a155ab7e55364966cf4707e058",
+          "url": "https://github.com/paritytech/polkadot-sdk/commit/ec73ea95d67d4f315d4117c9207455bec548659a"
+        },
+        "date": 1728221089944,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "Sent to peers",
+            "value": 63622.5,
+            "unit": "KiB"
+          },
+          {
+            "name": "Received from peers",
+            "value": 52934.40000000001,
+            "unit": "KiB"
+          },
+          {
+            "name": "approval-distribution/test-environment",
+            "value": 0.00002538223,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-0",
+            "value": 2.3934668677400004,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-1",
+            "value": 2.3791726535699977,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel",
+            "value": 12.197444907879957,
+            "unit": "seconds"
+          },
+          {
+            "name": "test-environment",
+            "value": 3.3636006166922385,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-gather-signatures",
+            "value": 0.005728212999999994,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-distribution",
+            "value": 0.00002538223,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting/test-environment",
+            "value": 0.0000223191,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting",
+            "value": 0.0000223191,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-db",
+            "value": 2.1141878592400003,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-3",
+            "value": 2.392395413710001,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-subsystem",
+            "value": 0.4914950359999596,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-2",
+            "value": 2.4209988646200005,
             "unit": "seconds"
           }
         ]
