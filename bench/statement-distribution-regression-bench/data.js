@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1728152383199,
+  "lastUpdate": 1728221134950,
   "repoUrl": "https://github.com/paritytech/polkadot-sdk",
   "entries": {
     "statement-distribution-regression-bench": [
@@ -13503,6 +13503,50 @@ window.BENCHMARK_DATA = {
           {
             "name": "statement-distribution",
             "value": 0.03550327446600001,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "jonathan@dwellir.com",
+            "name": "Jonathan Udd",
+            "username": "jonathanudd"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "ec73ea95d67d4f315d4117c9207455bec548659a",
+          "message": "Added people-polkadot Dwellir bootnodes (#5893)\n\n# Description\n\nAdding Dwellir bootnodes in the `people-polkadot.json` spec file.",
+          "timestamp": "2024-10-06T12:23:45Z",
+          "tree_id": "f38029d29b6b99a155ab7e55364966cf4707e058",
+          "url": "https://github.com/paritytech/polkadot-sdk/commit/ec73ea95d67d4f315d4117c9207455bec548659a"
+        },
+        "date": 1728221116039,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "Sent to peers",
+            "value": 127.95399999999997,
+            "unit": "KiB"
+          },
+          {
+            "name": "Received from peers",
+            "value": 106.39999999999996,
+            "unit": "KiB"
+          },
+          {
+            "name": "statement-distribution",
+            "value": 0.03546499840600001,
+            "unit": "seconds"
+          },
+          {
+            "name": "test-environment",
+            "value": 0.045037953989999976,
             "unit": "seconds"
           }
         ]
