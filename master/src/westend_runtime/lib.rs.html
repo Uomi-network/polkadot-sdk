@@ -2912,6 +2912,8 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 <a href="#2762" id="2762">2762</a>
 <a href="#2763" id="2763">2763</a>
 <a href="#2764" id="2764">2764</a>
+<a href="#2765" id="2765">2765</a>
+<a href="#2766" id="2766">2766</a>
 </pre></div><pre class="rust"><code><span class="comment">// Copyright (C) Parity Technologies (UK) Ltd.
 // This file is part of Polkadot.
 
@@ -3313,6 +3315,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 	<span class="kw">type </span>RuntimeFreezeReason = RuntimeFreezeReason;
 	<span class="kw">type </span>FreezeIdentifier = RuntimeFreezeReason;
 	<span class="kw">type </span>MaxFreezes = VariantCountOf&lt;RuntimeFreezeReason&gt;;
+	<span class="kw">type </span>DoneSlashHandler = ();
 }
 
 <span class="macro">parameter_types!</span> {
@@ -4698,6 +4701,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 			Runtime,
 			MaxAgentsToMigrate,
 		&gt;,
+		parachains_shared::migration::MigrateToV1&lt;Runtime&gt;,
 	);
 }
 

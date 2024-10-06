@@ -261,7 +261,7 @@ state of the context block.</li>
 <li>Ensure that any code upgrade scheduled by the candidate does not happen within <code>config.validation_upgrade_cooldown</code>
 of <code>Paras::last_code_upgrade(para_id, true)</code>, if any, comparing against the value of <code>Paras::FutureCodeUpgrades</code>
 for the given para ID.</li>
-<li>Check the collator's signature on the candidate data.</li>
+<li>Check the collator's signature on the candidate data (only if <code>CandidateDescriptor</code> is version 1)</li>
 <li>check the backing of the candidate using the signatures and the bitfields, comparing against the validators
 assigned to the groups, fetched with the <code>group_validators</code> lookup, while group indices are computed by <code>Scheduler</code>
 according to group rotation info.</li>
@@ -365,7 +365,7 @@ in <code>well_known_keys</code> in order to facilitate oraclisation on to the pa
 </ol>
 </li>
 </ul>
-<footer id="last-change">Last change: 2024-07-09, commit: <a href="https://github.com/paritytech/polkadot-sdk/commit/2f0e5a61b7">2f0e5a61b7</a></footer>
+<footer id="last-change">Last change: 2024-10-07, commit: <a href="https://github.com/paritytech/polkadot-sdk/commit/4b356c4b8b">4b356c4b8b</a></footer>
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">

@@ -2663,7 +2663,7 @@ state of the context block.</li>
 <li>Ensure that any code upgrade scheduled by the candidate does not happen within <code>config.validation_upgrade_cooldown</code>
 of <code>Paras::last_code_upgrade(para_id, true)</code>, if any, comparing against the value of <code>Paras::FutureCodeUpgrades</code>
 for the given para ID.</li>
-<li>Check the collator's signature on the candidate data.</li>
+<li>Check the collator's signature on the candidate data (only if <code>CandidateDescriptor</code> is version 1)</li>
 <li>check the backing of the candidate using the signatures and the bitfields, comparing against the validators
 assigned to the groups, fetched with the <code>group_validators</code> lookup, while group indices are computed by <code>Scheduler</code>
 according to group rotation info.</li>
@@ -2767,7 +2767,7 @@ in <code>well_known_keys</code> in order to facilitate oraclisation on to the pa
 </ol>
 </li>
 </ul>
-<footer id="last-change">Last change: 2024-07-09, commit: <a href="https://github.com/paritytech/polkadot-sdk/commit/2f0e5a61b7">2f0e5a61b7</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="parainherent"><a class="header" href="#parainherent"><code>ParaInherent</code></a></h1>
+<footer id="last-change">Last change: 2024-10-07, commit: <a href="https://github.com/paritytech/polkadot-sdk/commit/4b356c4b8b">4b356c4b8b</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="parainherent"><a class="header" href="#parainherent"><code>ParaInherent</code></a></h1>
 <blockquote>
 <p>NOTE: This module has suffered changes for the elastic scaling implementation. As a result, parts of this document may
 be out of date and will be updated at a later time. Issue tracking the update:
@@ -7834,7 +7834,7 @@ state.</p>
 <p>Once we have all parameters, we can spin up a background task to perform the validation in a way that doesn't hold up
 the entire event loop. Before invoking the validation function itself, this should first do some basic checks:</p>
 <ul>
-<li>The collator signature is valid</li>
+<li>The collator signature is valid (only if <code>CandidateDescriptor</code> has version 1)</li>
 <li>The PoV provided matches the <code>pov_hash</code> field of the descriptor</li>
 </ul>
 <p>For more details please see <a href="node/utility/pvf-host-and-workers.html">PVF Host and Workers</a>.</p>
@@ -7842,7 +7842,7 @@ the entire event loop. Before invoking the validation function itself, this shou
 <p>If we can assume the presence of the relay-chain state (that is, during processing
 <a href="node/utility/../../types/overseer-protocol.html#validationrequesttype"><code>CandidateValidationMessage</code></a><code>::ValidateFromChainState</code>) we can run all the checks that the relay-chain would run
 at the inclusion time thus confirming that the candidate will be accepted.</p>
-<footer id="last-change">Last change: 2023-12-04, commit: <a href="https://github.com/paritytech/polkadot-sdk/commit/707dbcc638">707dbcc638</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="pvf-host-and-workers"><a class="header" href="#pvf-host-and-workers">PVF Host and Workers</a></h1>
+<footer id="last-change">Last change: 2024-10-07, commit: <a href="https://github.com/paritytech/polkadot-sdk/commit/4b356c4b8b">4b356c4b8b</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="pvf-host-and-workers"><a class="header" href="#pvf-host-and-workers">PVF Host and Workers</a></h1>
 <p>The PVF host is responsible for handling requests to prepare and execute PVF
 code blobs, which it sends to PVF <strong>workers</strong> running in their own child
 processes. These workers are spawned from the <code>polkadot-prepare-worker</code> and

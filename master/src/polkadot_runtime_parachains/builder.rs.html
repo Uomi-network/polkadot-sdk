@@ -1093,6 +1093,66 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 <a href="#943" id="943">943</a>
 <a href="#944" id="944">944</a>
 <a href="#945" id="945">945</a>
+<a href="#946" id="946">946</a>
+<a href="#947" id="947">947</a>
+<a href="#948" id="948">948</a>
+<a href="#949" id="949">949</a>
+<a href="#950" id="950">950</a>
+<a href="#951" id="951">951</a>
+<a href="#952" id="952">952</a>
+<a href="#953" id="953">953</a>
+<a href="#954" id="954">954</a>
+<a href="#955" id="955">955</a>
+<a href="#956" id="956">956</a>
+<a href="#957" id="957">957</a>
+<a href="#958" id="958">958</a>
+<a href="#959" id="959">959</a>
+<a href="#960" id="960">960</a>
+<a href="#961" id="961">961</a>
+<a href="#962" id="962">962</a>
+<a href="#963" id="963">963</a>
+<a href="#964" id="964">964</a>
+<a href="#965" id="965">965</a>
+<a href="#966" id="966">966</a>
+<a href="#967" id="967">967</a>
+<a href="#968" id="968">968</a>
+<a href="#969" id="969">969</a>
+<a href="#970" id="970">970</a>
+<a href="#971" id="971">971</a>
+<a href="#972" id="972">972</a>
+<a href="#973" id="973">973</a>
+<a href="#974" id="974">974</a>
+<a href="#975" id="975">975</a>
+<a href="#976" id="976">976</a>
+<a href="#977" id="977">977</a>
+<a href="#978" id="978">978</a>
+<a href="#979" id="979">979</a>
+<a href="#980" id="980">980</a>
+<a href="#981" id="981">981</a>
+<a href="#982" id="982">982</a>
+<a href="#983" id="983">983</a>
+<a href="#984" id="984">984</a>
+<a href="#985" id="985">985</a>
+<a href="#986" id="986">986</a>
+<a href="#987" id="987">987</a>
+<a href="#988" id="988">988</a>
+<a href="#989" id="989">989</a>
+<a href="#990" id="990">990</a>
+<a href="#991" id="991">991</a>
+<a href="#992" id="992">992</a>
+<a href="#993" id="993">993</a>
+<a href="#994" id="994">994</a>
+<a href="#995" id="995">995</a>
+<a href="#996" id="996">996</a>
+<a href="#997" id="997">997</a>
+<a href="#998" id="998">998</a>
+<a href="#999" id="999">999</a>
+<a href="#1000" id="1000">1000</a>
+<a href="#1001" id="1001">1001</a>
+<a href="#1002" id="1002">1002</a>
+<a href="#1003" id="1003">1003</a>
+<a href="#1004" id="1004">1004</a>
+<a href="#1005" id="1005">1005</a>
 </pre></div><pre class="rust"><code><span class="comment">// Copyright (C) Parity Technologies (UK) Ltd.
 // This file is part of Polkadot.
 
@@ -1127,9 +1187,9 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 <span class="kw">use </span>polkadot_primitives::{
 	node_features::FeatureIndex,
 	vstaging::{
-		BackedCandidate, CandidateDescriptorV2,
-		CommittedCandidateReceiptV2 <span class="kw">as </span>CommittedCandidateReceipt,
-		InherentData <span class="kw">as </span>ParachainsInherentData,
+		BackedCandidate, CandidateDescriptorV2, ClaimQueueOffset,
+		CommittedCandidateReceiptV2 <span class="kw">as </span>CommittedCandidateReceipt, CoreSelector,
+		InherentData <span class="kw">as </span>ParachainsInherentData, UMPSignal, UMP_SEPARATOR,
 	},
 	AvailabilityBitfield, CandidateCommitments, CandidateDescriptor, CandidateHash, CollatorId,
 	CollatorSignature, CompactStatement, CoreIndex, DisputeStatement, DisputeStatementSet,
@@ -1147,14 +1207,14 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 	ValidationCode(<span class="macro">vec!</span>[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>])
 }
 
-<span class="comment">// Create a dummy collator id suitable to be used in a V1 candidate descriptor.
-</span><span class="kw">fn </span>junk_collator() -&gt; CollatorId {
+<span class="doccomment">/// Create a dummy collator id suitable to be used in a V1 candidate descriptor.
+</span><span class="kw">pub fn </span>junk_collator() -&gt; CollatorId {
 	CollatorId::from_slice(<span class="kw-2">&amp;mut </span>(<span class="number">0</span>..<span class="number">32</span>).into_iter().collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;().as_slice())
 		.expect(<span class="string">"32 bytes; qed"</span>)
 }
 
-<span class="comment">// Creates a dummy collator signature suitable to be used in a V1 candidate descriptor.
-</span><span class="kw">fn </span>junk_collator_signature() -&gt; CollatorSignature {
+<span class="doccomment">/// Creates a dummy collator signature suitable to be used in a V1 candidate descriptor.
+</span><span class="kw">pub fn </span>junk_collator_signature() -&gt; CollatorSignature {
 	CollatorSignature::from_slice(<span class="kw-2">&amp;mut </span>(<span class="number">0</span>..<span class="number">64</span>).into_iter().collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;().as_slice())
 		.expect(<span class="string">"64 bytes; qed"</span>)
 }
@@ -1239,8 +1299,13 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 	</span>unavailable_cores: Vec&lt;u32&gt;,
 	<span class="doccomment">/// Use v2 candidate descriptor.
 	</span>candidate_descriptor_v2: bool,
+	<span class="doccomment">/// Apply custom changes to generated candidates
+	</span>candidate_modifier: <span class="prelude-ty">Option</span>&lt;CandidateModifier&lt;T::Hash&gt;&gt;,
 	_phantom: core::marker::PhantomData&lt;T&gt;,
 }
+
+<span class="kw">pub type </span>CandidateModifier&lt;Hash&gt; =
+	<span class="kw">fn</span>(CommittedCandidateReceipt&lt;Hash&gt;) -&gt; CommittedCandidateReceipt&lt;Hash&gt;;
 
 <span class="doccomment">/// Paras inherent `enter` benchmark scenario.
 </span><span class="attr">#[cfg(any(feature = <span class="string">"runtime-benchmarks"</span>, test))]
@@ -1271,6 +1336,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 			fill_claimqueue: <span class="bool-val">true</span>,
 			unavailable_cores: <span class="macro">vec!</span>[],
 			candidate_descriptor_v2: <span class="bool-val">false</span>,
+			candidate_modifier: <span class="prelude-val">None</span>,
 			_phantom: core::marker::PhantomData::&lt;T&gt;,
 		}
 	}
@@ -1385,6 +1451,15 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 		<span class="self">self
 	</span>}
 
+	<span class="doccomment">/// Set the candidate modifier.
+	</span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>set_candidate_modifier(
+		<span class="kw-2">mut </span><span class="self">self</span>,
+		modifier: <span class="prelude-ty">Option</span>&lt;CandidateModifier&lt;T::Hash&gt;&gt;,
+	) -&gt; <span class="self">Self </span>{
+		<span class="self">self</span>.candidate_modifier = modifier;
+		<span class="self">self
+	</span>}
+
 	<span class="doccomment">/// Get the maximum number of validators per core.
 	</span><span class="kw">fn </span>max_validators_per_core(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; u32 {
 		<span class="self">self</span>.max_validators_per_core.unwrap_or(<span class="self">Self</span>::fallback_max_validators_per_core())
@@ -1420,18 +1495,33 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 		HeadData(<span class="macro">vec!</span>[<span class="number">0xFF</span>; max_head_size <span class="kw">as </span>usize])
 	}
 
-	<span class="kw">fn </span>candidate_descriptor_mock() -&gt; CandidateDescriptorV2&lt;T::Hash&gt; {
-		<span class="comment">// Use a v1 descriptor.
-		</span>CandidateDescriptor::&lt;T::Hash&gt; {
-			para_id: <span class="number">0</span>.into(),
-			relay_parent: Default::default(),
-			collator: junk_collator(),
-			persisted_validation_data_hash: Default::default(),
-			pov_hash: Default::default(),
-			erasure_root: Default::default(),
-			signature: junk_collator_signature(),
-			para_head: Default::default(),
-			validation_code_hash: mock_validation_code().hash(),
+	<span class="kw">fn </span>candidate_descriptor_mock(candidate_descriptor_v2: bool) -&gt; CandidateDescriptorV2&lt;T::Hash&gt; {
+		<span class="kw">if </span>candidate_descriptor_v2 {
+			CandidateDescriptorV2::new(
+				<span class="number">0</span>.into(),
+				Default::default(),
+				CoreIndex(<span class="number">200</span>),
+				<span class="number">2</span>,
+				Default::default(),
+				Default::default(),
+				Default::default(),
+				Default::default(),
+				mock_validation_code().hash(),
+			)
+		} <span class="kw">else </span>{
+			<span class="comment">// Convert v1 to v2.
+			</span>CandidateDescriptor::&lt;T::Hash&gt; {
+				para_id: <span class="number">0</span>.into(),
+				relay_parent: Default::default(),
+				collator: junk_collator(),
+				persisted_validation_data_hash: Default::default(),
+				pov_hash: Default::default(),
+				erasure_root: Default::default(),
+				signature: junk_collator_signature(),
+				para_head: Default::default(),
+				validation_code_hash: mock_validation_code().hash(),
+			}
+			.into()
 		}
 		.into()
 	}
@@ -1443,17 +1533,19 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 		candidate_hash: CandidateHash,
 		availability_votes: BitVec&lt;u8, BitOrderLsb0&gt;,
 		commitments: CandidateCommitments,
+		candidate_descriptor_v2: bool,
 	) -&gt; inclusion::CandidatePendingAvailability&lt;T::Hash, BlockNumberFor&lt;T&gt;&gt; {
 		inclusion::CandidatePendingAvailability::&lt;T::Hash, BlockNumberFor&lt;T&gt;&gt;::new(
-			core_idx,                          <span class="comment">// core
-			</span>candidate_hash,                    <span class="comment">// hash
-			</span><span class="self">Self</span>::candidate_descriptor_mock(), <span class="comment">// candidate descriptor
-			</span>commitments,                       <span class="comment">// commitments
-			</span>availability_votes,                <span class="comment">// availability votes
-			</span>Default::default(),                <span class="comment">// backers
-			</span>Zero::zero(),                      <span class="comment">// relay parent
-			</span>One::one(),                        <span class="comment">// relay chain block this was backed in
-			</span>group_idx,                         <span class="comment">// backing group
+			core_idx,                                                 <span class="comment">// core
+			</span>candidate_hash,                                           <span class="comment">// hash
+			</span><span class="self">Self</span>::candidate_descriptor_mock(candidate_descriptor_v2), <span class="comment">// candidate descriptor
+			</span>commitments,                                              <span class="comment">// commitments
+			</span>availability_votes,                                       <span class="comment">// availability votes
+			</span>Default::default(),                                       <span class="comment">// backers
+			</span>Zero::zero(),                                             <span class="comment">// relay parent
+			</span>One::one(),                                               <span class="comment">/* relay chain block this
+			                                                           * was backed in */
+			</span>group_idx, <span class="comment">// backing group
 		</span>)
 	}
 
@@ -1468,6 +1560,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 		group_idx: GroupIndex,
 		availability_votes: BitVec&lt;u8, BitOrderLsb0&gt;,
 		candidate_hash: CandidateHash,
+		candidate_descriptor_v2: bool,
 	) {
 		<span class="kw">let </span>commitments = CandidateCommitments::&lt;u32&gt; {
 			upward_messages: Default::default(),
@@ -1483,6 +1576,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 			candidate_hash,
 			availability_votes,
 			commitments,
+			candidate_descriptor_v2,
 		);
 		inclusion::PendingAvailability::&lt;T&gt;::mutate(para_id, |maybe_candidates| {
 			<span class="kw">if let </span><span class="prelude-val">Some</span>(candidates) = maybe_candidates {
@@ -1642,6 +1736,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 					<span class="comment">// No validators have made this candidate available yet.
 					</span><span class="macro">bitvec::bitvec!</span>[u8, bitvec::order::Lsb0; <span class="number">0</span>; validators.len()],
 					CandidateHash(H256::from(byte32_slice_from(current_core_idx))),
+					<span class="self">self</span>.candidate_descriptor_v2,
 				);
 				<span class="kw">if </span>!<span class="self">self</span>.unavailable_cores.contains(<span class="kw-2">&amp;</span>current_core_idx) {
 					concluding_cores.insert(current_core_idx);
@@ -1749,7 +1844,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 								para_id,
 								relay_parent,
 								core_idx,
-								<span class="number">1</span>,
+								<span class="self">self</span>.target_session,
 								persisted_validation_data_hash,
 								pov_hash,
 								Default::default(),
@@ -1771,7 +1866,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 							.into()
 						};
 
-						<span class="kw">let </span>candidate = CommittedCandidateReceipt::&lt;T::Hash&gt; {
+						<span class="kw">let </span><span class="kw-2">mut </span>candidate = CommittedCandidateReceipt::&lt;T::Hash&gt; {
 							descriptor,
 							commitments: CandidateCommitments::&lt;u32&gt; {
 								upward_messages: Default::default(),
@@ -1783,6 +1878,27 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 								hrmp_watermark: <span class="self">self</span>.relay_parent_number(),
 							},
 						};
+
+						<span class="kw">if </span><span class="self">self</span>.candidate_descriptor_v2 {
+							<span class="comment">// `UMPSignal` separator.
+							</span>candidate.commitments.upward_messages.force_push(UMP_SEPARATOR);
+
+							<span class="comment">// `SelectCore` commitment.
+							// Claim queue offset must be `0` so this candidate is for the very
+							// next block.
+							</span>candidate.commitments.upward_messages.force_push(
+								UMPSignal::SelectCore(
+									CoreSelector(chain_idx <span class="kw">as </span>u8),
+									ClaimQueueOffset(<span class="number">0</span>),
+								)
+								.encode(),
+							);
+						}
+
+						<span class="comment">// Maybe apply the candidate modifier
+						</span><span class="kw">if let </span><span class="prelude-val">Some</span>(modifier) = <span class="self">self</span>.candidate_modifier {
+							candidate = modifier(candidate);
+						}
 
 						<span class="kw">let </span>candidate_hash = candidate.hash();
 
@@ -1803,12 +1919,15 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 							})
 							.collect();
 
-						<span class="comment">// Check if the elastic scaling bit is set, if so we need to supply the core
-						// index in the generated candidate.
-						</span><span class="kw">let </span>core_idx = configuration::ActiveConfig::&lt;T&gt;::get()
-							.node_features
-							.get(FeatureIndex::ElasticScalingMVP <span class="kw">as </span>usize)
-							.map(|_the_bit| core_idx);
+						<span class="comment">// Don't inject core when it is available in descriptor.
+						</span><span class="kw">let </span>core_idx = <span class="kw">if </span>candidate.descriptor.core_index().is_some() {
+							<span class="prelude-val">None
+						</span>} <span class="kw">else </span>{
+							configuration::ActiveConfig::&lt;T&gt;::get()
+								.node_features
+								.get(FeatureIndex::ElasticScalingMVP <span class="kw">as </span>usize)
+								.and_then(|the_bit| <span class="kw">if </span><span class="kw-2">*</span>the_bit { <span class="prelude-val">Some</span>(core_idx) } <span class="kw">else </span>{ <span class="prelude-val">None </span>})
+						};
 
 						BackedCandidate::&lt;T::Hash&gt;::new(
 							candidate,
@@ -1861,6 +1980,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 					group_idx,
 					<span class="self">Self</span>::validator_availability_votes_yes(validators.len()),
 					candidate_hash,
+					<span class="self">self</span>.candidate_descriptor_v2,
 				);
 
 				<span class="kw">let </span>statements_len =

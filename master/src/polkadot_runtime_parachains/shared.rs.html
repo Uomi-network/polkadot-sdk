@@ -421,6 +421,28 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 <a href="#271" id="271">271</a>
 <a href="#272" id="272">272</a>
 <a href="#273" id="273">273</a>
+<a href="#274" id="274">274</a>
+<a href="#275" id="275">275</a>
+<a href="#276" id="276">276</a>
+<a href="#277" id="277">277</a>
+<a href="#278" id="278">278</a>
+<a href="#279" id="279">279</a>
+<a href="#280" id="280">280</a>
+<a href="#281" id="281">281</a>
+<a href="#282" id="282">282</a>
+<a href="#283" id="283">283</a>
+<a href="#284" id="284">284</a>
+<a href="#285" id="285">285</a>
+<a href="#286" id="286">286</a>
+<a href="#287" id="287">287</a>
+<a href="#288" id="288">288</a>
+<a href="#289" id="289">289</a>
+<a href="#290" id="290">290</a>
+<a href="#291" id="291">291</a>
+<a href="#292" id="292">292</a>
+<a href="#293" id="293">293</a>
+<a href="#294" id="294">294</a>
+<a href="#295" id="295">295</a>
 </pre></div><pre class="rust"><code><span class="comment">// Copyright (C) Parity Technologies (UK) Ltd.
 // This file is part of Polkadot.
 
@@ -443,12 +465,14 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 //! dependent on any of the other pallets.
 
 </span><span class="kw">use </span>alloc::{
-	collections::{btree_map::BTreeMap, vec_deque::VecDeque},
+	collections::{btree_map::BTreeMap, btree_set::BTreeSet, vec_deque::VecDeque},
 	vec::Vec,
 };
 <span class="kw">use </span>frame_support::{pallet_prelude::<span class="kw-2">*</span>, traits::DisabledValidators};
 <span class="kw">use </span>frame_system::pallet_prelude::BlockNumberFor;
-<span class="kw">use </span>polkadot_primitives::{SessionIndex, ValidatorId, ValidatorIndex};
+<span class="kw">use </span>polkadot_primitives::{
+	vstaging::transpose_claim_queue, CoreIndex, Id, SessionIndex, ValidatorId, ValidatorIndex,
+};
 <span class="kw">use </span>sp_runtime::traits::AtLeast32BitUnsigned;
 
 <span class="kw">use </span>rand::{seq::SliceRandom, SeedableRng};
@@ -466,16 +490,28 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 <span class="attr">#[cfg(test)]
 </span><span class="kw">mod </span>tests;
 
-<span class="doccomment">/// Information about past relay-parents.
+<span class="kw">pub mod </span>migration;
+
+<span class="doccomment">/// Information about a relay parent.
+</span><span class="attr">#[derive(Encode, Decode, Default, TypeInfo, Debug)]
+</span><span class="kw">pub struct </span>RelayParentInfo&lt;Hash&gt; {
+	<span class="comment">// Relay parent hash
+	</span><span class="kw">pub </span>relay_parent: Hash,
+	<span class="comment">// The state root at this block
+	</span><span class="kw">pub </span>state_root: Hash,
+	<span class="comment">// Claim queue snapshot, optimized for accessing the assignments by `ParaId`.
+	// For each para we store the cores assigned per depth.
+	</span><span class="kw">pub </span>claim_queue: BTreeMap&lt;Id, BTreeMap&lt;u8, BTreeSet&lt;CoreIndex&gt;&gt;&gt;,
+}
+
+<span class="doccomment">/// Keeps tracks of information about all viable relay parents.
 </span><span class="attr">#[derive(Encode, Decode, Default, TypeInfo)]
 </span><span class="kw">pub struct </span>AllowedRelayParentsTracker&lt;Hash, BlockNumber&gt; {
-	<span class="comment">// The past relay parents, paired with state roots, that are viable to build upon.
+	<span class="comment">// Information about past relay parents that are viable to build upon.
 	//
 	// They are in ascending chronologic order, so the newest relay parents are at
 	// the back of the deque.
-	//
-	// (relay_parent, state_root)
-	</span>buffer: VecDeque&lt;(Hash, Hash)&gt;,
+	</span>buffer: VecDeque&lt;RelayParentInfo&lt;Hash&gt;&gt;,
 
 	<span class="comment">// The number of the most recent relay-parent, if any.
 	// If the buffer is empty, this value has no meaning and may
@@ -493,13 +529,17 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 		<span class="kw-2">&amp;mut </span><span class="self">self</span>,
 		relay_parent: Hash,
 		state_root: Hash,
+		claim_queue: BTreeMap&lt;CoreIndex, VecDeque&lt;Id&gt;&gt;,
 		number: BlockNumber,
 		max_ancestry_len: u32,
 	) {
+		<span class="kw">let </span>claim_queue = transpose_claim_queue(claim_queue);
+
 		<span class="comment">// + 1 for the most recent block, which is always allowed.
 		</span><span class="kw">let </span>buffer_size_limit = max_ancestry_len <span class="kw">as </span>usize + <span class="number">1</span>;
 
-		<span class="self">self</span>.buffer.push_back((relay_parent, state_root));
+		<span class="self">self</span>.buffer.push_back(RelayParentInfo { relay_parent, state_root, claim_queue });
+
 		<span class="self">self</span>.latest_number = number;
 		<span class="kw">while </span><span class="self">self</span>.buffer.len() &gt; buffer_size_limit {
 			<span class="kw">let _ </span>= <span class="self">self</span>.buffer.pop_front();
@@ -519,8 +559,8 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 		<span class="kw-2">&amp;</span><span class="self">self</span>,
 		relay_parent: Hash,
 		prev: <span class="prelude-ty">Option</span>&lt;BlockNumber&gt;,
-	) -&gt; <span class="prelude-ty">Option</span>&lt;(Hash, BlockNumber)&gt; {
-		<span class="kw">let </span>pos = <span class="self">self</span>.buffer.iter().position(|(rp, <span class="kw">_</span>)| rp == <span class="kw-2">&amp;</span>relay_parent)<span class="question-mark">?</span>;
+	) -&gt; <span class="prelude-ty">Option</span>&lt;(<span class="kw-2">&amp;</span>RelayParentInfo&lt;Hash&gt;, BlockNumber)&gt; {
+		<span class="kw">let </span>pos = <span class="self">self</span>.buffer.iter().position(|info| info.relay_parent == relay_parent)<span class="question-mark">?</span>;
 		<span class="kw">let </span>age = (<span class="self">self</span>.buffer.len() - <span class="number">1</span>) - pos;
 		<span class="kw">let </span>number = <span class="self">self</span>.latest_number - BlockNumber::from(age <span class="kw">as </span>u32);
 
@@ -530,7 +570,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 			</span>}
 		}
 
-		<span class="prelude-val">Some</span>((<span class="self">self</span>.buffer[pos].<span class="number">1</span>, number))
+		<span class="prelude-val">Some</span>((<span class="kw-2">&amp;</span><span class="self">self</span>.buffer[pos], number))
 	}
 
 	<span class="doccomment">/// Returns block number of the earliest block the buffer would contain if
@@ -550,8 +590,11 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 </span><span class="kw">pub mod </span>pallet {
 	<span class="kw">use super</span>::<span class="kw-2">*</span>;
 
+	<span class="kw">const </span>STORAGE_VERSION: StorageVersion = StorageVersion::new(<span class="number">1</span>);
+
 	<span class="attr">#[pallet::pallet]
 	#[pallet::without_storage_info]
+	#[pallet::storage_version(STORAGE_VERSION)]
 	</span><span class="kw">pub struct </span>Pallet&lt;T&gt;(<span class="kw">_</span>);
 
 	<span class="attr">#[pallet::config]
@@ -686,11 +729,12 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 	</span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>add_allowed_relay_parent(
 		relay_parent: T::Hash,
 		state_root: T::Hash,
+		claim_queue: BTreeMap&lt;CoreIndex, VecDeque&lt;Id&gt;&gt;,
 		number: BlockNumberFor&lt;T&gt;,
 		max_ancestry_len: u32,
 	) {
 		AllowedRelayParents::&lt;T&gt;::mutate(|tracker| {
-			tracker.update(relay_parent, state_root, number, max_ancestry_len)
+			tracker.update(relay_parent, state_root, claim_queue, number, max_ancestry_len)
 		})
 	}
 }

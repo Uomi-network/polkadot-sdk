@@ -736,6 +736,20 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 <a href="#586" id="586">586</a>
 <a href="#587" id="587">587</a>
 <a href="#588" id="588">588</a>
+<a href="#589" id="589">589</a>
+<a href="#590" id="590">590</a>
+<a href="#591" id="591">591</a>
+<a href="#592" id="592">592</a>
+<a href="#593" id="593">593</a>
+<a href="#594" id="594">594</a>
+<a href="#595" id="595">595</a>
+<a href="#596" id="596">596</a>
+<a href="#597" id="597">597</a>
+<a href="#598" id="598">598</a>
+<a href="#599" id="599">599</a>
+<a href="#600" id="600">600</a>
+<a href="#601" id="601">601</a>
+<a href="#602" id="602">602</a>
 </pre></div><pre class="rust"><code><span class="comment">// Copyright (C) Parity Technologies (UK) Ltd.
 // This file is part of Polkadot.
 
@@ -1193,8 +1207,22 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 	//
 	// Thus, minimum relay parent is ensured to have asynchronous backing enabled.
 	</span><span class="kw">let </span>now = frame_system::Pallet::&lt;T&gt;::block_number();
-	<span class="kw">let </span>min_relay_parent_number = shared::AllowedRelayParents::&lt;T&gt;::get()
-		.hypothetical_earliest_block_number(now, config.async_backing_params.allowed_ancestry_len);
+
+	<span class="comment">// Use the right storage depending on version to ensure #64 doesn't cause issues with this
+	// migration.
+	</span><span class="kw">let </span>min_relay_parent_number = <span class="kw">if </span>shared::Pallet::&lt;T&gt;::on_chain_storage_version() ==
+		StorageVersion::new(<span class="number">0</span>)
+	{
+		shared::migration::v0::AllowedRelayParents::&lt;T&gt;::get().hypothetical_earliest_block_number(
+			now,
+			config.async_backing_params.allowed_ancestry_len,
+		)
+	} <span class="kw">else </span>{
+		shared::AllowedRelayParents::&lt;T&gt;::get().hypothetical_earliest_block_number(
+			now,
+			config.async_backing_params.allowed_ancestry_len,
+		)
+	};
 
 	<span class="kw">let </span>required_parent = paras::Heads::&lt;T&gt;::get(para_id)<span class="question-mark">?</span>;
 	<span class="kw">let </span>validation_code_hash = paras::CurrentCodeHash::&lt;T&gt;::get(para_id)<span class="question-mark">?</span>;

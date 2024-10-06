@@ -1702,6 +1702,84 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 <a href="#1552" id="1552">1552</a>
 <a href="#1553" id="1553">1553</a>
 <a href="#1554" id="1554">1554</a>
+<a href="#1555" id="1555">1555</a>
+<a href="#1556" id="1556">1556</a>
+<a href="#1557" id="1557">1557</a>
+<a href="#1558" id="1558">1558</a>
+<a href="#1559" id="1559">1559</a>
+<a href="#1560" id="1560">1560</a>
+<a href="#1561" id="1561">1561</a>
+<a href="#1562" id="1562">1562</a>
+<a href="#1563" id="1563">1563</a>
+<a href="#1564" id="1564">1564</a>
+<a href="#1565" id="1565">1565</a>
+<a href="#1566" id="1566">1566</a>
+<a href="#1567" id="1567">1567</a>
+<a href="#1568" id="1568">1568</a>
+<a href="#1569" id="1569">1569</a>
+<a href="#1570" id="1570">1570</a>
+<a href="#1571" id="1571">1571</a>
+<a href="#1572" id="1572">1572</a>
+<a href="#1573" id="1573">1573</a>
+<a href="#1574" id="1574">1574</a>
+<a href="#1575" id="1575">1575</a>
+<a href="#1576" id="1576">1576</a>
+<a href="#1577" id="1577">1577</a>
+<a href="#1578" id="1578">1578</a>
+<a href="#1579" id="1579">1579</a>
+<a href="#1580" id="1580">1580</a>
+<a href="#1581" id="1581">1581</a>
+<a href="#1582" id="1582">1582</a>
+<a href="#1583" id="1583">1583</a>
+<a href="#1584" id="1584">1584</a>
+<a href="#1585" id="1585">1585</a>
+<a href="#1586" id="1586">1586</a>
+<a href="#1587" id="1587">1587</a>
+<a href="#1588" id="1588">1588</a>
+<a href="#1589" id="1589">1589</a>
+<a href="#1590" id="1590">1590</a>
+<a href="#1591" id="1591">1591</a>
+<a href="#1592" id="1592">1592</a>
+<a href="#1593" id="1593">1593</a>
+<a href="#1594" id="1594">1594</a>
+<a href="#1595" id="1595">1595</a>
+<a href="#1596" id="1596">1596</a>
+<a href="#1597" id="1597">1597</a>
+<a href="#1598" id="1598">1598</a>
+<a href="#1599" id="1599">1599</a>
+<a href="#1600" id="1600">1600</a>
+<a href="#1601" id="1601">1601</a>
+<a href="#1602" id="1602">1602</a>
+<a href="#1603" id="1603">1603</a>
+<a href="#1604" id="1604">1604</a>
+<a href="#1605" id="1605">1605</a>
+<a href="#1606" id="1606">1606</a>
+<a href="#1607" id="1607">1607</a>
+<a href="#1608" id="1608">1608</a>
+<a href="#1609" id="1609">1609</a>
+<a href="#1610" id="1610">1610</a>
+<a href="#1611" id="1611">1611</a>
+<a href="#1612" id="1612">1612</a>
+<a href="#1613" id="1613">1613</a>
+<a href="#1614" id="1614">1614</a>
+<a href="#1615" id="1615">1615</a>
+<a href="#1616" id="1616">1616</a>
+<a href="#1617" id="1617">1617</a>
+<a href="#1618" id="1618">1618</a>
+<a href="#1619" id="1619">1619</a>
+<a href="#1620" id="1620">1620</a>
+<a href="#1621" id="1621">1621</a>
+<a href="#1622" id="1622">1622</a>
+<a href="#1623" id="1623">1623</a>
+<a href="#1624" id="1624">1624</a>
+<a href="#1625" id="1625">1625</a>
+<a href="#1626" id="1626">1626</a>
+<a href="#1627" id="1627">1627</a>
+<a href="#1628" id="1628">1628</a>
+<a href="#1629" id="1629">1629</a>
+<a href="#1630" id="1630">1630</a>
+<a href="#1631" id="1631">1631</a>
+<a href="#1632" id="1632">1632</a>
 </pre></div><pre class="rust"><code><span class="comment">// Copyright (C) Parity Technologies (UK) Ltd.
 // This file is part of Polkadot.
 
@@ -1749,6 +1827,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 	pallet_prelude::<span class="kw-2">*</span>,
 	traits::Randomness,
 };
+
 <span class="kw">use </span>frame_system::pallet_prelude::<span class="kw-2">*</span>;
 <span class="kw">use </span>pallet_babe::{<span class="self">self</span>, ParentBlockRandomness};
 <span class="kw">use </span>polkadot_primitives::{
@@ -2036,22 +2115,6 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 		<span class="kw">let </span>now = frame_system::Pallet::&lt;T&gt;::block_number();
 		<span class="kw">let </span>config = configuration::ActiveConfig::&lt;T&gt;::get();
 
-		<span class="comment">// Before anything else, update the allowed relay-parents.
-		</span>{
-			<span class="kw">let </span>parent_number = now - One::one();
-			<span class="kw">let </span>parent_storage_root = <span class="kw-2">*</span>parent_header.state_root();
-
-			shared::AllowedRelayParents::&lt;T&gt;::mutate(|tracker| {
-				tracker.update(
-					parent_hash,
-					parent_storage_root,
-					parent_number,
-					config.async_backing_params.allowed_ancestry_len,
-				);
-			});
-		}
-		<span class="kw">let </span>allowed_relay_parents = shared::AllowedRelayParents::&lt;T&gt;::get();
-
 		<span class="kw">let </span>candidates_weight = backed_candidates_weight::&lt;T&gt;(<span class="kw-2">&amp;</span>backed_candidates);
 		<span class="kw">let </span>bitfields_weight = signed_bitfields_weight::&lt;T&gt;(<span class="kw-2">&amp;</span>bitfields);
 		<span class="kw">let </span>disputes_weight = multi_dispute_statement_sets_weight::&lt;T&gt;(<span class="kw-2">&amp;</span>disputes);
@@ -2296,6 +2359,29 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 		scheduler::Pallet::&lt;T&gt;::free_cores_and_fill_claim_queue(freed, now);
 
 		METRICS.on_candidates_processed_total(backed_candidates.len() <span class="kw">as </span>u64);
+
+		<span class="comment">// After freeing cores and filling claims, but before processing backed candidates
+		// we update the allowed relay-parents.
+		</span>{
+			<span class="kw">let </span>parent_number = now - One::one();
+			<span class="kw">let </span>parent_storage_root = <span class="kw-2">*</span>parent_header.state_root();
+
+			shared::AllowedRelayParents::&lt;T&gt;::mutate(|tracker| {
+				tracker.update(
+					parent_hash,
+					parent_storage_root,
+					scheduler::ClaimQueue::&lt;T&gt;::get()
+						.into_iter()
+						.map(|(core_index, paras)| {
+							(core_index, paras.into_iter().map(|e| e.para_id()).collect())
+						})
+						.collect(),
+					parent_number,
+					config.async_backing_params.allowed_ancestry_len,
+				);
+			});
+		}
+		<span class="kw">let </span>allowed_relay_parents = shared::AllowedRelayParents::&lt;T&gt;::get();
 
 		<span class="kw">let </span>core_index_enabled = configuration::ActiveConfig::&lt;T&gt;::get()
 			.node_features
@@ -2676,6 +2762,86 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 	bitfields
 }
 
+<span class="doccomment">/// Perform required checks for given candidate receipt.
+///
+/// Returns `true` if candidate descriptor is version 1.
+///
+/// Otherwise returns `false` if:
+/// - version 2 descriptors are not allowed
+/// - the core index in descriptor doesn't match the one computed from the commitments
+/// - the `SelectCore` signal does not refer to a core at the top of claim queue
+</span><span class="kw">fn </span>sanitize_backed_candidate_v2&lt;T: <span class="kw">crate</span>::inclusion::Config&gt;(
+	candidate: <span class="kw-2">&amp;</span>BackedCandidate&lt;T::Hash&gt;,
+	allowed_relay_parents: <span class="kw-2">&amp;</span>AllowedRelayParentsTracker&lt;T::Hash, BlockNumberFor&lt;T&gt;&gt;,
+	allow_v2_receipts: bool,
+) -&gt; bool {
+	<span class="kw">if </span>candidate.descriptor().version() == CandidateDescriptorVersion::V1 {
+		<span class="kw">return </span><span class="bool-val">true
+	</span>}
+
+	<span class="comment">// It is mandatory to filter these before calling `filter_unchained_candidates` to ensure
+	// any v1 descendants of v2 candidates are dropped.
+	</span><span class="kw">if </span>!allow_v2_receipts {
+		<span class="macro">log::debug!</span>(
+			target: LOG_TARGET,
+			<span class="string">"V2 candidate descriptors not allowed. Dropping candidate {:?} for paraid {:?}."</span>,
+			candidate.candidate().hash(),
+			candidate.descriptor().para_id()
+		);
+		<span class="kw">return </span><span class="bool-val">false
+	</span>}
+
+	<span class="kw">let </span><span class="prelude-val">Some</span>(session_index) = candidate.descriptor().session_index() <span class="kw">else </span>{
+		<span class="macro">log::debug!</span>(
+			target: LOG_TARGET,
+			<span class="string">"Invalid V2 candidate receipt {:?} for paraid {:?}, missing session index."</span>,
+			candidate.candidate().hash(),
+			candidate.descriptor().para_id(),
+		);
+		<span class="kw">return </span><span class="bool-val">false
+	</span>};
+
+	<span class="comment">// Check if session index is equal to current session index.
+	</span><span class="kw">if </span>session_index != shared::CurrentSessionIndex::&lt;T&gt;::get() {
+		<span class="macro">log::debug!</span>(
+			target: LOG_TARGET,
+			<span class="string">"Dropping V2 candidate receipt {:?} for paraid {:?}, invalid session index {}, current session {}"</span>,
+			candidate.candidate().hash(),
+			candidate.descriptor().para_id(),
+			session_index,
+			shared::CurrentSessionIndex::&lt;T&gt;::get()
+		);
+		<span class="kw">return </span><span class="bool-val">false
+	</span>}
+
+	<span class="comment">// Get the claim queue snapshot at the candidate relay parent.
+	</span><span class="kw">let </span><span class="prelude-val">Some</span>((rp_info, <span class="kw">_</span>)) =
+		allowed_relay_parents.acquire_info(candidate.descriptor().relay_parent(), <span class="prelude-val">None</span>)
+	<span class="kw">else </span>{
+		<span class="macro">log::debug!</span>(
+			target: LOG_TARGET,
+			<span class="string">"Relay parent {:?} for candidate {:?} is not in the allowed relay parents."</span>,
+			candidate.descriptor().relay_parent(),
+			candidate.candidate().hash(),
+		);
+		<span class="kw">return </span><span class="bool-val">false
+	</span>};
+
+	<span class="comment">// Check validity of `core_index`.
+	</span><span class="kw">if let </span><span class="prelude-val">Err</span>(err) = candidate.candidate().check_core_index(<span class="kw-2">&amp;</span>rp_info.claim_queue) {
+		<span class="macro">log::debug!</span>(
+			target: LOG_TARGET,
+			<span class="string">"Dropping candidate {:?} for paraid {:?}, {:?}"</span>,
+			candidate.candidate().hash(),
+			candidate.descriptor().para_id(),
+			err,
+		);
+
+		<span class="kw">return </span><span class="bool-val">false
+	</span>}
+	<span class="bool-val">true
+</span>}
+
 <span class="doccomment">/// Performs various filtering on the backed candidates inherent data.
 /// Must maintain the invariant that the returned candidate collection contains the candidates
 /// sorted in dependency order for each para. When doing any filtering, we must therefore drop any
@@ -2705,18 +2871,10 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 	<span class="comment">// Map the candidates to the right paraids, while making sure that the order between candidates
 	// of the same para is preserved.
 	</span><span class="kw">let </span><span class="kw-2">mut </span>candidates_per_para: BTreeMap&lt;ParaId, Vec&lt;<span class="kw">_</span>&gt;&gt; = BTreeMap::new();
+
 	<span class="kw">for </span>candidate <span class="kw">in </span>backed_candidates {
-		<span class="comment">// Drop any v2 candidate receipts if nodes are not allowed to use them.
-		// It is mandatory to filter these before calling `filter_unchained_candidates` to ensure
-		// any v1 descendants of v2 candidates are dropped.
-		</span><span class="kw">if </span>!allow_v2_receipts &amp;&amp; candidate.descriptor().version() == CandidateDescriptorVersion::V2
+		<span class="kw">if </span>!sanitize_backed_candidate_v2::&lt;T&gt;(<span class="kw-2">&amp;</span>candidate, allowed_relay_parents, allow_v2_receipts)
 		{
-			<span class="macro">log::debug!</span>(
-				target: LOG_TARGET,
-				<span class="string">"V2 candidate descriptors not allowed. Dropping candidate {:?} for paraid {:?}."</span>,
-				candidate.candidate().hash(),
-				candidate.descriptor().para_id()
-			);
 			<span class="kw">continue
 		</span>}
 
@@ -2914,7 +3072,8 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 	// 1. Core index assigned to the parachain which has produced the candidate
 	// 2. The relay chain block number of the candidate
 	</span>retain_candidates::&lt;T, <span class="kw">_</span>, <span class="kw">_</span>&gt;(backed_candidates_with_core, |para_id, (bc, core_idx)| {
-		<span class="kw">let </span>(validator_indices, maybe_core_index) =
+		<span class="comment">// `CoreIndex` not used, we just need a copy to write it back later.
+		</span><span class="kw">let </span>(validator_indices, maybe_core_index) =
 			bc.validator_indices_and_core_index(core_index_enabled);
 		<span class="kw">let </span><span class="kw-2">mut </span>validator_indices = BitVec::&lt;<span class="kw">_</span>&gt;::from(validator_indices);
 
@@ -3072,8 +3231,8 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 
 <span class="doccomment">/// Map candidates to scheduled cores.
 /// If the para only has one scheduled core and one candidate supplied, map the candidate to the
-/// single core. If the para has multiple cores scheduled, only map the candidates which have a
-/// proper core injected. Filter out the rest.
+/// single core. If the para has multiple cores scheduled, only map the candidates with core index.
+/// Filter out the rest.
 /// Also returns whether or not we dropped any candidates.
 /// When dropping a candidate of a para, we must drop all subsequent candidates from that para
 /// (because they form a chain).
@@ -3091,119 +3250,116 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 			<span class="kw">continue
 		</span>}
 
-		<span class="kw">let </span>scheduled_cores = scheduled.get_mut(<span class="kw-2">&amp;</span>para_id);
-
-		<span class="comment">// ParaIds without scheduled cores are silently filtered out.
-		</span><span class="kw">if let </span><span class="prelude-val">Some</span>(scheduled_cores) = scheduled_cores {
-			<span class="kw">if </span>scheduled_cores.len() == <span class="number">0 </span>{
-				<span class="macro">log::debug!</span>(
-					target: LOG_TARGET,
-					<span class="string">"Paraid: {:?} has no scheduled cores but {} candidates were supplied."</span>,
-					para_id,
-					backed_candidates.len()
-				);
-
-			<span class="comment">// Non-elastic scaling case. One core per para.
-			</span>} <span class="kw">else if </span>scheduled_cores.len() == <span class="number">1 </span>&amp;&amp; !core_index_enabled {
-				backed_candidates_with_core.insert(
-					para_id,
-					<span class="macro">vec!</span>[(
-						<span class="comment">// We need the first one here, as we assume candidates of a para are in
-						// dependency order.
-						</span>backed_candidates.into_iter().next().expect(<span class="string">"Length is at least 1"</span>),
-						scheduled_cores.pop_first().expect(<span class="string">"Length is 1"</span>),
-					)],
-				);
-				<span class="kw">continue</span>;
-
-			<span class="comment">// Elastic scaling case. We only allow candidates which have the right core
-			// indices injected.
-			</span>} <span class="kw">else if </span>scheduled_cores.len() &gt;= <span class="number">1 </span>&amp;&amp; core_index_enabled {
-				<span class="comment">// We must preserve the dependency order given in the input.
-				</span><span class="kw">let </span><span class="kw-2">mut </span>temp_backed_candidates = Vec::with_capacity(scheduled_cores.len());
-
-				<span class="kw">for </span>candidate <span class="kw">in </span>backed_candidates {
-					<span class="kw">if </span>scheduled_cores.len() == <span class="number">0 </span>{
-						<span class="comment">// We've got candidates for all of this para's assigned cores. Move on to
-						// the next para.
-						</span><span class="macro">log::debug!</span>(
-							target: LOG_TARGET,
-							<span class="string">"Found enough candidates for paraid: {:?}."</span>,
-							candidate.descriptor().para_id()
-						);
-						<span class="kw">break</span>;
-					}
-					<span class="kw">let </span>maybe_injected_core_index: <span class="prelude-ty">Option</span>&lt;CoreIndex&gt; =
-						get_injected_core_index::&lt;T&gt;(allowed_relay_parents, <span class="kw-2">&amp;</span>candidate);
-
-					<span class="kw">if let </span><span class="prelude-val">Some</span>(core_index) = maybe_injected_core_index {
-						<span class="kw">if </span>scheduled_cores.remove(<span class="kw-2">&amp;</span>core_index) {
-							temp_backed_candidates.push((candidate, core_index));
-						} <span class="kw">else </span>{
-							<span class="comment">// if we got a candidate for a core index which is not scheduled, stop
-							// the work for this para. the already processed candidate chain in
-							// temp_backed_candidates is still fine though.
-							</span><span class="macro">log::debug!</span>(
-								target: LOG_TARGET,
-								<span class="string">"Found a backed candidate {:?} with injected core index {}, which is not scheduled for paraid {:?}."</span>,
-								candidate.candidate().hash(),
-								core_index.<span class="number">0</span>,
-								candidate.descriptor().para_id()
-							);
-
-							<span class="kw">break</span>;
-						}
-					} <span class="kw">else </span>{
-						<span class="comment">// if we got a candidate which does not contain its core index, stop the
-						// work for this para. the already processed candidate chain in
-						// temp_backed_candidates is still fine though.
-
-						</span><span class="macro">log::debug!</span>(
-							target: LOG_TARGET,
-							<span class="string">"Found a backed candidate {:?} with no injected core index, for paraid {:?} which has multiple scheduled cores."</span>,
-							candidate.candidate().hash(),
-							candidate.descriptor().para_id()
-						);
-
-						<span class="kw">break</span>;
-					}
-				}
-
-				<span class="kw">if </span>!temp_backed_candidates.is_empty() {
-					backed_candidates_with_core
-						.entry(para_id)
-						.or_insert_with(|| <span class="macro">vec!</span>[])
-						.extend(temp_backed_candidates);
-				}
-			} <span class="kw">else </span>{
-				<span class="macro">log::warn!</span>(
-					target: LOG_TARGET,
-					<span class="string">"Found a paraid {:?} which has multiple scheduled cores but ElasticScalingMVP feature is not enabled: {:?}"</span>,
-					para_id,
-					scheduled_cores
-				);
-			}
-		} <span class="kw">else </span>{
+		<span class="kw">let </span><span class="prelude-val">Some</span>(scheduled_cores) = scheduled.get_mut(<span class="kw-2">&amp;</span>para_id) <span class="kw">else </span>{
 			<span class="macro">log::debug!</span>(
 				target: LOG_TARGET,
 				<span class="string">"Paraid: {:?} has no entry in scheduled cores but {} candidates were supplied."</span>,
 				para_id,
 				backed_candidates.len()
 			);
+			<span class="kw">continue
+		</span>};
+
+		<span class="comment">// ParaIds without scheduled cores are silently filtered out.
+		</span><span class="kw">if </span>scheduled_cores.len() == <span class="number">0 </span>{
+			<span class="macro">log::debug!</span>(
+				target: LOG_TARGET,
+				<span class="string">"Paraid: {:?} has no scheduled cores but {} candidates were supplied."</span>,
+				para_id,
+				backed_candidates.len()
+			);
+			<span class="kw">continue
+		</span>}
+
+		<span class="comment">// We must preserve the dependency order given in the input.
+		</span><span class="kw">let </span><span class="kw-2">mut </span>temp_backed_candidates = Vec::with_capacity(scheduled_cores.len());
+
+		<span class="kw">for </span>candidate <span class="kw">in </span>backed_candidates {
+			<span class="kw">if </span>scheduled_cores.len() == <span class="number">0 </span>{
+				<span class="comment">// We've got candidates for all of this para's assigned cores. Move on to
+				// the next para.
+				</span><span class="macro">log::debug!</span>(
+					target: LOG_TARGET,
+					<span class="string">"Found enough candidates for paraid: {:?}."</span>,
+					candidate.descriptor().para_id()
+				);
+				<span class="kw">break</span>;
+			}
+
+			<span class="kw">if let </span><span class="prelude-val">Some</span>(core_index) =
+				get_core_index::&lt;T&gt;(core_index_enabled, allowed_relay_parents, <span class="kw-2">&amp;</span>candidate)
+			{
+				<span class="kw">if </span>scheduled_cores.remove(<span class="kw-2">&amp;</span>core_index) {
+					temp_backed_candidates.push((candidate, core_index));
+				} <span class="kw">else </span>{
+					<span class="comment">// if we got a candidate for a core index which is not scheduled, stop
+					// the work for this para. the already processed candidate chain in
+					// temp_backed_candidates is still fine though.
+					</span><span class="macro">log::debug!</span>(
+						target: LOG_TARGET,
+						<span class="string">"Found a backed candidate {:?} with core index {}, which is not scheduled for paraid {:?}."</span>,
+						candidate.candidate().hash(),
+						core_index.<span class="number">0</span>,
+						candidate.descriptor().para_id()
+					);
+
+					<span class="kw">break</span>;
+				}
+			} <span class="kw">else </span>{
+				<span class="comment">// No core index is fine, if para has just 1 core assigned.
+				</span><span class="kw">if </span>scheduled_cores.len() == <span class="number">1 </span>{
+					temp_backed_candidates
+						.push((candidate, scheduled_cores.pop_first().expect(<span class="string">"Length is 1"</span>)));
+					<span class="kw">break</span>;
+				}
+
+				<span class="comment">// if we got a candidate which does not contain its core index, stop the
+				// work for this para. the already processed candidate chain in
+				// temp_backed_candidates is still fine though.
+
+				</span><span class="macro">log::debug!</span>(
+					target: LOG_TARGET,
+					<span class="string">"Found a backed candidate {:?} without core index information, but paraid {:?} has multiple scheduled cores."</span>,
+					candidate.candidate().hash(),
+					candidate.descriptor().para_id()
+				);
+
+				<span class="kw">break</span>;
+			}
+		}
+
+		<span class="kw">if </span>!temp_backed_candidates.is_empty() {
+			backed_candidates_with_core
+				.entry(para_id)
+				.or_insert_with(|| <span class="macro">vec!</span>[])
+				.extend(temp_backed_candidates);
 		}
 	}
 
 	backed_candidates_with_core
 }
 
+<span class="comment">// Must be called only for candidates that have been sanitized already.
+</span><span class="kw">fn </span>get_core_index&lt;T: configuration::Config + scheduler::Config + inclusion::Config&gt;(
+	core_index_enabled: bool,
+	allowed_relay_parents: <span class="kw-2">&amp;</span>AllowedRelayParentsTracker&lt;T::Hash, BlockNumberFor&lt;T&gt;&gt;,
+	candidate: <span class="kw-2">&amp;</span>BackedCandidate&lt;T::Hash&gt;,
+) -&gt; <span class="prelude-ty">Option</span>&lt;CoreIndex&gt; {
+	candidate.candidate().descriptor.core_index().or_else(|| {
+		get_injected_core_index::&lt;T&gt;(core_index_enabled, allowed_relay_parents, <span class="kw-2">&amp;</span>candidate)
+	})
+}
+
 <span class="kw">fn </span>get_injected_core_index&lt;T: configuration::Config + scheduler::Config + inclusion::Config&gt;(
+	core_index_enabled: bool,
 	allowed_relay_parents: <span class="kw-2">&amp;</span>AllowedRelayParentsTracker&lt;T::Hash, BlockNumberFor&lt;T&gt;&gt;,
 	candidate: <span class="kw-2">&amp;</span>BackedCandidate&lt;T::Hash&gt;,
 ) -&gt; <span class="prelude-ty">Option</span>&lt;CoreIndex&gt; {
 	<span class="comment">// After stripping the 8 bit extensions, the `validator_indices` field length is expected
 	// to be equal to backing group size. If these don't match, the `CoreIndex` is badly encoded,
 	// or not supported.
-	</span><span class="kw">let </span>(validator_indices, maybe_core_idx) = candidate.validator_indices_and_core_index(<span class="bool-val">true</span>);
+	</span><span class="kw">let </span>(validator_indices, maybe_core_idx) =
+		candidate.validator_indices_and_core_index(core_index_enabled);
 
 	<span class="kw">let </span><span class="prelude-val">Some</span>(core_idx) = maybe_core_idx <span class="kw">else </span>{ <span class="kw">return </span><span class="prelude-val">None </span>};
 

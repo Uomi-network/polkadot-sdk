@@ -1569,6 +1569,40 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 <a href="#1419" id="1419">1419</a>
 <a href="#1420" id="1420">1420</a>
 <a href="#1421" id="1421">1421</a>
+<a href="#1422" id="1422">1422</a>
+<a href="#1423" id="1423">1423</a>
+<a href="#1424" id="1424">1424</a>
+<a href="#1425" id="1425">1425</a>
+<a href="#1426" id="1426">1426</a>
+<a href="#1427" id="1427">1427</a>
+<a href="#1428" id="1428">1428</a>
+<a href="#1429" id="1429">1429</a>
+<a href="#1430" id="1430">1430</a>
+<a href="#1431" id="1431">1431</a>
+<a href="#1432" id="1432">1432</a>
+<a href="#1433" id="1433">1433</a>
+<a href="#1434" id="1434">1434</a>
+<a href="#1435" id="1435">1435</a>
+<a href="#1436" id="1436">1436</a>
+<a href="#1437" id="1437">1437</a>
+<a href="#1438" id="1438">1438</a>
+<a href="#1439" id="1439">1439</a>
+<a href="#1440" id="1440">1440</a>
+<a href="#1441" id="1441">1441</a>
+<a href="#1442" id="1442">1442</a>
+<a href="#1443" id="1443">1443</a>
+<a href="#1444" id="1444">1444</a>
+<a href="#1445" id="1445">1445</a>
+<a href="#1446" id="1446">1446</a>
+<a href="#1447" id="1447">1447</a>
+<a href="#1448" id="1448">1448</a>
+<a href="#1449" id="1449">1449</a>
+<a href="#1450" id="1450">1450</a>
+<a href="#1451" id="1451">1451</a>
+<a href="#1452" id="1452">1452</a>
+<a href="#1453" id="1453">1453</a>
+<a href="#1454" id="1454">1454</a>
+<a href="#1455" id="1455">1455</a>
 </pre></div><pre class="rust"><code><span class="comment">// Copyright (C) Parity Technologies (UK) Ltd.
 // This file is part of Polkadot.
 
@@ -2011,6 +2045,11 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 	</span>TotalSizeExceeded { total_size: u64, limit: u64 },
 	<span class="doccomment">/// A para-chain cannot send UMP messages while it is offboarding.
 	</span>IsOffboarding,
+	<span class="doccomment">/// The allowed number of `UMPSignal` messages in the queue was exceeded.
+	/// Currenly only one such message is allowed.
+	</span>TooManyUMPSignals { count: u32 },
+	<span class="doccomment">/// The UMP queue contains an invalid `UMPSignal`
+	</span>NoUmpSignal,
 }
 
 <span class="kw">impl </span>fmt::Debug <span class="kw">for </span>UmpAcceptanceCheckErr {
@@ -2038,6 +2077,12 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 			),
 			UmpAcceptanceCheckErr::IsOffboarding =&gt; {
 				<span class="macro">write!</span>(fmt, <span class="string">"upward message rejected because the para is off-boarding"</span>)
+			},
+			UmpAcceptanceCheckErr::TooManyUMPSignals { count } =&gt; {
+				<span class="macro">write!</span>(fmt, <span class="string">"the ump queue has too many `UMPSignal` messages ({} &gt; 1 )"</span>, count)
+			},
+			UmpAcceptanceCheckErr::NoUmpSignal =&gt; {
+				<span class="macro">write!</span>(fmt, <span class="string">"Required UMP signal not found"</span>)
 			},
 		}
 	}
@@ -2506,6 +2551,27 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 		para: ParaId,
 		upward_messages: <span class="kw-2">&amp;</span>[UpwardMessage],
 	) -&gt; <span class="prelude-ty">Result</span>&lt;(), UmpAcceptanceCheckErr&gt; {
+		<span class="comment">// Filter any pending UMP signals and the separator.
+		</span><span class="kw">let </span>upward_messages = <span class="kw">if let </span><span class="prelude-val">Some</span>(separator_index) =
+			upward_messages.iter().position(|message| message.is_empty())
+		{
+			<span class="kw">let </span>(upward_messages, ump_signals) = upward_messages.split_at(separator_index);
+
+			<span class="kw">if </span>ump_signals.len() &gt; <span class="number">2 </span>{
+				<span class="kw">return </span><span class="prelude-val">Err</span>(UmpAcceptanceCheckErr::TooManyUMPSignals {
+					count: ump_signals.len() <span class="kw">as </span>u32,
+				})
+			}
+
+			<span class="kw">if </span>ump_signals.len() == <span class="number">1 </span>{
+				<span class="kw">return </span><span class="prelude-val">Err</span>(UmpAcceptanceCheckErr::NoUmpSignal)
+			}
+
+			upward_messages
+		} <span class="kw">else </span>{
+			upward_messages
+		};
+
 		<span class="comment">// Cannot send UMP messages while off-boarding.
 		</span><span class="kw">if </span>paras::Pallet::&lt;T&gt;::is_offboarding(para) {
 			<span class="macro">ensure!</span>(upward_messages.is_empty(), UmpAcceptanceCheckErr::IsOffboarding);
@@ -2560,6 +2626,8 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 	</span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>receive_upward_messages(para: ParaId, upward_messages: <span class="kw-2">&amp;</span>[Vec&lt;u8&gt;]) {
 		<span class="kw">let </span>bounded = upward_messages
 			.iter()
+			<span class="comment">// Stop once we hit the `UMPSignal` separator.
+			</span>.take_while(|message| !message.is_empty())
 			.filter_map(|d| {
 				BoundedSlice::try_from(<span class="kw-2">&amp;</span>d[..])
 					.inspect_err(|<span class="kw">_</span>| {
@@ -2828,17 +2896,17 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 		<span class="kw">let </span>relay_parent = backed_candidate_receipt.descriptor.relay_parent();
 
 		<span class="comment">// Check that the relay-parent is one of the allowed relay-parents.
-		</span><span class="kw">let </span>(relay_parent_storage_root, relay_parent_number) = {
+		</span><span class="kw">let </span>(state_root, relay_parent_number) = {
 			<span class="kw">match </span>allowed_relay_parents.acquire_info(relay_parent, <span class="self">self</span>.prev_context) {
 				<span class="prelude-val">None </span>=&gt; <span class="kw">return </span><span class="prelude-val">Err</span>(Error::&lt;T&gt;::DisallowedRelayParent),
-				<span class="prelude-val">Some</span>(info) =&gt; info,
+				<span class="prelude-val">Some</span>((info, relay_parent_number)) =&gt; (info.state_root, relay_parent_number),
 			}
 		};
 
 		{
 			<span class="kw">let </span>persisted_validation_data = make_persisted_validation_data_with_parent::&lt;T&gt;(
 				relay_parent_number,
-				relay_parent_storage_root,
+				state_root,
 				parent_head_data,
 			);
 
