@@ -974,6 +974,10 @@ pub mod pallet {
 			})
 		}
 
+		/// Register the callers account id so to so that it can be used in contract interactions.
+		///
+		/// This will error if the origin is already mapped or is a eth native `Address20`. It will
+		/// take a deposit that can be released by calling [`Self::unmap_account`].
 		#[pallet::call_index(6)]
 		#[pallet::weight(0)]
 		pub fn map_account(origin: OriginFor<T>) -> DispatchResult {
@@ -981,6 +985,7 @@ pub mod pallet {
 			T::AddressMapper::map(&origin)
 		}
 
+		/// Unregister the callers account id in order to free the deposit.
 		#[pallet::call_index(7)]
 		#[pallet::weight(0)]
 		pub fn unmap_account(origin: OriginFor<T>) -> DispatchResult {
@@ -988,6 +993,11 @@ pub mod pallet {
 			T::AddressMapper::unmap(&origin)
 		}
 
+		/// Dispatch an `call` with the origin set to the callers fallback address.
+		///
+		/// Every `AccountId32` can control its corresponding fallback account. The fallback account
+		/// is the `AccountId20` with the last 12 bytes set to `0xEE`. This is essentially a
+		/// recovery function in case an `AccountId20` was used without creating a mapping first.
 		#[pallet::call_index(8)]
 		#[pallet::weight({
 			let dispatch_info = call.get_dispatch_info();
