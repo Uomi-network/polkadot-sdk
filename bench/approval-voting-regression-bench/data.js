@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1728294070014,
+  "lastUpdate": 1728299054778,
   "repoUrl": "https://github.com/paritytech/polkadot-sdk",
   "entries": {
     "approval-voting-regression-bench": [
@@ -22723,6 +22723,105 @@ window.BENCHMARK_DATA = {
           {
             "name": "test-environment",
             "value": 3.3175887204124654,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "60601340+lexnv@users.noreply.github.com",
+            "name": "Alexandru Vasile",
+            "username": "lexnv"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "d66a5a41086718af03a272fd62b779eb8b81a74f",
+          "message": "chainHead: Track reported blocks to capture notification gaps (#5856)\n\nThere are cases during warp sync or re-orgs, where we receive a\nnotification with a block parent that was not reported in the past. This\nPR extends the tracking state to catch those cases and report a `Stop`\nevent to the user.\n\nThis PR adds a new state to the RPC-v2 chainHead to track which blocks\nhave been reported.\n\nIn the past we relied on the pinning mechanism to provide us details if\na block is pinned or not.\nHowever, the pinning state keeps the minimal information around for\npinning. Therefore, unpinning a block will cause the state to disappear.\n\nCloses: https://github.com/paritytech/polkadot-sdk/issues/5761\n\n---------\n\nSigned-off-by: Alexandru Vasile <alexandru.vasile@parity.io>\nCo-authored-by: Sebastian Kunert <skunert49@gmail.com>",
+          "timestamp": "2024-10-07T09:46:56Z",
+          "tree_id": "fc1e57aed5a22fdf664d11a51cb15f06b6dbb45c",
+          "url": "https://github.com/paritytech/polkadot-sdk/commit/d66a5a41086718af03a272fd62b779eb8b81a74f"
+        },
+        "date": 1728299035717,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "Sent to peers",
+            "value": 63631.33,
+            "unit": "KiB"
+          },
+          {
+            "name": "Received from peers",
+            "value": 52944.90000000001,
+            "unit": "KiB"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-2",
+            "value": 2.4268914731600004,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-distribution",
+            "value": 0.0000230022,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-db",
+            "value": 2.0952073444599884,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-subsystem",
+            "value": 0.4794288771699762,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-1",
+            "value": 2.3809504869300016,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-0",
+            "value": 2.384722980330001,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-distribution/test-environment",
+            "value": 0.0000230022,
+            "unit": "seconds"
+          },
+          {
+            "name": "test-environment",
+            "value": 3.2860448613621123,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel",
+            "value": 12.153804699639966,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting/test-environment",
+            "value": 0.0000205395,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-3",
+            "value": 2.3804624781499997,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-gather-signatures",
+            "value": 0.006141059439999999,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting",
+            "value": 0.0000205395,
             "unit": "seconds"
           }
         ]
