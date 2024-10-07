@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1728299029394,
+  "lastUpdate": 1728303359114,
   "repoUrl": "https://github.com/paritytech/polkadot-sdk",
   "entries": {
     "availability-distribution-regression-bench": [
@@ -28915,6 +28915,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "test-environment",
             "value": 0.008854682066666753,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "oliver.tale-yazdi@parity.io",
+            "name": "Oliver Tale-Yazdi",
+            "username": "ggwpez"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "fe0bfb79f4c883abbc3214519d19e46617c20bd2",
+          "message": "[CI] Update try-runtime-cli (#5890)\n\nUpdate try-runtime-cli to 0.8.0 for MBM testing.\n\n---------\n\nSigned-off-by: Oliver Tale-Yazdi <oliver.tale-yazdi@parity.io>",
+          "timestamp": "2024-10-07T11:11:58Z",
+          "tree_id": "3b403a309bf3205afa8de30f77f4f984ec6ef02a",
+          "url": "https://github.com/paritytech/polkadot-sdk/commit/fe0bfb79f4c883abbc3214519d19e46617c20bd2"
+        },
+        "date": 1728303340386,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "Received from peers",
+            "value": 433.3333333333332,
+            "unit": "KiB"
+          },
+          {
+            "name": "Sent to peers",
+            "value": 18481.666666666653,
+            "unit": "KiB"
+          },
+          {
+            "name": "availability-distribution",
+            "value": 0.01679115821333333,
+            "unit": "seconds"
+          },
+          {
+            "name": "availability-store",
+            "value": 0.17854325953999997,
+            "unit": "seconds"
+          },
+          {
+            "name": "bitfield-distribution",
+            "value": 0.02476872762666666,
+            "unit": "seconds"
+          },
+          {
+            "name": "test-environment",
+            "value": 0.008981046113333424,
             "unit": "seconds"
           }
         ]
