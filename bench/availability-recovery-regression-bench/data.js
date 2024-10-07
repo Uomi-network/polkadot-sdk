@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1728303332558,
+  "lastUpdate": 1728317559853,
   "repoUrl": "https://github.com/paritytech/polkadot-sdk",
   "entries": {
     "availability-recovery-regression-bench": [
@@ -23135,6 +23135,50 @@ window.BENCHMARK_DATA = {
           {
             "name": "test-environment",
             "value": 0.23409631116666668,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "shawntabrizi@gmail.com",
+            "name": "Shawn Tabrizi",
+            "username": "shawntabrizi"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "3846691350abd2c39f557500fe1f115cd6676d16",
+          "message": "Introduce and Implement `VestedTransfer` Trait (#5630)\n\nThis PR introduces a `VestedTransfer` Trait, which handles making a\ntransfer while also applying a vesting schedule to that balance.\n\nThis can be used in pallets like the Treasury pallet, where now we can\neasily introduce a `vested_spend` extrinsic as an alternative to giving\nall funds up front.\n\nWe implement `()` for the `VestedTransfer` trait, which just returns an\nerror, and allows anyone to opt out from needing to use or implement\nthis trait.\n\nThis PR also updates the logic of `do_vested_transfer` to remove the\n\"pre-check\" which was needed before we had a default transactional layer\nin FRAME.\n\nFinally, I also fixed up some bad formatting in the test.rs file.\n\n---------\n\nCo-authored-by: Guillaume Thiolliere <gui.thiolliere@gmail.com>\nCo-authored-by: Bastian Köcher <git@kchr.de>",
+          "timestamp": "2024-10-07T14:57:49Z",
+          "tree_id": "46114f95297c45a494bf5b00f671dfee41d76e46",
+          "url": "https://github.com/paritytech/polkadot-sdk/commit/3846691350abd2c39f557500fe1f115cd6676d16"
+        },
+        "date": 1728317540960,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "Received from peers",
+            "value": 307203,
+            "unit": "KiB"
+          },
+          {
+            "name": "Sent to peers",
+            "value": 1.6666666666666665,
+            "unit": "KiB"
+          },
+          {
+            "name": "availability-recovery",
+            "value": 11.707856633399995,
+            "unit": "seconds"
+          },
+          {
+            "name": "test-environment",
+            "value": 0.23178489706666666,
             "unit": "seconds"
           }
         ]
