@@ -1380,6 +1380,10 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 <a href="#1230" id="1230">1230</a>
 <a href="#1231" id="1231">1231</a>
 <a href="#1232" id="1232">1232</a>
+<a href="#1233" id="1233">1233</a>
+<a href="#1234" id="1234">1234</a>
+<a href="#1235" id="1235">1235</a>
+<a href="#1236" id="1236">1236</a>
 </pre></div><pre class="rust"><code><span class="comment">// This file is part of Substrate.
 
 // Copyright (C) Parity Technologies (UK) Ltd.
@@ -1915,6 +1919,10 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 		<span class="doccomment">/// The static memory consumption of the blob will be larger than
 		/// [`limits::code::STATIC_MEMORY_BYTES`].
 		</span>StaticMemoryTooLarge,
+		<span class="doccomment">/// The program contains a basic block that is larger than allowed.
+		</span>BasicBlockTooLarge,
+		<span class="doccomment">/// The program contains an invalid instruction.
+		</span>InvalidInstruction,
 		<span class="doccomment">/// The contract has reached its maximum number of delegate dependencies.
 		</span>MaxDelegateDependenciesReached,
 		<span class="doccomment">/// The dependency was not found in the contract's delegate dependencies.

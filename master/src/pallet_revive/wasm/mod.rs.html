@@ -514,6 +514,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 <a href="#364" id="364">364</a>
 <a href="#365" id="365">365</a>
 <a href="#366" id="366">366</a>
+<a href="#367" id="367">367</a>
 </pre></div><pre class="rust"><code><span class="comment">// This file is part of Substrate.
 
 // Copyright (C) Parity Technologies (UK) Ltd.
@@ -807,6 +808,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 		<span class="kw">let </span><span class="kw-2">mut </span>module_config = polkavm::ModuleConfig::new();
 		module_config.set_page_size(limits::PAGE_SIZE);
 		module_config.set_gas_metering(<span class="prelude-val">Some</span>(polkavm::GasMeteringKind::Sync));
+		module_config.set_allow_sbrk(<span class="bool-val">false</span>);
 		<span class="kw">let </span>module = polkavm::Module::new(<span class="kw-2">&amp;</span>engine, <span class="kw-2">&amp;</span>module_config, <span class="self">self</span>.code.into_inner().into())
 			.map_err(|err| {
 			<span class="macro">log::debug!</span>(target: LOG_TARGET, <span class="string">"failed to create polkavm module: {err:?}"</span>);

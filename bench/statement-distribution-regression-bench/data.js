@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1728303412208,
+  "lastUpdate": 1728317638318,
   "repoUrl": "https://github.com/paritytech/polkadot-sdk",
   "entries": {
     "statement-distribution-regression-bench": [
@@ -13767,6 +13767,50 @@ window.BENCHMARK_DATA = {
           {
             "name": "test-environment",
             "value": 0.04421302338799995,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "shawntabrizi@gmail.com",
+            "name": "Shawn Tabrizi",
+            "username": "shawntabrizi"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "3846691350abd2c39f557500fe1f115cd6676d16",
+          "message": "Introduce and Implement `VestedTransfer` Trait (#5630)\n\nThis PR introduces a `VestedTransfer` Trait, which handles making a\ntransfer while also applying a vesting schedule to that balance.\n\nThis can be used in pallets like the Treasury pallet, where now we can\neasily introduce a `vested_spend` extrinsic as an alternative to giving\nall funds up front.\n\nWe implement `()` for the `VestedTransfer` trait, which just returns an\nerror, and allows anyone to opt out from needing to use or implement\nthis trait.\n\nThis PR also updates the logic of `do_vested_transfer` to remove the\n\"pre-check\" which was needed before we had a default transactional layer\nin FRAME.\n\nFinally, I also fixed up some bad formatting in the test.rs file.\n\n---------\n\nCo-authored-by: Guillaume Thiolliere <gui.thiolliere@gmail.com>\nCo-authored-by: Bastian Köcher <git@kchr.de>",
+          "timestamp": "2024-10-07T14:57:49Z",
+          "tree_id": "46114f95297c45a494bf5b00f671dfee41d76e46",
+          "url": "https://github.com/paritytech/polkadot-sdk/commit/3846691350abd2c39f557500fe1f115cd6676d16"
+        },
+        "date": 1728317619615,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "Sent to peers",
+            "value": 127.94799999999995,
+            "unit": "KiB"
+          },
+          {
+            "name": "Received from peers",
+            "value": 106.39999999999996,
+            "unit": "KiB"
+          },
+          {
+            "name": "test-environment",
+            "value": 0.04496342328599992,
+            "unit": "seconds"
+          },
+          {
+            "name": "statement-distribution",
+            "value": 0.036057803948,
             "unit": "seconds"
           }
         ]
