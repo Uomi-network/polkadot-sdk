@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1728288901977,
+  "lastUpdate": 1728294095851,
   "repoUrl": "https://github.com/paritytech/polkadot-sdk",
   "entries": {
     "statement-distribution-regression-bench": [
@@ -13635,6 +13635,50 @@ window.BENCHMARK_DATA = {
           {
             "name": "test-environment",
             "value": 0.04499707202999994,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "bkontur@gmail.com",
+            "name": "Branislav Kontur",
+            "username": "bkontur"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "e354d6680d98993481fe9b2583619c7e7d7f04ad",
+          "message": "Update docker image for bridges substrate-relay (#5947)\n\nThis PR updates the substrate-relay version for the bridges' Zombienet\ntests.",
+          "timestamp": "2024-10-07T08:30:13Z",
+          "tree_id": "99c055fc8bf9fb36f00af3b6771aca56e8e0b9e6",
+          "url": "https://github.com/paritytech/polkadot-sdk/commit/e354d6680d98993481fe9b2583619c7e7d7f04ad"
+        },
+        "date": 1728294076732,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "Sent to peers",
+            "value": 127.94199999999994,
+            "unit": "KiB"
+          },
+          {
+            "name": "Received from peers",
+            "value": 106.39999999999996,
+            "unit": "KiB"
+          },
+          {
+            "name": "test-environment",
+            "value": 0.04459494065199994,
+            "unit": "seconds"
+          },
+          {
+            "name": "statement-distribution",
+            "value": 0.03553543997800002,
             "unit": "seconds"
           }
         ]
