@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1728317586163,
+  "lastUpdate": 1728320267436,
   "repoUrl": "https://github.com/paritytech/polkadot-sdk",
   "entries": {
     "availability-distribution-regression-bench": [
@@ -29023,6 +29023,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "availability-store",
             "value": 0.17756769542,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "alex.theissen@me.com",
+            "name": "Alexander Theißen",
+            "username": "athei"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": false,
+          "id": "5f55185eac6b4366484cf1bd7d374b2e652b076a",
+          "message": "revive: Bump PolkaVM and add static code validation (#5939)\n\nThis PR adds **static** validation that prevents upload of code that:\n\n1) Contains basic blocks larger than the specified limit (currently\n`200`)\n2) Contains invalid instructions\n3) Uses the `sbrk` instruction\n\nDoing that statically at upload time (instead of at runtime) allows us\nto change the basic block limit or add instructions later without\nworrying about breaking old code. This is well worth the linear scan of\nthe whole blob on deployment in my opinion. Please note that those\nchecks are not applied when existing code is just run (hot path).\n\nAlso some drive by fixes:\n- Remove superflous `publish = true`\n- Abort fixture build on warning and fix existing warnings\n- Re-enable optimizations in fixture builds (should be fixed now in\nPolkaVM)\n- Disable stripping for fixture builds (maybe we can get some line\ninformation on trap via `RUST_LOG`)\n\n---------\n\nCo-authored-by: command-bot <>\nCo-authored-by: PG Herveou <pgherveou@gmail.com>",
+          "timestamp": "2024-10-07T15:47:34Z",
+          "tree_id": "470bf8faf7ff5a54ab754cadd42a750676b0cae6",
+          "url": "https://github.com/paritytech/polkadot-sdk/commit/5f55185eac6b4366484cf1bd7d374b2e652b076a"
+        },
+        "date": 1728320247345,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "Received from peers",
+            "value": 433.3333333333332,
+            "unit": "KiB"
+          },
+          {
+            "name": "Sent to peers",
+            "value": 18481.666666666653,
+            "unit": "KiB"
+          },
+          {
+            "name": "test-environment",
+            "value": 0.00864687250666673,
+            "unit": "seconds"
+          },
+          {
+            "name": "availability-distribution",
+            "value": 0.016277455680000004,
+            "unit": "seconds"
+          },
+          {
+            "name": "availability-store",
+            "value": 0.17726887562,
+            "unit": "seconds"
+          },
+          {
+            "name": "bitfield-distribution",
+            "value": 0.024587750006666666,
             "unit": "seconds"
           }
         ]
