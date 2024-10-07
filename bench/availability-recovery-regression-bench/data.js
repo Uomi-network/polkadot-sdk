@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1728320240193,
+  "lastUpdate": 1728323349890,
   "repoUrl": "https://github.com/paritytech/polkadot-sdk",
   "entries": {
     "availability-recovery-regression-bench": [
@@ -23223,6 +23223,50 @@ window.BENCHMARK_DATA = {
           {
             "name": "test-environment",
             "value": 0.23689572576666662,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "10196091+Ank4n@users.noreply.github.com",
+            "name": "Ankan",
+            "username": "Ank4n"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": false,
+          "id": "9128dca3c544a5327f0a89241aea1409d67c81b0",
+          "message": "[Staking] Noop refactor to prep pallet for currency fungible migration (#5399)\n\nThis is a no-op refactor of staking pallet to move all `T::Currency` api\ncalls under one module.\n\nA followup PR (https://github.com/paritytech/polkadot-sdk/pull/5501)\nwill implement the Currency <> Fungible migration for the pallet.\n\nIntroduces the new `asset` module that centralizes all interaction with\n`T::Currency`. This is an attempt to try minimising staking logic\nchanges to minimal parts of the codebase.\n\n## Things of note\n- `T::Currency::free_balance` in current implementation includes both\nstaked (locked) and liquid tokens (kinda sounds wrong to call it free\nthen). This PR renames it to `stakeable_balance` (any better name\nsuggestions?). With #5501, this will become `free balance that can be\nheld/staked` + `already held/staked balance`.",
+          "timestamp": "2024-10-07T16:37:34Z",
+          "tree_id": "6d59b6db2144d9a7e43e62fa1176e761137bb77b",
+          "url": "https://github.com/paritytech/polkadot-sdk/commit/9128dca3c544a5327f0a89241aea1409d67c81b0"
+        },
+        "date": 1728323330179,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "Received from peers",
+            "value": 307203,
+            "unit": "KiB"
+          },
+          {
+            "name": "Sent to peers",
+            "value": 1.6666666666666665,
+            "unit": "KiB"
+          },
+          {
+            "name": "test-environment",
+            "value": 0.23404800196666659,
+            "unit": "seconds"
+          },
+          {
+            "name": "availability-recovery",
+            "value": 11.668433570533333,
             "unit": "seconds"
           }
         ]
