@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1728294043183,
+  "lastUpdate": 1728299029394,
   "repoUrl": "https://github.com/paritytech/polkadot-sdk",
   "entries": {
     "availability-distribution-regression-bench": [
@@ -28861,6 +28861,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "test-environment",
             "value": 0.008741034666666736,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "60601340+lexnv@users.noreply.github.com",
+            "name": "Alexandru Vasile",
+            "username": "lexnv"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "d66a5a41086718af03a272fd62b779eb8b81a74f",
+          "message": "chainHead: Track reported blocks to capture notification gaps (#5856)\n\nThere are cases during warp sync or re-orgs, where we receive a\nnotification with a block parent that was not reported in the past. This\nPR extends the tracking state to catch those cases and report a `Stop`\nevent to the user.\n\nThis PR adds a new state to the RPC-v2 chainHead to track which blocks\nhave been reported.\n\nIn the past we relied on the pinning mechanism to provide us details if\na block is pinned or not.\nHowever, the pinning state keeps the minimal information around for\npinning. Therefore, unpinning a block will cause the state to disappear.\n\nCloses: https://github.com/paritytech/polkadot-sdk/issues/5761\n\n---------\n\nSigned-off-by: Alexandru Vasile <alexandru.vasile@parity.io>\nCo-authored-by: Sebastian Kunert <skunert49@gmail.com>",
+          "timestamp": "2024-10-07T09:46:56Z",
+          "tree_id": "fc1e57aed5a22fdf664d11a51cb15f06b6dbb45c",
+          "url": "https://github.com/paritytech/polkadot-sdk/commit/d66a5a41086718af03a272fd62b779eb8b81a74f"
+        },
+        "date": 1728299010521,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "Sent to peers",
+            "value": 18481.666666666653,
+            "unit": "KiB"
+          },
+          {
+            "name": "Received from peers",
+            "value": 433.3333333333332,
+            "unit": "KiB"
+          },
+          {
+            "name": "availability-distribution",
+            "value": 0.01652788424,
+            "unit": "seconds"
+          },
+          {
+            "name": "bitfield-distribution",
+            "value": 0.024773823773333335,
+            "unit": "seconds"
+          },
+          {
+            "name": "availability-store",
+            "value": 0.17875041042666656,
+            "unit": "seconds"
+          },
+          {
+            "name": "test-environment",
+            "value": 0.008854682066666753,
             "unit": "seconds"
           }
         ]
