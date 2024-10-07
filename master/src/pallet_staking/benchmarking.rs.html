@@ -1236,6 +1236,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 <a href="#1086" id="1086">1086</a>
 <a href="#1087" id="1087">1087</a>
 <a href="#1088" id="1088">1088</a>
+<a href="#1089" id="1089">1089</a>
 </pre></div><pre class="rust"><code><span class="comment">// This file is part of Substrate.
 
 // Copyright (C) Parity Technologies (UK) Ltd.
@@ -1256,7 +1257,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 </span><span class="doccomment">//! Staking pallet benchmarking.
 
 </span><span class="kw">use super</span>::<span class="kw-2">*</span>;
-<span class="kw">use crate</span>::{ConfigOp, Pallet <span class="kw">as </span>Staking};
+<span class="kw">use crate</span>::{asset, ConfigOp, Pallet <span class="kw">as </span>Staking};
 <span class="kw">use </span>testing_utils::<span class="kw-2">*</span>;
 
 <span class="kw">use </span>codec::Decode;
@@ -1264,7 +1265,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 <span class="kw">use </span>frame_support::{
 	pallet_prelude::<span class="kw-2">*</span>,
 	storage::bounded_vec::BoundedVec,
-	traits::{Currency, Get, Imbalance, UnfilteredDispatchable},
+	traits::{Get, Imbalance, UnfilteredDispatchable},
 };
 <span class="kw">use </span>sp_runtime::{
 	traits::{Bounded, One, StaticLookup, TrailingZeroInput, Zero},
@@ -1370,7 +1371,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 	ErasRewardPoints::&lt;T&gt;::insert(current_era, reward);
 
 	<span class="comment">// Create reward pool
-	</span><span class="kw">let </span>total_payout = T::Currency::minimum_balance()
+	</span><span class="kw">let </span>total_payout = asset::existential_deposit::&lt;T&gt;()
 		.saturating_mul(upper_bound.into())
 		.saturating_mul(<span class="number">1000u32</span>.into());
 	&lt;ErasValidatorReward&lt;T&gt;&gt;::insert(current_era, total_payout);
@@ -1405,7 +1406,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 		<span class="macro">ensure!</span>(!origin_weight.is_zero(), <span class="string">"origin weight must be greater than 0"</span>);
 
 		<span class="comment">// burn the entire issuance.
-		</span><span class="kw">let </span>i = T::Currency::burn(T::Currency::total_issuance());
+		</span><span class="kw">let </span>i = asset::burn::&lt;T&gt;(asset::total_issuance::&lt;T&gt;());
 		core::mem::forget(i);
 
 		<span class="comment">// create accounts with the origin weight
@@ -1435,7 +1436,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 		</span><span class="kw">let </span>dest_weight_as_vote =
 			T::VoterList::score_update_worst_case(<span class="kw-2">&amp;</span>origin_stash1, is_increase);
 
-		<span class="kw">let </span>total_issuance = T::Currency::total_issuance();
+		<span class="kw">let </span>total_issuance = asset::total_issuance::&lt;T&gt;();
 
 		<span class="kw">let </span>dest_weight =
 			T::CurrencyToVote::to_currency(dest_weight_as_vote <span class="kw">as </span>u128, total_issuance);
@@ -1461,7 +1462,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 	bond {
 		<span class="kw">let </span>stash = create_funded_user::&lt;T&gt;(<span class="string">"stash"</span>, USER_SEED, <span class="number">100</span>);
 		<span class="kw">let </span>reward_destination = RewardDestination::Staked;
-		<span class="kw">let </span>amount = T::Currency::minimum_balance() * <span class="number">10u32</span>.into();
+		<span class="kw">let </span>amount = asset::existential_deposit::&lt;T&gt;() * <span class="number">10u32</span>.into();
 		<span class="macro">whitelist_account!</span>(stash);
 	}: <span class="kw">_</span>(RawOrigin::Signed(stash.clone()), amount, reward_destination)
 	verify {
@@ -1473,7 +1474,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 		<span class="comment">// clean up any existing state.
 		</span>clear_validators_and_nominators::&lt;T&gt;();
 
-		<span class="kw">let </span>origin_weight = MinNominatorBond::&lt;T&gt;::get().max(T::Currency::minimum_balance());
+		<span class="kw">let </span>origin_weight = MinNominatorBond::&lt;T&gt;::get().max(asset::existential_deposit::&lt;T&gt;());
 
 		<span class="comment">// setup the worst case list scenario.
 
@@ -1487,7 +1488,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 		<span class="kw">let </span>original_bonded: BalanceOf&lt;T&gt;
 			= Ledger::&lt;T&gt;::get(<span class="kw-2">&amp;</span>controller).map(|l| l.active).ok_or(<span class="string">"ledger not created after"</span>)<span class="question-mark">?</span>;
 
-		<span class="kw">let _ </span>= T::Currency::deposit_into_existing(<span class="kw-2">&amp;</span>stash, max_additional).unwrap();
+		<span class="kw">let _ </span>= asset::mint_existing::&lt;T&gt;(<span class="kw-2">&amp;</span>stash, max_additional).unwrap();
 
 		<span class="macro">whitelist_account!</span>(stash);
 	}: <span class="kw">_</span>(RawOrigin::Signed(stash), max_additional)
@@ -1502,7 +1503,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 		</span>clear_validators_and_nominators::&lt;T&gt;();
 
 		<span class="comment">// setup the worst case list scenario.
-		</span><span class="kw">let </span>total_issuance = T::Currency::total_issuance();
+		</span><span class="kw">let </span>total_issuance = asset::total_issuance::&lt;T&gt;();
 		<span class="comment">// the weight the nominator will start at. The value used here is expected to be
 		// significantly higher than the first position in a list (e.g. the first bag threshold).
 		</span><span class="kw">let </span>origin_weight = BalanceOf::&lt;T&gt;::try_from(<span class="number">952_994_955_240_703u128</span>)
@@ -1530,7 +1531,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 		</span><span class="kw">let </span>s <span class="kw">in </span><span class="number">0 </span>.. MAX_SPANS;
 		<span class="kw">let </span>(stash, controller) = create_stash_controller::&lt;T&gt;(<span class="number">0</span>, <span class="number">100</span>, RewardDestination::Staked)<span class="question-mark">?</span>;
 		add_slashing_spans::&lt;T&gt;(<span class="kw-2">&amp;</span>stash, s);
-		<span class="kw">let </span>amount = T::Currency::minimum_balance() * <span class="number">5u32</span>.into(); <span class="comment">// Half of total
+		<span class="kw">let </span>amount = asset::existential_deposit::&lt;T&gt;() * <span class="number">5u32</span>.into(); <span class="comment">// Half of total
 		</span>Staking::&lt;T&gt;::unbond(RawOrigin::Signed(controller.clone()).into(), amount)<span class="question-mark">?</span>;
 		CurrentEra::&lt;T&gt;::put(EraIndex::max_value());
 		<span class="kw">let </span>ledger = Ledger::&lt;T&gt;::get(<span class="kw-2">&amp;</span>controller).ok_or(<span class="string">"ledger not created before"</span>)<span class="question-mark">?</span>;
@@ -1550,7 +1551,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 		<span class="comment">// clean up any existing state.
 		</span>clear_validators_and_nominators::&lt;T&gt;();
 
-		<span class="kw">let </span>origin_weight = MinNominatorBond::&lt;T&gt;::get().max(T::Currency::minimum_balance());
+		<span class="kw">let </span>origin_weight = MinNominatorBond::&lt;T&gt;::get().max(asset::existential_deposit::&lt;T&gt;());
 
 		<span class="comment">// setup a worst case list scenario. Note that we don't care about the setup of the
 		// destination position because we are doing a removal from the list but no insert.
@@ -1560,7 +1561,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 		add_slashing_spans::&lt;T&gt;(<span class="kw-2">&amp;</span>stash, s);
 		<span class="macro">assert!</span>(T::VoterList::contains(<span class="kw-2">&amp;</span>stash));
 
-		<span class="kw">let </span>ed = T::Currency::minimum_balance();
+		<span class="kw">let </span>ed = asset::existential_deposit::&lt;T&gt;();
 		<span class="kw">let </span><span class="kw-2">mut </span>ledger = Ledger::&lt;T&gt;::get(<span class="kw-2">&amp;</span>controller).unwrap();
 		ledger.active = ed - One::one();
 		Ledger::&lt;T&gt;::insert(<span class="kw-2">&amp;</span>controller, ledger);
@@ -1660,7 +1661,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 		<span class="comment">// clean up any existing state.
 		</span>clear_validators_and_nominators::&lt;T&gt;();
 
-		<span class="kw">let </span>origin_weight = MinNominatorBond::&lt;T&gt;::get().max(T::Currency::minimum_balance());
+		<span class="kw">let </span>origin_weight = MinNominatorBond::&lt;T&gt;::get().max(asset::existential_deposit::&lt;T&gt;());
 
 		<span class="comment">// setup a worst case list scenario. Note we don't care about the destination position, because
 		// we are just doing an insert into the origin position.
@@ -1686,7 +1687,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 		<span class="comment">// clean up any existing state.
 		</span>clear_validators_and_nominators::&lt;T&gt;();
 
-		<span class="kw">let </span>origin_weight = MinNominatorBond::&lt;T&gt;::get().max(T::Currency::minimum_balance());
+		<span class="kw">let </span>origin_weight = MinNominatorBond::&lt;T&gt;::get().max(asset::existential_deposit::&lt;T&gt;());
 
 		<span class="comment">// setup a worst case list scenario. Note that we don't care about the setup of the
 		// destination position because we are doing a removal from the list but no insert.
@@ -1802,7 +1803,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 		<span class="comment">// Clean up any existing state.
 		</span>clear_validators_and_nominators::&lt;T&gt;();
 
-		<span class="kw">let </span>origin_weight = MinNominatorBond::&lt;T&gt;::get().max(T::Currency::minimum_balance());
+		<span class="kw">let </span>origin_weight = MinNominatorBond::&lt;T&gt;::get().max(asset::existential_deposit::&lt;T&gt;());
 
 		<span class="comment">// setup a worst case list scenario. Note that we don't care about the setup of the
 		// destination position because we are doing a removal from the list but no insert.
@@ -1849,21 +1850,21 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 		</span>&lt;ErasValidatorPrefs&lt;T&gt;&gt;::insert(current_era, validator.clone(), &lt;Staking&lt;T&gt;&gt;::validators(<span class="kw-2">&amp;</span>validator));
 
 		<span class="kw">let </span>caller = whitelisted_caller();
-		<span class="kw">let </span>balance_before = T::Currency::free_balance(<span class="kw-2">&amp;</span>validator);
+		<span class="kw">let </span>balance_before = asset::stakeable_balance::&lt;T&gt;(<span class="kw-2">&amp;</span>validator);
 		<span class="kw">let </span><span class="kw-2">mut </span>nominator_balances_before = Vec::new();
 		<span class="kw">for </span>(stash, <span class="kw">_</span>) <span class="kw">in </span><span class="kw-2">&amp;</span>nominators {
-			<span class="kw">let </span>balance = T::Currency::free_balance(stash);
+			<span class="kw">let </span>balance = asset::stakeable_balance::&lt;T&gt;(stash);
 			nominator_balances_before.push(balance);
 		}
 	}: payout_stakers(RawOrigin::Signed(caller), validator.clone(), current_era)
 	verify {
-		<span class="kw">let </span>balance_after = T::Currency::free_balance(<span class="kw-2">&amp;</span>validator);
+		<span class="kw">let </span>balance_after = asset::stakeable_balance::&lt;T&gt;(<span class="kw-2">&amp;</span>validator);
 		<span class="macro">ensure!</span>(
 			balance_before &lt; balance_after,
 			<span class="string">"Balance of validator stash should have increased after payout."</span>,
 		);
 		<span class="kw">for </span>((stash, <span class="kw">_</span>), balance_before) <span class="kw">in </span>nominators.iter().zip(nominator_balances_before.iter()) {
-			<span class="kw">let </span>balance_after = T::Currency::free_balance(stash);
+			<span class="kw">let </span>balance_after = asset::stakeable_balance::&lt;T&gt;(stash);
 			<span class="macro">ensure!</span>(
 				balance_before &lt; <span class="kw-2">&amp;</span>balance_after,
 				<span class="string">"Balance of nominator stash should have increased after payout."</span>,
@@ -1878,7 +1879,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 		</span>clear_validators_and_nominators::&lt;T&gt;();
 
 		<span class="kw">let </span>origin_weight = MinNominatorBond::&lt;T&gt;::get()
-			.max(T::Currency::minimum_balance())
+			.max(asset::existential_deposit::&lt;T&gt;())
 			<span class="comment">// we use 100 to play friendly with the list threshold values in the mock
 			</span>.max(<span class="number">100u32</span>.into());
 
@@ -1924,7 +1925,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 		<span class="comment">// clean up any existing state.
 		</span>clear_validators_and_nominators::&lt;T&gt;();
 
-		<span class="kw">let </span>origin_weight = MinNominatorBond::&lt;T&gt;::get().max(T::Currency::minimum_balance());
+		<span class="kw">let </span>origin_weight = MinNominatorBond::&lt;T&gt;::get().max(asset::existential_deposit::&lt;T&gt;());
 
 		<span class="comment">// setup a worst case list scenario. Note that we don't care about the setup of the
 		// destination position because we are doing a removal from the list but no insert.
@@ -1935,7 +1936,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 		add_slashing_spans::&lt;T&gt;(<span class="kw-2">&amp;</span>stash, s);
 		<span class="kw">let </span>l = StakingLedger::&lt;T&gt;::new(
 			stash.clone(),
-			T::Currency::minimum_balance() - One::one(),
+			asset::existential_deposit::&lt;T&gt;() - One::one(),
 		);
 		Ledger::&lt;T&gt;::insert(<span class="kw-2">&amp;</span>controller, l);
 
@@ -2002,7 +2003,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 		ErasRewardPoints::&lt;T&gt;::insert(current_era, reward);
 
 		<span class="comment">// Create reward pool
-		</span><span class="kw">let </span>total_payout = T::Currency::minimum_balance() * <span class="number">1000u32</span>.into();
+		</span><span class="kw">let </span>total_payout = asset::existential_deposit::&lt;T&gt;() * <span class="number">1000u32</span>.into();
 		&lt;ErasValidatorReward&lt;T&gt;&gt;::insert(current_era, total_payout);
 
 		<span class="kw">let </span>caller: T::AccountId = whitelisted_caller();
@@ -2031,8 +2032,8 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 			staking_ledger.unlocking.try_push(unlock_chunk.clone()).unwrap();
 		}
 		Ledger::&lt;T&gt;::insert(controller, staking_ledger);
-		<span class="kw">let </span>slash_amount = T::Currency::minimum_balance() * <span class="number">10u32</span>.into();
-		<span class="kw">let </span>balance_before = T::Currency::free_balance(<span class="kw-2">&amp;</span>stash);
+		<span class="kw">let </span>slash_amount = asset::existential_deposit::&lt;T&gt;() * <span class="number">10u32</span>.into();
+		<span class="kw">let </span>balance_before = asset::stakeable_balance::&lt;T&gt;(<span class="kw-2">&amp;</span>stash);
 	}: {
 		<span class="kw">crate</span>::slashing::do_slash::&lt;T&gt;(
 			<span class="kw-2">&amp;</span>stash,
@@ -2042,7 +2043,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 			EraIndex::zero()
 		);
 	} verify {
-		<span class="kw">let </span>balance_after = T::Currency::free_balance(<span class="kw-2">&amp;</span>stash);
+		<span class="kw">let </span>balance_after = asset::stakeable_balance::&lt;T&gt;(<span class="kw-2">&amp;</span>stash);
 		<span class="macro">assert!</span>(balance_before &gt; balance_after);
 	}
 
@@ -2128,7 +2129,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 		<span class="comment">// clean up any existing state.
 		</span>clear_validators_and_nominators::&lt;T&gt;();
 
-		<span class="kw">let </span>origin_weight = MinNominatorBond::&lt;T&gt;::get().max(T::Currency::minimum_balance());
+		<span class="kw">let </span>origin_weight = MinNominatorBond::&lt;T&gt;::get().max(asset::existential_deposit::&lt;T&gt;());
 
 		<span class="comment">// setup a worst case list scenario. Note that we don't care about the setup of the
 		// destination position because we are doing a removal from the list but no insert.
@@ -2210,7 +2211,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 <span class="attr">#[cfg(test)]
 </span><span class="kw">mod </span>tests {
 	<span class="kw">use super</span>::<span class="kw-2">*</span>;
-	<span class="kw">use </span><span class="kw">crate</span>::mock::{Balances, ExtBuilder, RuntimeOrigin, Staking, Test};
+	<span class="kw">use </span><span class="kw">crate</span>::mock::{ExtBuilder, RuntimeOrigin, Staking, Test};
 	<span class="kw">use </span>frame_support::assert_ok;
 
 	<span class="attr">#[test]
@@ -2257,16 +2258,17 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 
 			<span class="kw">let </span>current_era = CurrentEra::&lt;Test&gt;::get().unwrap();
 
-			<span class="kw">let </span>original_free_balance = Balances::free_balance(<span class="kw-2">&amp;</span>validator_stash);
+			<span class="kw">let </span>original_stakeable_balance = asset::stakeable_balance::&lt;Test&gt;(<span class="kw-2">&amp;</span>validator_stash);
 			<span class="macro">assert_ok!</span>(Staking::payout_stakers_by_page(
 				RuntimeOrigin::signed(<span class="number">1337</span>),
 				validator_stash,
 				current_era,
 				<span class="number">0
 			</span>));
-			<span class="kw">let </span>new_free_balance = Balances::free_balance(<span class="kw-2">&amp;</span>validator_stash);
+			<span class="kw">let </span>new_stakeable_balance = asset::stakeable_balance::&lt;Test&gt;(<span class="kw-2">&amp;</span>validator_stash);
 
-			<span class="macro">assert!</span>(original_free_balance &lt; new_free_balance);
+			<span class="comment">// reward increases stakeable balance
+			</span><span class="macro">assert!</span>(original_stakeable_balance &lt; new_stakeable_balance);
 		});
 	}
 

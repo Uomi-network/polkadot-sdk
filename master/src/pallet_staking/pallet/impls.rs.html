@@ -2450,11 +2450,6 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 <a href="#2300" id="2300">2300</a>
 <a href="#2301" id="2301">2301</a>
 <a href="#2302" id="2302">2302</a>
-<a href="#2303" id="2303">2303</a>
-<a href="#2304" id="2304">2304</a>
-<a href="#2305" id="2305">2305</a>
-<a href="#2306" id="2306">2306</a>
-<a href="#2307" id="2307">2307</a>
 </pre></div><pre class="rust"><code><span class="comment">// This file is part of Substrate.
 
 // Copyright (C) Parity Technologies (UK) Ltd.
@@ -2484,8 +2479,8 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 	dispatch::WithPostDispatchInfo,
 	pallet_prelude::<span class="kw-2">*</span>,
 	traits::{
-		Currency, Defensive, DefensiveSaturating, EstimateNextNewSession, Get, Imbalance,
-		InspectLockableCurrency, Len, LockableCurrency, OnUnbalanced, TryCollect, UnixTime,
+		Defensive, DefensiveSaturating, EstimateNextNewSession, Get, Imbalance, Len, OnUnbalanced,
+		TryCollect, UnixTime,
 	},
 	weights::Weight,
 };
@@ -2507,7 +2502,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 };
 
 <span class="kw">use crate</span>::{
-	election_size_tracker::StaticTracker, log, slashing, weights::WeightInfo, ActiveEraInfo,
+	asset, election_size_tracker::StaticTracker, log, slashing, weights::WeightInfo, ActiveEraInfo,
 	BalanceOf, EraInfo, EraPayout, Exposure, ExposureOf, Forcing, IndividualExposure,
 	LedgerIntegrityState, MaxNominationsOf, MaxWinnersOf, Nominations, NominationsQuota,
 	PositiveImbalanceOf, RewardDestination, SessionInterface, StakingLedger, ValidatorPrefs,
@@ -2553,7 +2548,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 	</span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>inspect_bond_state(
 		stash: <span class="kw-2">&amp;</span>T::AccountId,
 	) -&gt; <span class="prelude-ty">Result</span>&lt;LedgerIntegrityState, Error&lt;T&gt;&gt; {
-		<span class="kw">let </span>lock = T::Currency::balance_locked(<span class="kw">crate</span>::STAKING_ID, <span class="kw-2">&amp;</span>stash);
+		<span class="kw">let </span>lock = asset::staked::&lt;T&gt;(<span class="kw-2">&amp;</span>stash);
 
 		<span class="kw">let </span>controller = &lt;Bonded&lt;T&gt;&gt;::get(stash).ok_or_else(|| {
 			<span class="kw">if </span>lock == Zero::zero() {
@@ -2599,7 +2594,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 	</span><span class="kw">pub fn </span>weight_of_fn() -&gt; Box&lt;<span class="kw">dyn </span>Fn(<span class="kw-2">&amp;</span>T::AccountId) -&gt; VoteWeight&gt; {
 		<span class="comment">// NOTE: changing this to unboxed `impl Fn(..)` return type and the pallet will still
 		// compile, while some types in mock fail to resolve.
-		</span><span class="kw">let </span>issuance = T::Currency::total_issuance();
+		</span><span class="kw">let </span>issuance = asset::total_issuance::&lt;T&gt;();
 		Box::new(<span class="kw">move </span>|who: <span class="kw-2">&amp;</span>T::AccountId| -&gt; VoteWeight {
 			<span class="self">Self</span>::slashable_balance_of_vote_weight(who, issuance)
 		})
@@ -2607,7 +2602,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 
 	<span class="doccomment">/// Same as `weight_of_fn`, but made for one time use.
 	</span><span class="kw">pub fn </span>weight_of(who: <span class="kw-2">&amp;</span>T::AccountId) -&gt; VoteWeight {
-		<span class="kw">let </span>issuance = T::Currency::total_issuance();
+		<span class="kw">let </span>issuance = asset::total_issuance::&lt;T&gt;();
 		<span class="self">Self</span>::slashable_balance_of_vote_weight(who, issuance)
 	}
 
@@ -2621,7 +2616,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 		} <span class="kw">else </span>{
 			<span class="comment">// additional amount or actual balance of stash whichever is lower.
 			</span>additional.min(
-				T::Currency::free_balance(stash)
+				asset::stakeable_balance::&lt;T&gt;(stash)
 					.checked_sub(<span class="kw-2">&amp;</span>ledger.total)
 					.ok_or(ArithmeticError::Overflow)<span class="question-mark">?</span>,
 			)
@@ -2630,7 +2625,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 		ledger.total = ledger.total.checked_add(<span class="kw-2">&amp;</span>extra).ok_or(ArithmeticError::Overflow)<span class="question-mark">?</span>;
 		ledger.active = ledger.active.checked_add(<span class="kw-2">&amp;</span>extra).ok_or(ArithmeticError::Overflow)<span class="question-mark">?</span>;
 		<span class="comment">// last check: the new active amount of ledger must be more than ED.
-		</span><span class="macro">ensure!</span>(ledger.active &gt;= T::Currency::minimum_balance(), Error::&lt;T&gt;::InsufficientBond);
+		</span><span class="macro">ensure!</span>(ledger.active &gt;= asset::existential_deposit::&lt;T&gt;(), Error::&lt;T&gt;::InsufficientBond);
 
 		<span class="comment">// NOTE: ledger must be updated prior to calling `Self::weight_of`.
 		</span>ledger.update()<span class="question-mark">?</span>;
@@ -2655,7 +2650,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 		}
 		<span class="kw">let </span>new_total = ledger.total;
 
-		<span class="kw">let </span>ed = T::Currency::minimum_balance();
+		<span class="kw">let </span>ed = asset::existential_deposit::&lt;T&gt;();
 		<span class="kw">let </span>used_weight =
 			<span class="kw">if </span>ledger.unlocking.is_empty() &amp;&amp; (ledger.active &lt; ed || ledger.active.is_zero()) {
 				<span class="comment">// This account must have called `unbond()` with some value that caused the active
@@ -2871,12 +2866,12 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 		<span class="kw">let </span>dest = <span class="self">Self</span>::payee(StakingAccount::Stash(stash.clone()))<span class="question-mark">?</span>;
 
 		<span class="kw">let </span>maybe_imbalance = <span class="kw">match </span>dest {
-			RewardDestination::Stash =&gt; T::Currency::deposit_into_existing(stash, amount).ok(),
+			RewardDestination::Stash =&gt; asset::mint_existing::&lt;T&gt;(stash, amount),
 			RewardDestination::Staked =&gt; <span class="self">Self</span>::ledger(Stash(stash.clone()))
 				.and_then(|<span class="kw-2">mut </span>ledger| {
 					ledger.active += amount;
 					ledger.total += amount;
-					<span class="kw">let </span>r = T::Currency::deposit_into_existing(stash, amount).ok();
+					<span class="kw">let </span>r = asset::mint_existing::&lt;T&gt;(stash, amount);
 
 					<span class="kw">let _ </span>= ledger
 						.update()
@@ -2886,7 +2881,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 				})
 				.unwrap_or_default(),
 			RewardDestination::Account(<span class="kw-2">ref </span>dest_account) =&gt;
-				<span class="prelude-val">Some</span>(T::Currency::deposit_creating(<span class="kw-2">&amp;</span>dest_account, amount)),
+				<span class="prelude-val">Some</span>(asset::mint_creating::&lt;T&gt;(<span class="kw-2">&amp;</span>dest_account, amount)),
 			RewardDestination::None =&gt; <span class="prelude-val">None</span>,
 			<span class="attr">#[allow(deprecated)]
 			</span>RewardDestination::Controller =&gt; <span class="self">Self</span>::bonded(stash)
@@ -2894,7 +2889,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 						<span class="macro">defensive!</span>(<span class="string">"Paying out controller as reward destination which is deprecated and should be migrated."</span>);
 						<span class="comment">// This should never happen once payees with a `Controller` variant have been migrated.
 						// But if it does, just pay the controller account.
-						</span>T::Currency::deposit_creating(<span class="kw-2">&amp;</span>controller, amount)
+						</span>asset::mint_creating::&lt;T&gt;(<span class="kw-2">&amp;</span>controller, amount)
 		}),
 		};
 		maybe_imbalance.map(|imbalance| (imbalance, dest))
@@ -3033,7 +3028,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 			<span class="kw">let </span>era_duration = (now_as_millis_u64.defensive_saturating_sub(active_era_start))
 				.saturated_into::&lt;u64&gt;();
 			<span class="kw">let </span>staked = <span class="self">Self</span>::eras_total_stake(<span class="kw-2">&amp;</span>active_era.index);
-			<span class="kw">let </span>issuance = T::Currency::total_issuance();
+			<span class="kw">let </span>issuance = asset::total_issuance::&lt;T&gt;();
 
 			<span class="kw">let </span>(validator_payout, remainder) =
 				T::EraPayout::era_payout(staked, issuance, era_duration);
@@ -3054,7 +3049,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 
 			<span class="comment">// Set ending era reward.
 			</span>&lt;ErasValidatorReward&lt;T&gt;&gt;::insert(<span class="kw-2">&amp;</span>active_era.index, validator_payout);
-			T::RewardRemainder::on_unbalanced(T::Currency::issue(remainder));
+			T::RewardRemainder::on_unbalanced(asset::issue::&lt;T&gt;(remainder));
 
 			<span class="comment">// Clear disabled validators.
 			</span>&lt;DisabledValidators&lt;T&gt;&gt;::kill();
@@ -3205,7 +3200,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 	</span><span class="kw">fn </span>collect_exposures(
 		supports: BoundedSupportsOf&lt;T::ElectionProvider&gt;,
 	) -&gt; BoundedVec&lt;(T::AccountId, Exposure&lt;T::AccountId, BalanceOf&lt;T&gt;&gt;), MaxWinnersOf&lt;T&gt;&gt; {
-		<span class="kw">let </span>total_issuance = T::Currency::total_issuance();
+		<span class="kw">let </span>total_issuance = asset::total_issuance::&lt;T&gt;();
 		<span class="kw">let </span>to_currency = |e: frame_election_provider_support::ExtendedBalance| {
 			T::CurrencyToVote::to_currency(e, total_issuance)
 		};
@@ -4038,7 +4033,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 		<span class="comment">// also, we play a trick to make sure that a issuance based-`CurrencyToVote` behaves well:
 		// This will make sure that total issuance is zero, thus the currency to vote will be a 1-1
 		// conversion.
-		</span><span class="kw">let </span>imbalance = T::Currency::burn(T::Currency::total_issuance());
+		</span><span class="kw">let </span>imbalance = asset::burn::&lt;T&gt;(asset::total_issuance::&lt;T&gt;());
 		<span class="comment">// kinda ugly, but gets the job done. The fact that this works here is a HUGE exception.
 		// Don't try this pattern in other places.
 		</span>core::mem::forget(imbalance);
@@ -4376,7 +4371,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 
 <span class="kw">impl</span>&lt;T: Config&gt; sp_staking::StakingUnchecked <span class="kw">for </span>Pallet&lt;T&gt; {
 	<span class="kw">fn </span>migrate_to_virtual_staker(who: <span class="kw-2">&amp;</span><span class="self">Self</span>::AccountId) {
-		T::Currency::remove_lock(<span class="kw">crate</span>::STAKING_ID, who);
+		asset::kill_stake::&lt;T&gt;(who);
 		VirtualStakers::&lt;T&gt;::insert(who, ());
 	}
 
@@ -4413,12 +4408,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 	</span><span class="kw">fn </span>migrate_to_direct_staker(who: <span class="kw-2">&amp;</span><span class="self">Self</span>::AccountId) {
 		<span class="macro">assert!</span>(VirtualStakers::&lt;T&gt;::contains_key(who));
 		<span class="kw">let </span>ledger = StakingLedger::&lt;T&gt;::get(Stash(who.clone())).unwrap();
-		T::Currency::set_lock(
-			<span class="kw">crate</span>::STAKING_ID,
-			who,
-			ledger.total,
-			frame_support::traits::WithdrawReasons::all(),
-		);
+		asset::update_stake::&lt;T&gt;(who, ledger.total);
 		VirtualStakers::&lt;T&gt;::remove(who);
 	}
 }
@@ -4554,7 +4544,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 				<span class="comment">// ensure locks consistency.
 				</span><span class="kw">if </span>VirtualStakers::&lt;T&gt;::contains_key(stash.clone()) {
 					<span class="macro">ensure!</span>(
-						T::Currency::balance_locked(<span class="kw">crate</span>::STAKING_ID, <span class="kw-2">&amp;</span>stash) == Zero::zero(),
+						asset::staked::&lt;T&gt;(<span class="kw-2">&amp;</span>stash) == Zero::zero(),
 						<span class="string">"virtual stakers should not have any locked balance"
 					</span>);
 					<span class="macro">ensure!</span>(

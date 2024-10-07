@@ -1035,15 +1035,15 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 //! Based on research at &lt;https://research.web3.foundation/en/latest/polkadot/slashing/npos.html&gt;
 
 </span><span class="kw">use crate</span>::{
-	BalanceOf, Config, DisabledValidators, DisablingStrategy, Error, Exposure, NegativeImbalanceOf,
-	NominatorSlashInEra, Pallet, Perbill, SessionInterface, SpanSlash, UnappliedSlash,
-	ValidatorSlashInEra,
+	asset, BalanceOf, Config, DisabledValidators, DisablingStrategy, Error, Exposure,
+	NegativeImbalanceOf, NominatorSlashInEra, Pallet, Perbill, SessionInterface, SpanSlash,
+	UnappliedSlash, ValidatorSlashInEra,
 };
 <span class="kw">use </span>alloc::vec::Vec;
 <span class="kw">use </span>codec::{Decode, Encode, MaxEncodedLen};
 <span class="kw">use </span>frame_support::{
 	ensure,
-	traits::{Currency, Defensive, DefensiveSaturating, Imbalance, OnUnbalanced},
+	traits::{Defensive, DefensiveSaturating, Imbalance, OnUnbalanced},
 };
 <span class="kw">use </span>scale_info::TypeInfo;
 <span class="kw">use </span>sp_runtime::{
@@ -1563,7 +1563,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 			<span class="prelude-val">Err</span>(<span class="kw">_</span>) =&gt; <span class="kw">return</span>, <span class="comment">// nothing to do.
 		</span>};
 
-	<span class="kw">let </span>value = ledger.slash(value, T::Currency::minimum_balance(), slash_era);
+	<span class="kw">let </span>value = ledger.slash(value, asset::existential_deposit::&lt;T&gt;(), slash_era);
 	<span class="kw">if </span>value.is_zero() {
 		<span class="comment">// nothing to do
 		</span><span class="kw">return
@@ -1571,7 +1571,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 
 	<span class="comment">// Skip slashing for virtual stakers. The pallets managing them should handle the slashing.
 	</span><span class="kw">if </span>!Pallet::&lt;T&gt;::is_virtual_staker(stash) {
-		<span class="kw">let </span>(imbalance, missing) = T::Currency::slash(stash, value);
+		<span class="kw">let </span>(imbalance, missing) = asset::slash::&lt;T&gt;(stash, value);
 		slashed_imbalance.subsume(imbalance);
 
 		<span class="kw">if </span>!missing.is_zero() {
@@ -1641,7 +1641,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 
 		<span class="comment">// this cancels out the reporter reward imbalance internally, leading
 		// to no change in total issuance.
-		</span>T::Currency::resolve_creating(reporter, reporter_reward);
+		</span>asset::deposit_slashed::&lt;T&gt;(reporter, reporter_reward);
 	}
 
 	<span class="comment">// the rest goes to the on-slash imbalance handler (e.g. treasury)

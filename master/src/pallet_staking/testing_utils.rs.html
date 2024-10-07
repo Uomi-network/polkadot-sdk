@@ -418,7 +418,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 <span class="kw">use </span>sp_io::hashing::blake2_256;
 
 <span class="kw">use </span>frame_election_provider_support::SortedListProvider;
-<span class="kw">use </span>frame_support::{pallet_prelude::<span class="kw-2">*</span>, traits::Currency};
+<span class="kw">use </span>frame_support::pallet_prelude::<span class="kw-2">*</span>;
 <span class="kw">use </span>sp_runtime::{traits::StaticLookup, Perbill};
 
 <span class="kw">const </span>SEED: u32 = <span class="number">0</span>;
@@ -443,8 +443,8 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 	balance_factor: u32,
 ) -&gt; T::AccountId {
 	<span class="kw">let </span>user = account(string, n, SEED);
-	<span class="kw">let </span>balance = T::Currency::minimum_balance() * balance_factor.into();
-	<span class="kw">let _ </span>= T::Currency::make_free_balance_be(<span class="kw-2">&amp;</span>user, balance);
+	<span class="kw">let </span>balance = asset::existential_deposit::&lt;T&gt;() * balance_factor.into();
+	<span class="kw">let _ </span>= asset::set_stakeable_balance::&lt;T&gt;(<span class="kw-2">&amp;</span>user, balance);
 	user
 }
 
@@ -455,7 +455,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 	balance: BalanceOf&lt;T&gt;,
 ) -&gt; T::AccountId {
 	<span class="kw">let </span>user = account(string, n, SEED);
-	<span class="kw">let _ </span>= T::Currency::make_free_balance_be(<span class="kw-2">&amp;</span>user, balance);
+	<span class="kw">let _ </span>= asset::set_stakeable_balance::&lt;T&gt;(<span class="kw-2">&amp;</span>user, balance);
 	user
 }
 
@@ -467,7 +467,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 ) -&gt; <span class="prelude-ty">Result</span>&lt;(T::AccountId, T::AccountId), <span class="kw-2">&amp;</span><span class="lifetime">'static </span>str&gt; {
 	<span class="kw">let </span>staker = create_funded_user::&lt;T&gt;(<span class="string">"stash"</span>, n, balance_factor);
 	<span class="kw">let </span>amount =
-		T::Currency::minimum_balance().max(<span class="number">1u64</span>.into()) * (balance_factor / <span class="number">10</span>).max(<span class="number">1</span>).into();
+		asset::existential_deposit::&lt;T&gt;().max(<span class="number">1u64</span>.into()) * (balance_factor / <span class="number">10</span>).max(<span class="number">1</span>).into();
 	Staking::&lt;T&gt;::bond(RawOrigin::Signed(staker.clone()).into(), amount, destination)<span class="question-mark">?</span>;
 	<span class="prelude-val">Ok</span>((staker.clone(), staker))
 }
@@ -486,7 +486,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 	} <span class="kw">else </span>{
 		create_funded_user::&lt;T&gt;(<span class="string">"controller"</span>, n, balance_factor)
 	};
-	<span class="kw">let </span>amount = T::Currency::minimum_balance() * (balance_factor / <span class="number">10</span>).max(<span class="number">1</span>).into();
+	<span class="kw">let </span>amount = asset::existential_deposit::&lt;T&gt;() * (balance_factor / <span class="number">10</span>).max(<span class="number">1</span>).into();
 	Staking::&lt;T&gt;::bond(RawOrigin::Signed(stash.clone()).into(), amount, destination)<span class="question-mark">?</span>;
 
 	<span class="comment">// update ledger to be a *different* controller to stash
@@ -519,7 +519,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 	<span class="kw">let </span>staker = create_funded_user::&lt;T&gt;(<span class="string">"stash"</span>, n, <span class="number">0</span>);
 	<span class="comment">// payee has no funds
 	</span><span class="kw">let </span>payee = create_funded_user::&lt;T&gt;(<span class="string">"payee"</span>, n, <span class="number">0</span>);
-	<span class="kw">let </span>amount = T::Currency::minimum_balance() * (balance_factor / <span class="number">10</span>).max(<span class="number">1</span>).into();
+	<span class="kw">let </span>amount = asset::existential_deposit::&lt;T&gt;() * (balance_factor / <span class="number">10</span>).max(<span class="number">1</span>).into();
 	Staking::&lt;T&gt;::bond(
 		RawOrigin::Signed(staker.clone()).into(),
 		amount,

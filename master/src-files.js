@@ -240,7 +240,7 @@ var srcIndex = new Map(JSON.parse('[\
 ["pallet_session_benchmarking",["",[],["inner.rs","lib.rs"]]],\
 ["pallet_skip_feeless_payment",["",[],["lib.rs"]]],\
 ["pallet_society",["",[],["benchmarking.rs","lib.rs","migrations.rs","weights.rs"]]],\
-["pallet_staking",["",[["pallet",[],["impls.rs","mod.rs"]]],["benchmarking.rs","election_size_tracker.rs","inflation.rs","ledger.rs","lib.rs","migrations.rs","slashing.rs","testing_utils.rs","weights.rs"]]],\
+["pallet_staking",["",[["pallet",[],["impls.rs","mod.rs"]]],["asset.rs","benchmarking.rs","election_size_tracker.rs","inflation.rs","ledger.rs","lib.rs","migrations.rs","slashing.rs","testing_utils.rs","weights.rs"]]],\
 ["pallet_staking_reward_curve",["",[],["lib.rs","log.rs"]]],\
 ["pallet_staking_reward_fn",["",[],["lib.rs"]]],\
 ["pallet_staking_runtime_api",["",[],["lib.rs"]]],\

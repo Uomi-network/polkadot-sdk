@@ -275,7 +275,7 @@ any limitation on the amount that can be added.</p>
 </ul>
 </div><div class="sub-variant" id="variant.bond_extra.fields"><h4>Fields</h4><div class="sub-variant-field"><span id="variant.bond_extra.field.max_additional" class="section-header"><a href="#variant.bond_extra.field.max_additional" class="anchor field">§</a><code>max_additional: <a class="type" href="type.BalanceOf.html" title="type pallet_staking::BalanceOf">BalanceOf</a>&lt;T&gt;</code></span></div></div><section id="variant.unbond" class="variant"><a href="#variant.unbond" class="anchor">§</a><h3 class="code-header">unbond</h3></section><div class="docblock"><p>Schedule a portion of the stash to be unlocked ready for transfer out after the bond
 period ends. If this leaves an amount actively bonded less than
-T::Currency::minimum_balance(), then it is increased to the full amount.</p>
+<a href="asset/fn.existential_deposit.html" title="fn pallet_staking::asset::existential_deposit"><code>asset::existential_deposit</code></a>, then it is increased to the full amount.</p>
 <p>The dispatch origin for this call must be <em>Signed</em> by the controller, not the stash.</p>
 <p>Once the unlock period is done, you can call <code>withdraw_unbonded</code> to actually move
 the funds out of management ready for transfer.</p>

@@ -1174,6 +1174,8 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 <a href="#1024" id="1024">1024</a>
 <a href="#1025" id="1025">1025</a>
 <a href="#1026" id="1026">1026</a>
+<a href="#1027" id="1027">1027</a>
+<a href="#1028" id="1028">1028</a>
 </pre></div><pre class="rust"><code><span class="comment">// This file is part of Substrate.
 
 // Copyright (C) Parity Technologies (UK) Ltd.
@@ -1217,7 +1219,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 	traits::{Bounded, StaticLookup, Zero},
 	Perbill,
 };
-<span class="kw">use </span>sp_staking::EraIndex;
+<span class="kw">use </span>sp_staking::{EraIndex, StakingUnchecked};
 <span class="comment">// `frame_benchmarking::benchmarks!` macro needs this
 </span><span class="kw">use </span>pallet_nomination_pools::Call;
 
@@ -1307,6 +1309,8 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 			)
 			.expect(<span class="string">"member should have enough balance to transfer"</span>);
 		});
+
+	pallet_staking::Pallet::&lt;T&gt;::migrate_to_direct_staker(<span class="kw-2">&amp;</span>pool_acc);
 }
 
 <span class="kw">fn </span>vote_to_balance&lt;T: pallet_nomination_pools::Config&gt;(

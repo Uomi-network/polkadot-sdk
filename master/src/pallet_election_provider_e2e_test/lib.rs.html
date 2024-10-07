@@ -580,6 +580,13 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 <a href="#430" id="430">430</a>
 <a href="#431" id="431">431</a>
 <a href="#432" id="432">432</a>
+<a href="#433" id="433">433</a>
+<a href="#434" id="434">434</a>
+<a href="#435" id="435">435</a>
+<a href="#436" id="436">436</a>
+<a href="#437" id="437">437</a>
+<a href="#438" id="438">438</a>
+<a href="#439" id="439">439</a>
 </pre></div><pre class="rust"><code><span class="comment">// This file is part of Substrate.
 
 // Copyright (C) Parity Technologies (UK) Ltd.
@@ -904,24 +911,24 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 		<span class="macro">assert_eq!</span>(&lt;Runtime <span class="kw">as </span>pallet_nomination_pools::Config&gt;::MaxUnbonding::get(), <span class="number">1</span>);
 
 		<span class="comment">// init state of pool members.
-		</span><span class="kw">let </span>init_free_balance_2 = Balances::free_balance(<span class="number">2</span>);
-		<span class="kw">let </span>init_free_balance_3 = Balances::free_balance(<span class="number">3</span>);
+		</span><span class="kw">let </span>init_stakeable_balance_2 = pallet_staking::asset::stakeable_balance::&lt;Runtime&gt;(<span class="kw-2">&amp;</span><span class="number">2</span>);
+		<span class="kw">let </span>init_stakeable_balance_3 = pallet_staking::asset::stakeable_balance::&lt;Runtime&gt;(<span class="kw-2">&amp;</span><span class="number">3</span>);
 
 		<span class="kw">let </span>pool_bonded_account = Pools::generate_bonded_account(<span class="number">1</span>);
 
 		<span class="comment">// creates a pool with 5 bonded, owned by 1.
 		</span><span class="macro">assert_ok!</span>(Pools::create(RuntimeOrigin::signed(<span class="number">1</span>), <span class="number">5</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>));
-		<span class="macro">assert_eq!</span>(locked_amount_for(pool_bonded_account), <span class="number">5</span>);
+		<span class="macro">assert_eq!</span>(staked_amount_for(pool_bonded_account), <span class="number">5</span>);
 
 		<span class="kw">let </span>init_tvl = TotalValueLocked::&lt;Runtime&gt;::get();
 
 		<span class="comment">// 2 joins the pool.
 		</span><span class="macro">assert_ok!</span>(Pools::join(RuntimeOrigin::signed(<span class="number">2</span>), <span class="number">10</span>, <span class="number">1</span>));
-		<span class="macro">assert_eq!</span>(locked_amount_for(pool_bonded_account), <span class="number">15</span>);
+		<span class="macro">assert_eq!</span>(staked_amount_for(pool_bonded_account), <span class="number">15</span>);
 
 		<span class="comment">// 3 joins the pool.
 		</span><span class="macro">assert_ok!</span>(Pools::join(RuntimeOrigin::signed(<span class="number">3</span>), <span class="number">10</span>, <span class="number">1</span>));
-		<span class="macro">assert_eq!</span>(locked_amount_for(pool_bonded_account), <span class="number">25</span>);
+		<span class="macro">assert_eq!</span>(staked_amount_for(pool_bonded_account), <span class="number">25</span>);
 
 		<span class="macro">assert_eq!</span>(TotalValueLocked::&lt;Runtime&gt;::get(), <span class="number">25</span>);
 
@@ -932,7 +939,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 		</span><span class="macro">assert_ok!</span>(Pools::unbond(RuntimeOrigin::signed(<span class="number">2</span>), <span class="number">2</span>, <span class="number">10</span>));
 
 		<span class="comment">// amount is still locked in the pool, needs to wait for unbonding period.
-		</span><span class="macro">assert_eq!</span>(locked_amount_for(pool_bonded_account), <span class="number">25</span>);
+		</span><span class="macro">assert_eq!</span>(staked_amount_for(pool_bonded_account), <span class="number">25</span>);
 
 		<span class="comment">// max chunks in the ledger are now filled up (`MaxUnlockingChunks == 1`).
 		</span><span class="macro">assert_eq!</span>(unlocking_chunks_of(pool_bonded_account), <span class="number">1</span>);
@@ -954,8 +961,8 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 		<span class="macro">assert_eq!</span>(current_era(), <span class="number">3</span>);
 		System::reset_events();
 
-		<span class="kw">let </span>locked_before_withdraw_pool = locked_amount_for(pool_bonded_account);
-		<span class="macro">assert_eq!</span>(Balances::free_balance(pool_bonded_account), <span class="number">26</span>);
+		<span class="kw">let </span>staked_before_withdraw_pool = staked_amount_for(pool_bonded_account);
+		<span class="macro">assert_eq!</span>(pallet_staking::asset::stakeable_balance::&lt;Runtime&gt;(<span class="kw-2">&amp;</span>pool_bonded_account), <span class="number">26</span>);
 
 		<span class="comment">// now unbonding 3 will work, although the pool's ledger still has the unlocking chunks
 		// filled up.
@@ -973,20 +980,21 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 		);
 
 		<span class="comment">// balance of the pool remains the same, it hasn't withdraw explicitly from the pool yet.
-		</span><span class="macro">assert_eq!</span>(Balances::free_balance(pool_bonded_account), <span class="number">26</span>);
+		</span><span class="macro">assert_eq!</span>(pallet_staking::asset::stakeable_balance::&lt;Runtime&gt;(<span class="kw-2">&amp;</span>pool_bonded_account), <span class="number">26</span>);
 		<span class="comment">// but the locked amount in the pool's account decreases due to the auto-withdraw:
-		</span><span class="macro">assert_eq!</span>(locked_before_withdraw_pool - <span class="number">10</span>, locked_amount_for(pool_bonded_account));
+		</span><span class="macro">assert_eq!</span>(staked_before_withdraw_pool - <span class="number">10</span>, staked_amount_for(pool_bonded_account));
 
 		<span class="comment">// TVL correctly updated.
 		</span><span class="macro">assert_eq!</span>(TotalValueLocked::&lt;Runtime&gt;::get(), <span class="number">25 </span>- <span class="number">10</span>);
 
 		<span class="comment">// however, note that the withdrawing from the pool still works for 2, the funds are taken
-		// from the pool's free balance.
-		</span><span class="macro">assert_eq!</span>(Balances::free_balance(pool_bonded_account), <span class="number">26</span>);
+		// from the pool's non staked balance.
+		</span><span class="macro">assert_eq!</span>(pallet_staking::asset::stakeable_balance::&lt;Runtime&gt;(<span class="kw-2">&amp;</span>pool_bonded_account), <span class="number">26</span>);
+		<span class="macro">assert_eq!</span>(pallet_staking::asset::staked::&lt;Runtime&gt;(<span class="kw-2">&amp;</span>pool_bonded_account), <span class="number">15</span>);
 		<span class="macro">assert_ok!</span>(Pools::withdraw_unbonded(RuntimeOrigin::signed(<span class="number">2</span>), <span class="number">2</span>, <span class="number">10</span>));
-		<span class="macro">assert_eq!</span>(Balances::free_balance(pool_bonded_account), <span class="number">16</span>);
+		<span class="macro">assert_eq!</span>(pallet_staking::asset::stakeable_balance::&lt;Runtime&gt;(<span class="kw-2">&amp;</span>pool_bonded_account), <span class="number">16</span>);
 
-		<span class="macro">assert_eq!</span>(Balances::free_balance(<span class="number">2</span>), <span class="number">20</span>);
+		<span class="macro">assert_eq!</span>(pallet_staking::asset::stakeable_balance::&lt;Runtime&gt;(<span class="kw-2">&amp;</span><span class="number">2</span>), <span class="number">20</span>);
 		<span class="macro">assert_eq!</span>(TotalValueLocked::&lt;Runtime&gt;::get(), <span class="number">15</span>);
 
 		<span class="comment">// 3 cannot withdraw yet.
@@ -1005,9 +1013,15 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 		<span class="macro">assert_ok!</span>(Pools::withdraw_unbonded(RuntimeOrigin::signed(<span class="number">3</span>), <span class="number">3</span>, <span class="number">10</span>));
 
 		<span class="comment">// final conditions are the expected.
-		</span><span class="macro">assert_eq!</span>(Balances::free_balance(pool_bonded_account), <span class="number">6</span>); <span class="comment">// 5 init bonded + ED
-		</span><span class="macro">assert_eq!</span>(Balances::free_balance(<span class="number">2</span>), init_free_balance_2);
-		<span class="macro">assert_eq!</span>(Balances::free_balance(<span class="number">3</span>), init_free_balance_3);
+		</span><span class="macro">assert_eq!</span>(pallet_staking::asset::stakeable_balance::&lt;Runtime&gt;(<span class="kw-2">&amp;</span>pool_bonded_account), <span class="number">6</span>); <span class="comment">// 5 init bonded + ED
+		</span><span class="macro">assert_eq!</span>(
+			pallet_staking::asset::stakeable_balance::&lt;Runtime&gt;(<span class="kw-2">&amp;</span><span class="number">2</span>),
+			init_stakeable_balance_2
+		);
+		<span class="macro">assert_eq!</span>(
+			pallet_staking::asset::stakeable_balance::&lt;Runtime&gt;(<span class="kw-2">&amp;</span><span class="number">3</span>),
+			init_stakeable_balance_3
+		);
 
 		<span class="macro">assert_eq!</span>(TotalValueLocked::&lt;Runtime&gt;::get(), init_tvl);
 	});
