@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1728288850317,
+  "lastUpdate": 1728294043183,
   "repoUrl": "https://github.com/paritytech/polkadot-sdk",
   "entries": {
     "availability-distribution-regression-bench": [
@@ -28807,6 +28807,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "test-environment",
             "value": 0.008708024146666762,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "bkontur@gmail.com",
+            "name": "Branislav Kontur",
+            "username": "bkontur"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "e354d6680d98993481fe9b2583619c7e7d7f04ad",
+          "message": "Update docker image for bridges substrate-relay (#5947)\n\nThis PR updates the substrate-relay version for the bridges' Zombienet\ntests.",
+          "timestamp": "2024-10-07T08:30:13Z",
+          "tree_id": "99c055fc8bf9fb36f00af3b6771aca56e8e0b9e6",
+          "url": "https://github.com/paritytech/polkadot-sdk/commit/e354d6680d98993481fe9b2583619c7e7d7f04ad"
+        },
+        "date": 1728294024298,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "Sent to peers",
+            "value": 18481.666666666653,
+            "unit": "KiB"
+          },
+          {
+            "name": "Received from peers",
+            "value": 433.3333333333332,
+            "unit": "KiB"
+          },
+          {
+            "name": "availability-store",
+            "value": 0.17860041467999982,
+            "unit": "seconds"
+          },
+          {
+            "name": "bitfield-distribution",
+            "value": 0.02475417155333333,
+            "unit": "seconds"
+          },
+          {
+            "name": "availability-distribution",
+            "value": 0.016602216953333335,
+            "unit": "seconds"
+          },
+          {
+            "name": "test-environment",
+            "value": 0.008741034666666736,
             "unit": "seconds"
           }
         ]
