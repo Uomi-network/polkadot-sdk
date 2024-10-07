@@ -2776,6 +2776,10 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 <a href="#2626" id="2626">2626</a>
 <a href="#2627" id="2627">2627</a>
 <a href="#2628" id="2628">2628</a>
+<a href="#2629" id="2629">2629</a>
+<a href="#2630" id="2630">2630</a>
+<a href="#2631" id="2631">2631</a>
+<a href="#2632" id="2632">2632</a>
 </pre></div><pre class="rust"><code><span class="comment">// Copyright (C) Parity Technologies (UK) Ltd.
 // This file is part of Polkadot.
 
@@ -2811,6 +2815,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 	dynamic_params::{dynamic_pallet_params, dynamic_params},
 	traits::FromContains,
 };
+<span class="kw">use </span>pallet_balances::WeightInfo;
 <span class="kw">use </span>pallet_nis::WithMaximumOf;
 <span class="kw">use </span>polkadot_primitives::{
 	slashing,
@@ -4379,6 +4384,8 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 		<span class="kw">pub const </span>TechnicalMembershipPalletName: <span class="kw-2">&amp;</span><span class="lifetime">'static </span>str = <span class="string">"TechnicalMembership"</span>;
 		<span class="kw">pub const </span>TipsPalletName: <span class="kw-2">&amp;</span><span class="lifetime">'static </span>str = <span class="string">"Tips"</span>;
 		<span class="kw">pub const </span>PhragmenElectionPalletId: LockIdentifier = <span class="kw-2">*</span><span class="string">b"phrelect"</span>;
+		<span class="doccomment">/// Weight for balance unreservations
+		</span><span class="kw">pub </span>BalanceUnreserveWeight: Weight = weights::pallet_balances_balances::WeightInfo::&lt;Runtime&gt;::force_unreserve();
 	}
 
 	<span class="comment">// Special Config for Gov V1 pallets, allowing us to run migrations for them without
@@ -4434,6 +4441,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
         </span>pallet_elections_phragmen::migrations::unlock_and_unreserve_all_funds::UnlockAndUnreserveAllFunds&lt;UnlockConfig&gt;,
         pallet_democracy::migrations::unlock_and_unreserve_all_funds::UnlockAndUnreserveAllFunds&lt;UnlockConfig&gt;,
         pallet_tips::migrations::unreserve_deposits::UnreserveDeposits&lt;UnlockConfig, ()&gt;,
+        pallet_treasury::migration::cleanup_proposals::Migration&lt;Runtime, (), BalanceUnreserveWeight&gt;,
 
         <span class="comment">// Delete all Gov v1 pallet storage key/values.
 

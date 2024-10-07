@@ -254,7 +254,7 @@ var srcIndex = new Map(JSON.parse('[\
 ["pallet_transaction_payment_rpc",["",[],["lib.rs"]]],\
 ["pallet_transaction_payment_rpc_runtime_api",["",[],["lib.rs"]]],\
 ["pallet_transaction_storage",["",[],["benchmarking.rs","lib.rs","weights.rs"]]],\
-["pallet_treasury",["",[],["benchmarking.rs","lib.rs","weights.rs"]]],\
+["pallet_treasury",["",[],["benchmarking.rs","lib.rs","migration.rs","weights.rs"]]],\
 ["pallet_tx_pause",["",[],["benchmarking.rs","lib.rs","weights.rs"]]],\
 ["pallet_uniques",["",[],["benchmarking.rs","functions.rs","impl_nonfungibles.rs","lib.rs","migration.rs","types.rs","weights.rs"]]],\
 ["pallet_utility",["",[],["benchmarking.rs","lib.rs","weights.rs"]]],\

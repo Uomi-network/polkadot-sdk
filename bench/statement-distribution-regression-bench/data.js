@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1728320322323,
+  "lastUpdate": 1728323429156,
   "repoUrl": "https://github.com/paritytech/polkadot-sdk",
   "entries": {
     "statement-distribution-regression-bench": [
@@ -13855,6 +13855,50 @@ window.BENCHMARK_DATA = {
           {
             "name": "test-environment",
             "value": 0.044967754097999954,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "10196091+Ank4n@users.noreply.github.com",
+            "name": "Ankan",
+            "username": "Ank4n"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": false,
+          "id": "9128dca3c544a5327f0a89241aea1409d67c81b0",
+          "message": "[Staking] Noop refactor to prep pallet for currency fungible migration (#5399)\n\nThis is a no-op refactor of staking pallet to move all `T::Currency` api\ncalls under one module.\n\nA followup PR (https://github.com/paritytech/polkadot-sdk/pull/5501)\nwill implement the Currency <> Fungible migration for the pallet.\n\nIntroduces the new `asset` module that centralizes all interaction with\n`T::Currency`. This is an attempt to try minimising staking logic\nchanges to minimal parts of the codebase.\n\n## Things of note\n- `T::Currency::free_balance` in current implementation includes both\nstaked (locked) and liquid tokens (kinda sounds wrong to call it free\nthen). This PR renames it to `stakeable_balance` (any better name\nsuggestions?). With #5501, this will become `free balance that can be\nheld/staked` + `already held/staked balance`.",
+          "timestamp": "2024-10-07T16:37:34Z",
+          "tree_id": "6d59b6db2144d9a7e43e62fa1176e761137bb77b",
+          "url": "https://github.com/paritytech/polkadot-sdk/commit/9128dca3c544a5327f0a89241aea1409d67c81b0"
+        },
+        "date": 1728323409599,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "Received from peers",
+            "value": 106.39999999999996,
+            "unit": "KiB"
+          },
+          {
+            "name": "Sent to peers",
+            "value": 127.94999999999993,
+            "unit": "KiB"
+          },
+          {
+            "name": "statement-distribution",
+            "value": 0.03529632565800002,
+            "unit": "seconds"
+          },
+          {
+            "name": "test-environment",
+            "value": 0.04472740098399997,
             "unit": "seconds"
           }
         ]
