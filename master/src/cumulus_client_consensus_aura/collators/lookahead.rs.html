@@ -639,6 +639,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 <a href="#489" id="489">489</a>
 <a href="#490" id="490">490</a>
 <a href="#491" id="491">491</a>
+<a href="#492" id="492">492</a>
 </pre></div><pre class="rust"><code><span class="comment">// Copyright (C) Parity Technologies (UK) Ltd.
 // This file is part of Cumulus.
 
@@ -677,7 +678,9 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 <span class="kw">use </span>cumulus_client_consensus_common::{<span class="self">self </span><span class="kw">as </span>consensus_common, ParachainBlockImportMarker};
 <span class="kw">use </span>cumulus_client_consensus_proposer::ProposerInterface;
 <span class="kw">use </span>cumulus_primitives_aura::AuraUnincludedSegmentApi;
-<span class="kw">use </span>cumulus_primitives_core::{ClaimQueueOffset, CollectCollationInfo, PersistedValidationData};
+<span class="kw">use </span>cumulus_primitives_core::{
+	ClaimQueueOffset, CollectCollationInfo, PersistedValidationData, DEFAULT_CLAIM_QUEUE_OFFSET,
+};
 <span class="kw">use </span>cumulus_relay_chain_interface::RelayChainInterface;
 
 <span class="kw">use </span>polkadot_node_primitives::{PoV, SubmitCollationParams};
@@ -901,8 +904,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 				relay_parent,
 				params.para_id,
 				<span class="kw-2">&amp;mut </span>params.relay_client,
-				<span class="comment">// Use depth 0, to preserve behaviour.
-				</span>ClaimQueueOffset(<span class="number">0</span>),
+				ClaimQueueOffset(DEFAULT_CLAIM_QUEUE_OFFSET),
 			)
 			.<span class="kw">await
 			</span>.get(<span class="number">0</span>)

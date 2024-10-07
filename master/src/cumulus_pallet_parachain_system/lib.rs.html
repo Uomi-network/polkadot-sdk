@@ -1885,6 +1885,51 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 <a href="#1735" id="1735">1735</a>
 <a href="#1736" id="1736">1736</a>
 <a href="#1737" id="1737">1737</a>
+<a href="#1738" id="1738">1738</a>
+<a href="#1739" id="1739">1739</a>
+<a href="#1740" id="1740">1740</a>
+<a href="#1741" id="1741">1741</a>
+<a href="#1742" id="1742">1742</a>
+<a href="#1743" id="1743">1743</a>
+<a href="#1744" id="1744">1744</a>
+<a href="#1745" id="1745">1745</a>
+<a href="#1746" id="1746">1746</a>
+<a href="#1747" id="1747">1747</a>
+<a href="#1748" id="1748">1748</a>
+<a href="#1749" id="1749">1749</a>
+<a href="#1750" id="1750">1750</a>
+<a href="#1751" id="1751">1751</a>
+<a href="#1752" id="1752">1752</a>
+<a href="#1753" id="1753">1753</a>
+<a href="#1754" id="1754">1754</a>
+<a href="#1755" id="1755">1755</a>
+<a href="#1756" id="1756">1756</a>
+<a href="#1757" id="1757">1757</a>
+<a href="#1758" id="1758">1758</a>
+<a href="#1759" id="1759">1759</a>
+<a href="#1760" id="1760">1760</a>
+<a href="#1761" id="1761">1761</a>
+<a href="#1762" id="1762">1762</a>
+<a href="#1763" id="1763">1763</a>
+<a href="#1764" id="1764">1764</a>
+<a href="#1765" id="1765">1765</a>
+<a href="#1766" id="1766">1766</a>
+<a href="#1767" id="1767">1767</a>
+<a href="#1768" id="1768">1768</a>
+<a href="#1769" id="1769">1769</a>
+<a href="#1770" id="1770">1770</a>
+<a href="#1771" id="1771">1771</a>
+<a href="#1772" id="1772">1772</a>
+<a href="#1773" id="1773">1773</a>
+<a href="#1774" id="1774">1774</a>
+<a href="#1775" id="1775">1775</a>
+<a href="#1776" id="1776">1776</a>
+<a href="#1777" id="1777">1777</a>
+<a href="#1778" id="1778">1778</a>
+<a href="#1779" id="1779">1779</a>
+<a href="#1780" id="1780">1780</a>
+<a href="#1781" id="1781">1781</a>
+<a href="#1782" id="1782">1782</a>
 </pre></div><pre class="rust"><code><span class="comment">// Copyright (C) Parity Technologies (UK) Ltd.
 // This file is part of Cumulus.
 
@@ -2080,17 +2125,43 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 
 <span class="doccomment">/// Trait for selecting the next core to build the candidate for.
 </span><span class="kw">pub trait </span>SelectCore {
-	<span class="kw">fn </span>select_core_for_child() -&gt; (CoreSelector, ClaimQueueOffset);
+	<span class="doccomment">/// Core selector information for the current block.
+	</span><span class="kw">fn </span>selected_core() -&gt; (CoreSelector, ClaimQueueOffset);
+	<span class="doccomment">/// Core selector information for the next block.
+	</span><span class="kw">fn </span>select_next_core() -&gt; (CoreSelector, ClaimQueueOffset);
 }
 
 <span class="doccomment">/// The default core selection policy.
 </span><span class="kw">pub struct </span>DefaultCoreSelector&lt;T&gt;(PhantomData&lt;T&gt;);
 
 <span class="kw">impl</span>&lt;T: frame_system::Config&gt; SelectCore <span class="kw">for </span>DefaultCoreSelector&lt;T&gt; {
-	<span class="kw">fn </span>select_core_for_child() -&gt; (CoreSelector, ClaimQueueOffset) {
+	<span class="kw">fn </span>selected_core() -&gt; (CoreSelector, ClaimQueueOffset) {
+		<span class="kw">let </span>core_selector: U256 = frame_system::Pallet::&lt;T&gt;::block_number().into();
+
+		(CoreSelector(core_selector.byte(<span class="number">0</span>)), ClaimQueueOffset(DEFAULT_CLAIM_QUEUE_OFFSET))
+	}
+
+	<span class="kw">fn </span>select_next_core() -&gt; (CoreSelector, ClaimQueueOffset) {
 		<span class="kw">let </span>core_selector: U256 = (frame_system::Pallet::&lt;T&gt;::block_number() + One::one()).into();
 
 		(CoreSelector(core_selector.byte(<span class="number">0</span>)), ClaimQueueOffset(DEFAULT_CLAIM_QUEUE_OFFSET))
+	}
+}
+
+<span class="doccomment">/// Core selection policy that builds on claim queue offset 1.
+</span><span class="kw">pub struct </span>LookaheadCoreSelector&lt;T&gt;(PhantomData&lt;T&gt;);
+
+<span class="kw">impl</span>&lt;T: frame_system::Config&gt; SelectCore <span class="kw">for </span>LookaheadCoreSelector&lt;T&gt; {
+	<span class="kw">fn </span>selected_core() -&gt; (CoreSelector, ClaimQueueOffset) {
+		<span class="kw">let </span>core_selector: U256 = frame_system::Pallet::&lt;T&gt;::block_number().into();
+
+		(CoreSelector(core_selector.byte(<span class="number">0</span>)), ClaimQueueOffset(<span class="number">1</span>))
+	}
+
+	<span class="kw">fn </span>select_next_core() -&gt; (CoreSelector, ClaimQueueOffset) {
+		<span class="kw">let </span>core_selector: U256 = (frame_system::Pallet::&lt;T&gt;::block_number() + One::one()).into();
+
+		(CoreSelector(core_selector.byte(<span class="number">0</span>)), ClaimQueueOffset(<span class="number">1</span>))
 	}
 }
 
@@ -2251,6 +2322,11 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 
 				</span>UpwardMessages::&lt;T&gt;::put(<span class="kw-2">&amp;</span>up[..num <span class="kw">as </span>usize]);
 				<span class="kw-2">*</span>up = up.split_off(num <span class="kw">as </span>usize);
+
+				<span class="comment">// Send the core selector UMP signal. This is experimental until relay chain
+				// validators are upgraded to handle ump signals.
+				</span><span class="attr">#[cfg(feature = <span class="string">"experimental-ump-signals"</span>)]
+				</span><span class="self">Self</span>::send_ump_signal();
 
 				<span class="comment">// If the total size of the pending messages is less than the threshold,
 				// we decrease the fee factor, since the queue is less congested.
@@ -3284,9 +3360,9 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 		}
 	}
 
-	<span class="doccomment">/// Returns the core selector.
+	<span class="doccomment">/// Returns the core selector for the next block.
 	</span><span class="kw">pub fn </span>core_selector() -&gt; (CoreSelector, ClaimQueueOffset) {
-		T::SelectCore::select_core_for_child()
+		T::SelectCore::select_next_core()
 	}
 
 	<span class="doccomment">/// Set a custom head data that should be returned as result of `validate_block`.
@@ -3303,6 +3379,20 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 	/// your Parachain.
 	</span><span class="kw">pub fn </span>set_custom_validation_head_data(head_data: Vec&lt;u8&gt;) {
 		CustomValidationHeadData::&lt;T&gt;::put(head_data);
+	}
+
+	<span class="doccomment">/// Send the ump signals
+	</span><span class="attr">#[cfg(feature = <span class="string">"experimental-ump-signals"</span>)]
+	</span><span class="kw">fn </span>send_ump_signal() {
+		<span class="kw">use </span>cumulus_primitives_core::relay_chain::vstaging::{UMPSignal, UMP_SEPARATOR};
+
+		UpwardMessages::&lt;T&gt;::mutate(|up| {
+			up.push(UMP_SEPARATOR);
+
+			<span class="comment">// Send the core selector signal.
+			</span><span class="kw">let </span>core_selector = T::SelectCore::selected_core();
+			up.push(UMPSignal::SelectCore(core_selector.<span class="number">0</span>, core_selector.<span class="number">1</span>).encode());
+		});
 	}
 
 	<span class="doccomment">/// Open HRMP channel for using it in benchmarks or tests.

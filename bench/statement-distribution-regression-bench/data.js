@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1728252251952,
+  "lastUpdate": 1728288901977,
   "repoUrl": "https://github.com/paritytech/polkadot-sdk",
   "entries": {
     "statement-distribution-regression-bench": [
@@ -13591,6 +13591,50 @@ window.BENCHMARK_DATA = {
           {
             "name": "test-environment",
             "value": 0.04444819712199995,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "54085674+JuaniRios@users.noreply.github.com",
+            "name": "Juan Ignacio Rios",
+            "username": "JuaniRios"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "c0ddfbae0cca0314c9a50f688cb5a3fcdd71015c",
+          "message": "Generic slashing side-effects (#5623)\n\n# Description\n## What?\nMake it possible for other pallets to implement their own logic when a\nslash on a balance occurs.\n\n## Why?\nIn the [introduction of\nholds](https://github.com/paritytech/substrate/pull/12951) @gavofyork\nsaid:\n> Since Holds are designed to be infallibly slashed, this means that any\nlogic using a Freeze must handle the possibility of the frozen amount\nbeing reduced, potentially to zero. A permissionless function should be\nprovided in order to allow bookkeeping to be updated in this instance.\n\nAt Polimec we needed to find a way to reduce the vesting schedules of\nour users after a slash was made, and after talking to @kianenigma at\nthe Web3Summit, we realized there was no easy way to implement this with\nthe current traits, so we came up with this solution.\n\n\n\n## How?\n- First we abstract the `done_slash` function of holds::Balanced to it's\nown trait that any pallet can implement.\n- Then we add a config type in pallet-balances that accepts a callback\ntuple of all the pallets that implement this trait.\n- Finally implement done_slash for pallet-balances such that it calls\nthe config type.\n\n## Integration\nThe default implementation of done_slash is still an empty function, and\nthe new config type of pallet-balances can be set to an empty tuple, so\nnothing changes by default.\n\n## Review Notes\n- I suggest to focus on the first commit which contains the main logic\nchanges.\n- I also have a working implementation of done_slash for pallet_vesting,\nshould I add it to this PR?\n- If I run `cargo +nightly fmt --all` then I get changes to a lot of\nunrelated crates, so not sure if I should run it to avoid the fmt\nfailure of the CI\n- Should I hunt down references to fungible/fungibles documentation and\nupdate it accordingly?\n\n**Polkadot address:** `15fj1UhQp8Xes7y7LSmDYTy349mXvUwrbNmLaP5tQKBxsQY1`\n\n# Checklist\n\n* [x] My PR includes a detailed description as outlined in the\n\"Description\" and its two subsections above.\n* [x] My PR follows the [labeling requirements](\n\nhttps://github.com/paritytech/polkadot-sdk/blob/master/docs/contributor/CONTRIBUTING.md#Process\n) of this project (at minimum one label for `T` required)\n* External contributors: ask maintainers to put the right label on your\nPR.\n* [ ] I have made corresponding changes to the documentation (if\napplicable)\n\n---------\n\nCo-authored-by: Kian Paimani <5588131+kianenigma@users.noreply.github.com>\nCo-authored-by: command-bot <>\nCo-authored-by: Francisco Aguirre <franciscoaguirreperez@gmail.com>",
+          "timestamp": "2024-10-07T07:08:28Z",
+          "tree_id": "e8b4392e56470b5ee81b222fbe4040a04c8798fc",
+          "url": "https://github.com/paritytech/polkadot-sdk/commit/c0ddfbae0cca0314c9a50f688cb5a3fcdd71015c"
+        },
+        "date": 1728288882917,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "Sent to peers",
+            "value": 127.95599999999995,
+            "unit": "KiB"
+          },
+          {
+            "name": "Received from peers",
+            "value": 106.39999999999996,
+            "unit": "KiB"
+          },
+          {
+            "name": "statement-distribution",
+            "value": 0.035329838452,
+            "unit": "seconds"
+          },
+          {
+            "name": "test-environment",
+            "value": 0.04499707202999994,
             "unit": "seconds"
           }
         ]

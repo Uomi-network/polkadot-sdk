@@ -182,7 +182,7 @@ in runtime APIs related to authoring.</p>
 for.</p>
 <p>This is expected to be used by the
 <a href="cumulus_primitives_core::CollectCollationInfo"><code>CollectCollationInfo</code></a> runtime api.</p>
-</div></details><details class="toggle method-toggle" open><summary><section id="method.core_selector" class="method"><h4 class="code-header">pub fn <a href="#method.core_selector" class="fn">core_selector</a>() -&gt; (CoreSelector, ClaimQueueOffset)</h4></section></summary><div class="docblock"><p>Returns the core selector.</p>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.core_selector" class="method"><h4 class="code-header">pub fn <a href="#method.core_selector" class="fn">core_selector</a>() -&gt; (CoreSelector, ClaimQueueOffset)</h4></section></summary><div class="docblock"><p>Returns the core selector for the next block.</p>
 </div></details><details class="toggle method-toggle" open><summary><section id="method.set_custom_validation_head_data" class="method"><h4 class="code-header">pub fn <a href="#method.set_custom_validation_head_data" class="fn">set_custom_validation_head_data</a>(head_data: <a class="struct" href="https://doc.rust-lang.org/1.81.0/alloc/vec/struct.Vec.html" title="struct alloc::vec::Vec">Vec</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/1.81.0/std/primitive.u8.html">u8</a>&gt;)</h4></section></summary><div class="docblock"><p>Set a custom head data that should be returned as result of <code>validate_block</code>.</p>
 <p>This will overwrite the head data that is returned as result of <code>validate_block</code> while
 validating a <code>PoV</code> on the relay chain. Normally the head data that is being returned
