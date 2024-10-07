@@ -934,6 +934,32 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 <a href="#784" id="784">784</a>
 <a href="#785" id="785">785</a>
 <a href="#786" id="786">786</a>
+<a href="#787" id="787">787</a>
+<a href="#788" id="788">788</a>
+<a href="#789" id="789">789</a>
+<a href="#790" id="790">790</a>
+<a href="#791" id="791">791</a>
+<a href="#792" id="792">792</a>
+<a href="#793" id="793">793</a>
+<a href="#794" id="794">794</a>
+<a href="#795" id="795">795</a>
+<a href="#796" id="796">796</a>
+<a href="#797" id="797">797</a>
+<a href="#798" id="798">798</a>
+<a href="#799" id="799">799</a>
+<a href="#800" id="800">800</a>
+<a href="#801" id="801">801</a>
+<a href="#802" id="802">802</a>
+<a href="#803" id="803">803</a>
+<a href="#804" id="804">804</a>
+<a href="#805" id="805">805</a>
+<a href="#806" id="806">806</a>
+<a href="#807" id="807">807</a>
+<a href="#808" id="808">808</a>
+<a href="#809" id="809">809</a>
+<a href="#810" id="810">810</a>
+<a href="#811" id="811">811</a>
+<a href="#812" id="812">812</a>
 </pre></div><pre class="rust"><code><span class="comment">// This file is part of Substrate.
 
 // Copyright (C) Parity Technologies (UK) Ltd.
@@ -1002,8 +1028,8 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 	ensure,
 	storage::bounded_vec::BoundedVec,
 	traits::{
-		Currency, ExistenceRequirement, Get, LockIdentifier, LockableCurrency, VestingSchedule,
-		WithdrawReasons,
+		Currency, ExistenceRequirement, Get, LockIdentifier, LockableCurrency, VestedTransfer,
+		VestingSchedule, WithdrawReasons,
 	},
 	weights::Weight,
 };
@@ -1287,8 +1313,8 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 			schedule: VestingInfo&lt;BalanceOf&lt;T&gt;, BlockNumberFor&lt;T&gt;&gt;,
 		) -&gt; DispatchResult {
 			<span class="kw">let </span>transactor = ensure_signed(origin)<span class="question-mark">?</span>;
-			<span class="kw">let </span>transactor = &lt;T::Lookup <span class="kw">as </span>StaticLookup&gt;::unlookup(transactor);
-			<span class="self">Self</span>::do_vested_transfer(transactor, target, schedule)
+			<span class="kw">let </span>target = T::Lookup::lookup(target)<span class="question-mark">?</span>;
+			<span class="self">Self</span>::do_vested_transfer(<span class="kw-2">&amp;</span>transactor, <span class="kw-2">&amp;</span>target, schedule)
 		}
 
 		<span class="doccomment">/// Force a vested transfer.
@@ -1316,7 +1342,9 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 			schedule: VestingInfo&lt;BalanceOf&lt;T&gt;, BlockNumberFor&lt;T&gt;&gt;,
 		) -&gt; DispatchResult {
 			ensure_root(origin)<span class="question-mark">?</span>;
-			<span class="self">Self</span>::do_vested_transfer(source, target, schedule)
+			<span class="kw">let </span>target = T::Lookup::lookup(target)<span class="question-mark">?</span>;
+			<span class="kw">let </span>source = T::Lookup::lookup(source)<span class="question-mark">?</span>;
+			<span class="self">Self</span>::do_vested_transfer(<span class="kw-2">&amp;</span>source, <span class="kw-2">&amp;</span>target, schedule)
 		}
 
 		<span class="doccomment">/// Merge two vesting schedules together, creating a new vesting schedule that unlocks over
@@ -1461,8 +1489,8 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 
 	<span class="comment">// Execute a vested transfer from `source` to `target` with the given `schedule`.
 	</span><span class="kw">fn </span>do_vested_transfer(
-		source: AccountIdLookupOf&lt;T&gt;,
-		target: AccountIdLookupOf&lt;T&gt;,
+		source: <span class="kw-2">&amp;</span>T::AccountId,
+		target: <span class="kw-2">&amp;</span>T::AccountId,
 		schedule: VestingInfo&lt;BalanceOf&lt;T&gt;, BlockNumberFor&lt;T&gt;&gt;,
 	) -&gt; DispatchResult {
 		<span class="comment">// Validate user inputs.
@@ -1470,27 +1498,22 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 		<span class="kw">if </span>!schedule.is_valid() {
 			<span class="kw">return </span><span class="prelude-val">Err</span>(Error::&lt;T&gt;::InvalidScheduleParams.into())
 		};
-		<span class="kw">let </span>target = T::Lookup::lookup(target)<span class="question-mark">?</span>;
-		<span class="kw">let </span>source = T::Lookup::lookup(source)<span class="question-mark">?</span>;
 
 		<span class="comment">// Check we can add to this account prior to any storage writes.
 		</span><span class="self">Self</span>::can_add_vesting_schedule(
-			<span class="kw-2">&amp;</span>target,
+			target,
 			schedule.locked(),
 			schedule.per_block(),
 			schedule.starting_block(),
 		)<span class="question-mark">?</span>;
 
-		T::Currency::transfer(
-			<span class="kw-2">&amp;</span>source,
-			<span class="kw-2">&amp;</span>target,
-			schedule.locked(),
-			ExistenceRequirement::AllowDeath,
-		)<span class="question-mark">?</span>;
+		T::Currency::transfer(source, target, schedule.locked(), ExistenceRequirement::AllowDeath)<span class="question-mark">?</span>;
 
 		<span class="comment">// We can't let this fail because the currency transfer has already happened.
+		// Must be successful as it has been checked before.
+		// Better to return error on failure anyway.
 		</span><span class="kw">let </span>res = <span class="self">Self</span>::add_vesting_schedule(
-			<span class="kw-2">&amp;</span>target,
+			target,
 			schedule.locked(),
 			schedule.per_block(),
 			schedule.starting_block(),
@@ -1687,8 +1710,8 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 		<span class="prelude-val">Ok</span>(())
 	}
 
-	<span class="comment">// Ensure we can call `add_vesting_schedule` without error. This should always
-	// be called prior to `add_vesting_schedule`.
+	<span class="doccomment">/// Ensure we can call `add_vesting_schedule` without error. This should always
+	/// be called prior to `add_vesting_schedule`.
 	</span><span class="kw">fn </span>can_add_vesting_schedule(
 		who: <span class="kw-2">&amp;</span>T::AccountId,
 		locked: BalanceOf&lt;T&gt;,
@@ -1718,6 +1741,35 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 		<span class="self">Self</span>::write_vesting(who, schedules)<span class="question-mark">?</span>;
 		<span class="self">Self</span>::write_lock(who, locked_now);
 		<span class="prelude-val">Ok</span>(())
+	}
+}
+
+<span class="doccomment">/// An implementation that allows the Vesting Pallet to handle a vested transfer
+/// on behalf of another Pallet.
+</span><span class="kw">impl</span>&lt;T: Config&gt; VestedTransfer&lt;T::AccountId&gt; <span class="kw">for </span>Pallet&lt;T&gt;
+<span class="kw">where
+	</span>BalanceOf&lt;T&gt;: MaybeSerializeDeserialize + Debug,
+{
+	<span class="kw">type </span>Currency = T::Currency;
+	<span class="kw">type </span>Moment = BlockNumberFor&lt;T&gt;;
+
+	<span class="kw">fn </span>vested_transfer(
+		source: <span class="kw-2">&amp;</span>T::AccountId,
+		target: <span class="kw-2">&amp;</span>T::AccountId,
+		locked: BalanceOf&lt;T&gt;,
+		per_block: BalanceOf&lt;T&gt;,
+		starting_block: BlockNumberFor&lt;T&gt;,
+	) -&gt; DispatchResult {
+		<span class="kw">use </span>frame_support::storage::{with_transaction, TransactionOutcome};
+		<span class="kw">let </span>schedule = VestingInfo::new(locked, per_block, starting_block);
+		with_transaction(|| -&gt; TransactionOutcome&lt;DispatchResult&gt; {
+			<span class="kw">let </span>result = <span class="self">Self</span>::do_vested_transfer(source, target, schedule);
+
+			<span class="kw">match </span><span class="kw-2">&amp;</span>result {
+				<span class="prelude-val">Ok</span>(()) =&gt; TransactionOutcome::Commit(result),
+				<span class="kw">_ </span>=&gt; TransactionOutcome::Rollback(result),
+			}
+		})
 	}
 }
 </code></pre></div></section></main><script> mermaid.init({ startOnLoad: true, theme: "dark" }, "pre.language-mermaid > code");</script>

@@ -367,6 +367,22 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 <a href="#217" id="217">217</a>
 <a href="#218" id="218">218</a>
 <a href="#219" id="219">219</a>
+<a href="#220" id="220">220</a>
+<a href="#221" id="221">221</a>
+<a href="#222" id="222">222</a>
+<a href="#223" id="223">223</a>
+<a href="#224" id="224">224</a>
+<a href="#225" id="225">225</a>
+<a href="#226" id="226">226</a>
+<a href="#227" id="227">227</a>
+<a href="#228" id="228">228</a>
+<a href="#229" id="229">229</a>
+<a href="#230" id="230">230</a>
+<a href="#231" id="231">231</a>
+<a href="#232" id="232">232</a>
+<a href="#233" id="233">233</a>
+<a href="#234" id="234">234</a>
+<a href="#235" id="235">235</a>
 </pre></div><pre class="rust"><code><span class="comment">// Copyright 2019-2021 Parity Technologies (UK) Ltd.
 // This file is part of Parity Bridges Common.
 
@@ -490,6 +506,8 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 			<span class="macro">anyhow::format_err!</span>(<span class="string">"Invalid laneId: {:?}!"</span>, invalid_lane_id)
 		})<span class="question-mark">?</span>;
 
+		<span class="self">Self</span>::start_relay_guards(<span class="kw-2">&amp;</span>target_client, target_client.can_start_version_guard()).<span class="kw">await</span><span class="question-mark">?</span>;
+
 		<span class="kw">crate</span>::messages::run::&lt;<span class="self">Self</span>::MessagesLane, <span class="kw">_</span>, <span class="kw">_</span>&gt;(MessagesRelayParams {
 			source_client,
 			source_transaction_params: TransactionParams {
@@ -585,6 +603,20 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 		)
 		.<span class="kw">await
 	</span>}
+
+	<span class="doccomment">/// Add relay guards if required.
+	</span><span class="kw">async fn </span>start_relay_guards(
+		target_client: <span class="kw-2">&amp;</span><span class="kw">impl </span>Client&lt;<span class="self">Self</span>::Target&gt;,
+		enable_version_guard: bool,
+	) -&gt; relay_substrate_client::Result&lt;()&gt; {
+		<span class="kw">if </span>enable_version_guard {
+			relay_substrate_client::guard::abort_on_spec_version_change(
+				target_client.clone(),
+				target_client.simple_runtime_version().<span class="kw">await</span><span class="question-mark">?</span>.spec_version,
+			);
+		}
+		<span class="prelude-val">Ok</span>(())
+	}
 }
 </code></pre></div></section></main><script> mermaid.init({ startOnLoad: true, theme: "dark" }, "pre.language-mermaid > code");</script>
 

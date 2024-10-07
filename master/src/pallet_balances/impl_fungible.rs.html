@@ -533,6 +533,8 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 <a href="#383" id="383">383</a>
 <a href="#384" id="384">384</a>
 <a href="#385" id="385">385</a>
+<a href="#386" id="386">386</a>
+<a href="#387" id="387">387</a>
 </pre></div><pre class="rust"><code><span class="comment">// This file is part of Substrate.
 
 // Copyright (C) Parity Technologies (UK) Ltd.
@@ -889,7 +891,9 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 		<span class="self">Self</span>::deposit_event(Event::&lt;T, I&gt;::Withdraw { who: who.clone(), amount });
 	}
 	<span class="kw">fn </span>done_issue(amount: <span class="self">Self</span>::Balance) {
-		<span class="self">Self</span>::deposit_event(Event::&lt;T, I&gt;::Issued { amount });
+		<span class="kw">if </span>!amount.is_zero() {
+			<span class="self">Self</span>::deposit_event(Event::&lt;T, I&gt;::Issued { amount });
+		}
 	}
 	<span class="kw">fn </span>done_rescind(amount: <span class="self">Self</span>::Balance) {
 		<span class="self">Self</span>::deposit_event(Event::&lt;T, I&gt;::Rescinded { amount });

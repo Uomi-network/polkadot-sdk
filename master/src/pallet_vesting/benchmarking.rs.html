@@ -559,13 +559,6 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 <a href="#409" id="409">409</a>
 <a href="#410" id="410">410</a>
 <a href="#411" id="411">411</a>
-<a href="#412" id="412">412</a>
-<a href="#413" id="413">413</a>
-<a href="#414" id="414">414</a>
-<a href="#415" id="415">415</a>
-<a href="#416" id="416">416</a>
-<a href="#417" id="417">417</a>
-<a href="#418" id="418">418</a>
 </pre></div><pre class="rust"><code><span class="comment">// This file is part of Substrate.
 
 // Copyright (C) Parity Technologies (UK) Ltd.
@@ -610,7 +603,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 }
 
 <span class="kw">fn </span>add_vesting_schedules&lt;T: Config&gt;(
-	target: AccountIdLookupOf&lt;T&gt;,
+	target: <span class="kw-2">&amp;</span>T::AccountId,
 	n: u32,
 ) -&gt; <span class="prelude-ty">Result</span>&lt;BalanceOf&lt;T&gt;, <span class="kw-2">&amp;</span><span class="lifetime">'static </span>str&gt; {
 	<span class="kw">let </span>min_transfer = T::MinVestedTransfer::get();
@@ -620,7 +613,6 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 	<span class="kw">let </span>starting_block = <span class="number">1u32</span>;
 
 	<span class="kw">let </span>source: T::AccountId = account(<span class="string">"source"</span>, <span class="number">0</span>, SEED);
-	<span class="kw">let </span>source_lookup = T::Lookup::unlookup(source.clone());
 	T::Currency::make_free_balance_be(<span class="kw-2">&amp;</span>source, BalanceOf::&lt;T&gt;::max_value());
 
 	T::BlockNumberProvider::set_block_number(BlockNumberFor::&lt;T&gt;::zero());
@@ -630,11 +622,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 		total_locked += locked;
 
 		<span class="kw">let </span>schedule = VestingInfo::new(locked, per_block, starting_block.into());
-		<span class="macro">assert_ok!</span>(Vesting::&lt;T&gt;::do_vested_transfer(
-			source_lookup.clone(),
-			target.clone(),
-			schedule
-		));
+		<span class="macro">assert_ok!</span>(Vesting::&lt;T&gt;::do_vested_transfer(<span class="kw-2">&amp;</span>source, target, schedule));
 
 		<span class="comment">// Top up to guarantee we can always transfer another schedule.
 		</span>T::Currency::make_free_balance_be(<span class="kw-2">&amp;</span>source, BalanceOf::&lt;T&gt;::max_value());
@@ -649,11 +637,10 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 		<span class="kw">let </span>s <span class="kw">in </span><span class="number">1 </span>.. T::MAX_VESTING_SCHEDULES;
 
 		<span class="kw">let </span>caller: T::AccountId = whitelisted_caller();
-		<span class="kw">let </span>caller_lookup = T::Lookup::unlookup(caller.clone());
 		T::Currency::make_free_balance_be(<span class="kw-2">&amp;</span>caller, T::Currency::minimum_balance());
 
 		add_locks::&lt;T&gt;(<span class="kw-2">&amp;</span>caller, l <span class="kw">as </span>u8);
-		<span class="kw">let </span>expected_balance = add_vesting_schedules::&lt;T&gt;(caller_lookup, s)<span class="question-mark">?</span>;
+		<span class="kw">let </span>expected_balance = add_vesting_schedules::&lt;T&gt;(<span class="kw-2">&amp;</span>caller, s)<span class="question-mark">?</span>;
 
 		<span class="comment">// At block zero, everything is vested.
 		</span><span class="macro">assert_eq!</span>(System::&lt;T&gt;::block_number(), BlockNumberFor::&lt;T&gt;::zero());
@@ -677,11 +664,10 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 		<span class="kw">let </span>s <span class="kw">in </span><span class="number">1 </span>.. T::MAX_VESTING_SCHEDULES;
 
 		<span class="kw">let </span>caller: T::AccountId = whitelisted_caller();
-		<span class="kw">let </span>caller_lookup = T::Lookup::unlookup(caller.clone());
 		T::Currency::make_free_balance_be(<span class="kw-2">&amp;</span>caller, T::Currency::minimum_balance());
 
 		add_locks::&lt;T&gt;(<span class="kw-2">&amp;</span>caller, l <span class="kw">as </span>u8);
-		add_vesting_schedules::&lt;T&gt;(caller_lookup, s)<span class="question-mark">?</span>;
+		add_vesting_schedules::&lt;T&gt;(<span class="kw-2">&amp;</span>caller, s)<span class="question-mark">?</span>;
 
 		<span class="comment">// At block 21, everything is unlocked.
 		</span>T::BlockNumberProvider::set_block_number(<span class="number">21u32</span>.into());
@@ -709,7 +695,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 
 		T::Currency::make_free_balance_be(<span class="kw-2">&amp;</span>other, T::Currency::minimum_balance());
 		add_locks::&lt;T&gt;(<span class="kw-2">&amp;</span>other, l <span class="kw">as </span>u8);
-		<span class="kw">let </span>expected_balance = add_vesting_schedules::&lt;T&gt;(other_lookup.clone(), s)<span class="question-mark">?</span>;
+		<span class="kw">let </span>expected_balance = add_vesting_schedules::&lt;T&gt;(<span class="kw-2">&amp;</span>other, s)<span class="question-mark">?</span>;
 
 		<span class="comment">// At block zero, everything is vested.
 		</span><span class="macro">assert_eq!</span>(System::&lt;T&gt;::block_number(), BlockNumberFor::&lt;T&gt;::zero());
@@ -739,7 +725,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 
 		T::Currency::make_free_balance_be(<span class="kw-2">&amp;</span>other, T::Currency::minimum_balance());
 		add_locks::&lt;T&gt;(<span class="kw-2">&amp;</span>other, l <span class="kw">as </span>u8);
-		add_vesting_schedules::&lt;T&gt;(other_lookup.clone(), s)<span class="question-mark">?</span>;
+		add_vesting_schedules::&lt;T&gt;(<span class="kw-2">&amp;</span>other, s)<span class="question-mark">?</span>;
 		<span class="comment">// At block 21 everything is unlocked.
 		</span>T::BlockNumberProvider::set_block_number(<span class="number">21u32</span>.into());
 
@@ -774,7 +760,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 		add_locks::&lt;T&gt;(<span class="kw-2">&amp;</span>target, l <span class="kw">as </span>u8);
 		<span class="comment">// Add one vesting schedules.
 		</span><span class="kw">let </span>orig_balance = T::Currency::free_balance(<span class="kw-2">&amp;</span>target);
-		<span class="kw">let </span><span class="kw-2">mut </span>expected_balance = add_vesting_schedules::&lt;T&gt;(target_lookup.clone(), s)<span class="question-mark">?</span>;
+		<span class="kw">let </span><span class="kw-2">mut </span>expected_balance = add_vesting_schedules::&lt;T&gt;(<span class="kw-2">&amp;</span>target, s)<span class="question-mark">?</span>;
 
 		<span class="kw">let </span>transfer_amount = T::MinVestedTransfer::get();
 		<span class="kw">let </span>per_block = transfer_amount.checked_div(<span class="kw-2">&amp;</span><span class="number">20u32</span>.into()).unwrap();
@@ -814,7 +800,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 		add_locks::&lt;T&gt;(<span class="kw-2">&amp;</span>target, l <span class="kw">as </span>u8);
 		<span class="comment">// Add one less than max vesting schedules
 		</span><span class="kw">let </span>orig_balance = T::Currency::free_balance(<span class="kw-2">&amp;</span>target);
-		<span class="kw">let </span><span class="kw-2">mut </span>expected_balance = add_vesting_schedules::&lt;T&gt;(target_lookup.clone(), s)<span class="question-mark">?</span>;
+		<span class="kw">let </span><span class="kw-2">mut </span>expected_balance = add_vesting_schedules::&lt;T&gt;(<span class="kw-2">&amp;</span>target, s)<span class="question-mark">?</span>;
 
 		<span class="kw">let </span>transfer_amount = T::MinVestedTransfer::get();
 		<span class="kw">let </span>per_block = transfer_amount.checked_div(<span class="kw-2">&amp;</span><span class="number">20u32</span>.into()).unwrap();
@@ -849,7 +835,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 		</span>T::Currency::make_free_balance_be(<span class="kw-2">&amp;</span>caller, T::Currency::minimum_balance());
 		add_locks::&lt;T&gt;(<span class="kw-2">&amp;</span>caller, l <span class="kw">as </span>u8);
 		<span class="comment">// Add max vesting schedules.
-		</span><span class="kw">let </span>expected_balance = add_vesting_schedules::&lt;T&gt;(caller_lookup, s)<span class="question-mark">?</span>;
+		</span><span class="kw">let </span>expected_balance = add_vesting_schedules::&lt;T&gt;(<span class="kw-2">&amp;</span>caller, s)<span class="question-mark">?</span>;
 
 		<span class="comment">// Schedules are not vesting at block 0.
 		</span><span class="macro">assert_eq!</span>(System::&lt;T&gt;::block_number(), BlockNumberFor::&lt;T&gt;::zero());
@@ -900,7 +886,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 		</span>T::Currency::make_free_balance_be(<span class="kw-2">&amp;</span>caller, T::Currency::minimum_balance());
 		add_locks::&lt;T&gt;(<span class="kw-2">&amp;</span>caller, l <span class="kw">as </span>u8);
 		<span class="comment">// Add max vesting schedules.
-		</span><span class="kw">let </span>total_transferred = add_vesting_schedules::&lt;T&gt;(caller_lookup, s)<span class="question-mark">?</span>;
+		</span><span class="kw">let </span>total_transferred = add_vesting_schedules::&lt;T&gt;(<span class="kw-2">&amp;</span>caller, s)<span class="question-mark">?</span>;
 
 		<span class="comment">// Go to about half way through all the schedules duration. (They all start at 1, and have a duration of 20 or 21).
 		</span>T::BlockNumberProvider::set_block_number(<span class="number">11u32</span>.into());
@@ -965,7 +951,7 @@ force_remove_vesting_schedule {
 
 		<span class="comment">// Give target existing locks.
 		</span>add_locks::&lt;T&gt;(<span class="kw-2">&amp;</span>target, l <span class="kw">as </span>u8);
-		<span class="kw">let _ </span>= add_vesting_schedules::&lt;T&gt;(target_lookup.clone(), s)<span class="question-mark">?</span>;
+		add_vesting_schedules::&lt;T&gt;(<span class="kw-2">&amp;</span>target, s)<span class="question-mark">?</span>;
 
 		<span class="comment">// The last vesting schedule.
 		</span><span class="kw">let </span>schedule_index = s - <span class="number">1</span>;

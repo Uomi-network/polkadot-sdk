@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1728299080974,
+  "lastUpdate": 1728303412208,
   "repoUrl": "https://github.com/paritytech/polkadot-sdk",
   "entries": {
     "statement-distribution-regression-bench": [
@@ -13723,6 +13723,50 @@ window.BENCHMARK_DATA = {
           {
             "name": "statement-distribution",
             "value": 0.035338421395999985,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "oliver.tale-yazdi@parity.io",
+            "name": "Oliver Tale-Yazdi",
+            "username": "ggwpez"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "fe0bfb79f4c883abbc3214519d19e46617c20bd2",
+          "message": "[CI] Update try-runtime-cli (#5890)\n\nUpdate try-runtime-cli to 0.8.0 for MBM testing.\n\n---------\n\nSigned-off-by: Oliver Tale-Yazdi <oliver.tale-yazdi@parity.io>",
+          "timestamp": "2024-10-07T11:11:58Z",
+          "tree_id": "3b403a309bf3205afa8de30f77f4f984ec6ef02a",
+          "url": "https://github.com/paritytech/polkadot-sdk/commit/fe0bfb79f4c883abbc3214519d19e46617c20bd2"
+        },
+        "date": 1728303393107,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "Sent to peers",
+            "value": 127.94599999999998,
+            "unit": "KiB"
+          },
+          {
+            "name": "Received from peers",
+            "value": 106.39999999999996,
+            "unit": "KiB"
+          },
+          {
+            "name": "statement-distribution",
+            "value": 0.03501684780600001,
+            "unit": "seconds"
+          },
+          {
+            "name": "test-environment",
+            "value": 0.04421302338799995,
             "unit": "seconds"
           }
         ]

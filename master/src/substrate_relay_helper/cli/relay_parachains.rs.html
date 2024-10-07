@@ -299,6 +299,13 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 <a href="#149" id="149">149</a>
 <a href="#150" id="150">150</a>
 <a href="#151" id="151">151</a>
+<a href="#152" id="152">152</a>
+<a href="#153" id="153">153</a>
+<a href="#154" id="154">154</a>
+<a href="#155" id="155">155</a>
+<a href="#156" id="156">156</a>
+<a href="#157" id="157">157</a>
+<a href="#158" id="158">158</a>
 </pre></div><pre class="rust"><code><span class="comment">// Copyright 2019-2021 Parity Technologies (UK) Ltd.
 // This file is part of Parity Bridges Common.
 
@@ -333,6 +340,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 		chain_schema::<span class="kw-2">*</span>,
 		DefaultClient, PrometheusParams,
 	},
+	finality::SubstrateFinalitySyncPipeline,
 	parachains::{source::ParachainsSource, target::ParachainsTarget, ParachainsPipelineAdapter},
 	TransactionParams,
 };
@@ -404,6 +412,12 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 		<span class="kw">let </span>metrics_params: relay_utils::metrics::MetricsParams =
 			data.prometheus_params.into_metrics_params()<span class="question-mark">?</span>;
 		GlobalMetrics::new()<span class="question-mark">?</span>.register_and_spawn(<span class="kw-2">&amp;</span>metrics_params.registry)<span class="question-mark">?</span>;
+
+		<span class="self">Self</span>::RelayFinality::start_relay_guards(
+			target_client.target_client(),
+			target_client.target_client().can_start_version_guard(),
+		)
+		.<span class="kw">await</span><span class="question-mark">?</span>;
 
 		parachains_relay::parachains_loop::run(
 			source_client,

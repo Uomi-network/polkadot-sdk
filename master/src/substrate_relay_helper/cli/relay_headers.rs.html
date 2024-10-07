@@ -278,6 +278,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 <a href="#128" id="128">128</a>
 <a href="#129" id="129">129</a>
 <a href="#130" id="130">130</a>
+<a href="#131" id="131">131</a>
 </pre></div><pre class="rust"><code><span class="comment">// Copyright 2019-2021 Parity Technologies (UK) Ltd.
 // This file is part of Parity Bridges Common.
 
@@ -376,6 +377,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 			signer: target_sign,
 			mortality: target_transactions_mortality,
 		};
+
 		<span class="self">Self</span>::Finality::start_relay_guards(<span class="kw-2">&amp;</span>target_client, target_client.can_start_version_guard())
 			.<span class="kw">await</span><span class="question-mark">?</span>;
 
