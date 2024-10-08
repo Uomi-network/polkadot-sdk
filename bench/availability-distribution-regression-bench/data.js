@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1728398877007,
+  "lastUpdate": 1728410279495,
   "repoUrl": "https://github.com/paritytech/polkadot-sdk",
   "entries": {
     "availability-distribution-regression-bench": [
@@ -29347,6 +29347,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "bitfield-distribution",
             "value": 0.024744175640000008,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "363911+pepoviola@users.noreply.github.com",
+            "name": "Javier Viola",
+            "username": "pepoviola"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": false,
+          "id": "1e5f5fe9086233a464ee249de74e4df959b8eb15",
+          "message": "bump zombienet version and set request for k8s (#5968)\n\nBump zombienet version, including fixes for `ci` and set _resources\nrequests_ for the runner.\n\nThx!\n\nCo-authored-by: Bastian Köcher <git@kchr.de>",
+          "timestamp": "2024-10-08T16:16:36Z",
+          "tree_id": "b94cbdaf42f5e273993f2102cdca960a30f2c747",
+          "url": "https://github.com/paritytech/polkadot-sdk/commit/1e5f5fe9086233a464ee249de74e4df959b8eb15"
+        },
+        "date": 1728410259519,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "Received from peers",
+            "value": 433.3333333333332,
+            "unit": "KiB"
+          },
+          {
+            "name": "Sent to peers",
+            "value": 18481.666666666653,
+            "unit": "KiB"
+          },
+          {
+            "name": "availability-store",
+            "value": 0.1769495755266667,
+            "unit": "seconds"
+          },
+          {
+            "name": "bitfield-distribution",
+            "value": 0.02473940628,
+            "unit": "seconds"
+          },
+          {
+            "name": "test-environment",
+            "value": 0.008574395673333412,
+            "unit": "seconds"
+          },
+          {
+            "name": "availability-distribution",
+            "value": 0.016247231593333338,
             "unit": "seconds"
           }
         ]
