@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1728323402291,
+  "lastUpdate": 1728383404940,
   "repoUrl": "https://github.com/paritytech/polkadot-sdk",
   "entries": {
     "approval-voting-regression-bench": [
@@ -23218,6 +23218,105 @@ window.BENCHMARK_DATA = {
           {
             "name": "approval-distribution/test-environment",
             "value": 0.000017835869999999998,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "david.kazlauskas@parity.io",
+            "name": "davidk-pt",
+            "username": "davidk-pt"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": false,
+          "id": "9a37238295392a4a367fb45c0ca3d7f73ab32080",
+          "message": "Add migration to clear unapproved proposals from treasury pallet (#5892)\n\nResolves https://github.com/polkadot-fellows/runtimes/issues/459\n\nTested with rococo/westend/kusama/polkadot runtimes\n\n---------\n\nCo-authored-by: DavidK <davidk@parity.io>\nCo-authored-by: Muharem <ismailov.m.h@gmail.com>\nCo-authored-by: Shawn Tabrizi <shawntabrizi@gmail.com>\nCo-authored-by: Dónal Murray <donal.murray@parity.io>",
+          "timestamp": "2024-10-08T09:24:40Z",
+          "tree_id": "88e50c2a17c4b4b85310be9a06013a6a261e4d9c",
+          "url": "https://github.com/paritytech/polkadot-sdk/commit/9a37238295392a4a367fb45c0ca3d7f73ab32080"
+        },
+        "date": 1728383385615,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "Sent to peers",
+            "value": 63626.35000000001,
+            "unit": "KiB"
+          },
+          {
+            "name": "Received from peers",
+            "value": 52941,
+            "unit": "KiB"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-subsystem",
+            "value": 0.48816051674997263,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel",
+            "value": 12.275643677279977,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-db",
+            "value": 2.1325787615899996,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-0",
+            "value": 2.4109487769000006,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-gather-signatures",
+            "value": 0.005928324410000001,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-distribution",
+            "value": 0.000017958109999999997,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting/test-environment",
+            "value": 0.00001804647,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting",
+            "value": 0.00001804647,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-2",
+            "value": 2.445525028280001,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-3",
+            "value": 2.390859414020002,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-1",
+            "value": 2.4016428553299995,
+            "unit": "seconds"
+          },
+          {
+            "name": "test-environment",
+            "value": 3.3174586915124067,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-distribution/test-environment",
+            "value": 0.000017958109999999997,
             "unit": "seconds"
           }
         ]
