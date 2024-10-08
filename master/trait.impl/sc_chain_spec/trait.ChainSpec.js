@@ -1,5 +1,5 @@
 (function() {var implementors = {
-"polkadot_parachain_lib":[],
+"polkadot_omni_node_lib":[],
 "polkadot_service":[],
 "sc_chain_spec":[],
 "sc_cli":[],

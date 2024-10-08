@@ -382,7 +382,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 // along with Cumulus.  If not, see &lt;http://www.gnu.org/licenses/&gt;.
 
 </span><span class="kw">use </span>cumulus_primitives_core::ParaId;
-<span class="kw">use </span>polkadot_parachain_lib::chain_spec::GenericChainSpec;
+<span class="kw">use </span>polkadot_omni_node_lib::chain_spec::GenericChainSpec;
 <span class="kw">use </span>sc_chain_spec::{ChainSpec, ChainType};
 <span class="kw">use </span>std::str::FromStr;
 
@@ -494,7 +494,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 <span class="doccomment">/// Sub-module for Rococo setup
 </span><span class="kw">pub mod </span>rococo {
 	<span class="kw">use super</span>::{ChainType, ParaId};
-	<span class="kw">use </span>polkadot_parachain_lib::chain_spec::{Extensions, GenericChainSpec};
+	<span class="kw">use </span>polkadot_omni_node_lib::chain_spec::{Extensions, GenericChainSpec};
 
 	<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">const </span>BRIDGE_HUB_ROCOCO: <span class="kw-2">&amp;</span>str = <span class="string">"bridge-hub-rococo"</span>;
 	<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">const </span>BRIDGE_HUB_ROCOCO_LOCAL: <span class="kw-2">&amp;</span>str = <span class="string">"bridge-hub-rococo-local"</span>;
@@ -542,7 +542,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 <span class="doccomment">/// Sub-module for Westend setup.
 </span><span class="kw">pub mod </span>westend {
 	<span class="kw">use super</span>::{ChainType, ParaId};
-	<span class="kw">use </span>polkadot_parachain_lib::chain_spec::{Extensions, GenericChainSpec};
+	<span class="kw">use </span>polkadot_omni_node_lib::chain_spec::{Extensions, GenericChainSpec};
 
 	<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">const </span>BRIDGE_HUB_WESTEND: <span class="kw-2">&amp;</span>str = <span class="string">"bridge-hub-westend"</span>;
 	<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">const </span>BRIDGE_HUB_WESTEND_LOCAL: <span class="kw-2">&amp;</span>str = <span class="string">"bridge-hub-westend-local"</span>;
