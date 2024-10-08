@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1728393448767,
+  "lastUpdate": 1728398877007,
   "repoUrl": "https://github.com/paritytech/polkadot-sdk",
   "entries": {
     "availability-distribution-regression-bench": [
@@ -29293,6 +29293,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "availability-store",
             "value": 0.17902572937333333,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "oliver.tale-yazdi@parity.io",
+            "name": "Oliver Tale-Yazdi",
+            "username": "ggwpez"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "c482333560b1d0372824f29c5b85fad5d45f281d",
+          "message": "[omni-bencher] Make all runtimes work (#5872)\n\nChanges:\n- Add `--exclude-pallets` to exclude some pallets from runtimes where we\ndont have genesis presets yet\n- Make `--genesis-builder-policy=none` work with `--runtime`\n- CI: Run the frame-omni-bencher for all runtimes\n\n---------\n\nSigned-off-by: Oliver Tale-Yazdi <oliver.tale-yazdi@parity.io>\nCo-authored-by: ggwpez <ggwpez@users.noreply.github.com>\nCo-authored-by: Bastian Köcher <git@kchr.de>\nCo-authored-by: Branislav Kontur <bkontur@gmail.com>\nCo-authored-by: alvicsam <alvicsam@gmail.com>\nCo-authored-by: Maksym H <mordamax@gmail.com>\nCo-authored-by: Alexander Samusev <41779041+alvicsam@users.noreply.github.com>\nCo-authored-by: Maksym H <1177472+mordamax@users.noreply.github.com>",
+          "timestamp": "2024-10-08T13:41:40Z",
+          "tree_id": "3b0158ca1c38b780eecd64509b77b53fc90df133",
+          "url": "https://github.com/paritytech/polkadot-sdk/commit/c482333560b1d0372824f29c5b85fad5d45f281d"
+        },
+        "date": 1728398857382,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "Sent to peers",
+            "value": 18481.666666666653,
+            "unit": "KiB"
+          },
+          {
+            "name": "Received from peers",
+            "value": 433.3333333333332,
+            "unit": "KiB"
+          },
+          {
+            "name": "test-environment",
+            "value": 0.008692059740000079,
+            "unit": "seconds"
+          },
+          {
+            "name": "availability-store",
+            "value": 0.17677794234666663,
+            "unit": "seconds"
+          },
+          {
+            "name": "availability-distribution",
+            "value": 0.016321727706666667,
+            "unit": "seconds"
+          },
+          {
+            "name": "bitfield-distribution",
+            "value": 0.024744175640000008,
             "unit": "seconds"
           }
         ]
