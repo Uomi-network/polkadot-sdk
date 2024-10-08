@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1728410306238,
+  "lastUpdate": 1728422632528,
   "repoUrl": "https://github.com/paritytech/polkadot-sdk",
   "entries": {
     "approval-voting-regression-bench": [
@@ -23713,6 +23713,105 @@ window.BENCHMARK_DATA = {
           {
             "name": "approval-distribution",
             "value": 0.00002157585,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "git@kchr.de",
+            "name": "Bastian Köcher",
+            "username": "bkchr"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "5d82bdc428ebc33e642212fc720fc21ff2119412",
+          "message": "Bump some dependencies (#5886)\n\nThis bumps `ethbloom`, `ethereum-types`, `primitive-types` and `rlp` to\r\ntheir latest version.\r\n\r\nFixes: https://github.com/paritytech/polkadot-sdk/issues/5870\r\n\r\n---------\r\n\r\nCo-authored-by: command-bot <>\r\nCo-authored-by: ggwpez <ggwpez@users.noreply.github.com>\r\nCo-authored-by: Oliver Tale-Yazdi <oliver.tale-yazdi@parity.io>\r\nCo-authored-by: Shawn Tabrizi <shawntabrizi@gmail.com>\r\nCo-authored-by: Dónal Murray <donal.murray@parity.io>",
+          "timestamp": "2024-10-08T22:56:13+02:00",
+          "tree_id": "e030746ad30a7ba2fef8d92b0c3ac6e213b89633",
+          "url": "https://github.com/paritytech/polkadot-sdk/commit/5d82bdc428ebc33e642212fc720fc21ff2119412"
+        },
+        "date": 1728422612600,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "Sent to peers",
+            "value": 63633.6,
+            "unit": "KiB"
+          },
+          {
+            "name": "Received from peers",
+            "value": 52941.3,
+            "unit": "KiB"
+          },
+          {
+            "name": "approval-distribution",
+            "value": 0.000018731699999999996,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting/test-environment",
+            "value": 0.000018755899999999998,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel",
+            "value": 12.312722632879973,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-gather-signatures",
+            "value": 0.006037749340000001,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-2",
+            "value": 2.450447273600002,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-db",
+            "value": 2.1312949781700077,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-subsystem",
+            "value": 0.4936389213799677,
+            "unit": "seconds"
+          },
+          {
+            "name": "test-environment",
+            "value": 3.297189425902534,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-distribution/test-environment",
+            "value": 0.000018731699999999996,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-3",
+            "value": 2.4109191525999996,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting",
+            "value": 0.000018755899999999998,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-1",
+            "value": 2.4049719783599994,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-0",
+            "value": 2.4154125794299994,
             "unit": "seconds"
           }
         ]
