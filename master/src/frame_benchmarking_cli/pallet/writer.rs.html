@@ -1498,9 +1498,6 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 <a href="#1348" id="1348">1348</a>
 <a href="#1349" id="1349">1349</a>
 <a href="#1350" id="1350">1350</a>
-<a href="#1351" id="1351">1351</a>
-<a href="#1352" id="1352">1352</a>
-<a href="#1353" id="1353">1353</a>
 </pre></div><pre class="rust"><code><span class="comment">// This file is part of Substrate.
 
 // Copyright (C) Parity Technologies (UK) Ltd.
@@ -1987,9 +1984,6 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 			benchmarks: results.clone(),
 		};
 
-		<span class="kw">let </span>file_path = fs::canonicalize(<span class="kw-2">&amp;</span>file_path).map_err(|e| {
-			<span class="macro">format!</span>(<span class="string">"Could not get absolute path for: {:?}. Error: {:?}"</span>, <span class="kw-2">&amp;</span>file_path, e)
-		})<span class="question-mark">?</span>;
 		<span class="kw">let </span><span class="kw-2">mut </span>output_file = fs::File::create(<span class="kw-2">&amp;</span>file_path).map_err(|e| {
 			<span class="macro">format!</span>(<span class="string">"Could not write weight file to: {:?}. Error: {:?}"</span>, <span class="kw-2">&amp;</span>file_path, e)
 		})<span class="question-mark">?</span>;

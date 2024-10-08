@@ -229,6 +229,9 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 <a href="#79" id="79">79</a>
 <a href="#80" id="80">80</a>
 <a href="#81" id="81">81</a>
+<a href="#82" id="82">82</a>
+<a href="#83" id="83">83</a>
+<a href="#84" id="84">84</a>
 </pre></div><pre class="rust"><code><span class="comment">// Copyright (C) Parity Technologies (UK) Ltd.
 // SPDX-License-Identifier: Apache-2.0
 
@@ -303,7 +306,10 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 	<span class="kw">type </span>MaxDebugBufferLen = ConstU32&lt;{ <span class="number">2 </span>* <span class="number">1024 </span>* <span class="number">1024 </span>}&gt;;
 	<span class="kw">type </span>MaxDelegateDependencies = ConstU32&lt;<span class="number">32</span>&gt;;
 	<span class="kw">type </span>CodeHashLockupDepositPercent = CodeHashLockupDepositPercent;
-	<span class="kw">type </span>Migrations = (pallet_contracts::migration::v16::Migration&lt;Runtime&gt;,);
+	<span class="attr">#[cfg(not(feature = <span class="string">"runtime-benchmarks"</span>))]
+	</span><span class="kw">type </span>Migrations = ();
+	<span class="attr">#[cfg(feature = <span class="string">"runtime-benchmarks"</span>)]
+	</span><span class="kw">type </span>Migrations = pallet_contracts::migration::codegen::BenchMigrations;
 	<span class="kw">type </span>RuntimeHoldReason = RuntimeHoldReason;
 	<span class="kw">type </span>Debug = ();
 	<span class="kw">type </span>Environment = ();

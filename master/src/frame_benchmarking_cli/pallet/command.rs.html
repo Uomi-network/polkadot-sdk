@@ -1160,6 +1160,27 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 <a href="#1010" id="1010">1010</a>
 <a href="#1011" id="1011">1011</a>
 <a href="#1012" id="1012">1012</a>
+<a href="#1013" id="1013">1013</a>
+<a href="#1014" id="1014">1014</a>
+<a href="#1015" id="1015">1015</a>
+<a href="#1016" id="1016">1016</a>
+<a href="#1017" id="1017">1017</a>
+<a href="#1018" id="1018">1018</a>
+<a href="#1019" id="1019">1019</a>
+<a href="#1020" id="1020">1020</a>
+<a href="#1021" id="1021">1021</a>
+<a href="#1022" id="1022">1022</a>
+<a href="#1023" id="1023">1023</a>
+<a href="#1024" id="1024">1024</a>
+<a href="#1025" id="1025">1025</a>
+<a href="#1026" id="1026">1026</a>
+<a href="#1027" id="1027">1027</a>
+<a href="#1028" id="1028">1028</a>
+<a href="#1029" id="1029">1029</a>
+<a href="#1030" id="1030">1030</a>
+<a href="#1031" id="1031">1031</a>
+<a href="#1032" id="1032">1032</a>
+<a href="#1033" id="1033">1033</a>
 </pre></div><pre class="rust"><code><span class="comment">// This file is part of Substrate.
 
 // Copyright (C) Parity Technologies (UK) Ltd.
@@ -1198,7 +1219,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 		testing::{TestOffchainExt, TestTransactionPoolExt},
 		OffchainDbExt, OffchainWorkerExt, TransactionPoolExt,
 	},
-	traits::{CallContext, CodeExecutor, ReadRuntimeVersionExt},
+	traits::{CallContext, CodeExecutor, ReadRuntimeVersionExt, WrappedRuntimeCode},
 	Hasher,
 };
 <span class="kw">use </span>sp_externalities::Extensions;
@@ -1209,6 +1230,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 <span class="kw">use </span>sp_trie::{proof_size_extension::ProofSizeExt, recorder::Recorder};
 <span class="kw">use </span>sp_wasm_interface::HostFunctions;
 <span class="kw">use </span>std::{
+	borrow::Cow,
 	collections::{BTreeMap, BTreeSet, HashMap},
 	fmt::Debug,
 	fs,
@@ -1530,12 +1552,12 @@ become a hard error any time after December 2024."</span>;
 						<span class="string">"dispatch a benchmark"</span>,
 					) {
 						<span class="prelude-val">Err</span>(e) =&gt; {
-							<span class="macro">log::error!</span>(<span class="string">"Error executing and verifying runtime benchmark: {}"</span>, e);
+							<span class="macro">log::error!</span>(target: LOG_TARGET, <span class="string">"Error executing and verifying runtime benchmark: {}"</span>, e);
 							failed.push((pallet.clone(), extrinsic.clone()));
 							<span class="kw">continue </span><span class="lifetime">'outer
 						</span>},
 						<span class="prelude-val">Ok</span>(<span class="prelude-val">Err</span>(e)) =&gt; {
-							<span class="macro">log::error!</span>(<span class="string">"Error executing and verifying runtime benchmark: {}"</span>, e);
+							<span class="macro">log::error!</span>(target: LOG_TARGET, <span class="string">"Error executing and verifying runtime benchmark: {}"</span>, e);
 							failed.push((pallet.clone(), extrinsic.clone()));
 							<span class="kw">continue </span><span class="lifetime">'outer
 						</span>},
@@ -1570,12 +1592,12 @@ become a hard error any time after December 2024."</span>;
 						<span class="string">"dispatch a benchmark"</span>,
 					) {
 						<span class="prelude-val">Err</span>(e) =&gt; {
-							<span class="macro">log::error!</span>(<span class="string">"Error executing runtime benchmark: {}"</span>, e);
+							<span class="macro">log::error!</span>(target: LOG_TARGET, <span class="string">"Error executing runtime benchmark: {}"</span>, e);
 							failed.push((pallet.clone(), extrinsic.clone()));
 							<span class="kw">continue </span><span class="lifetime">'outer
 						</span>},
 						<span class="prelude-val">Ok</span>(<span class="prelude-val">Err</span>(e)) =&gt; {
-							<span class="macro">log::error!</span>(<span class="string">"Benchmark {pallet}::{extrinsic} failed: {e}"</span>,);
+							<span class="macro">log::error!</span>(target: LOG_TARGET, <span class="string">"Benchmark {pallet}::{extrinsic} failed: {e}"</span>,);
 							failed.push((pallet.clone(), extrinsic.clone()));
 							<span class="kw">continue </span><span class="lifetime">'outer
 						</span>},
@@ -1664,33 +1686,28 @@ become a hard error any time after December 2024."</span>;
 	}
 
 	<span class="kw">fn </span>select_benchmarks_to_run(<span class="kw-2">&amp;</span><span class="self">self</span>, list: Vec&lt;BenchmarkList&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;Vec&lt;SelectedBenchmark&gt;&gt; {
-		<span class="kw">let </span>pallet = <span class="self">self</span>.pallet.clone().unwrap_or_default();
-		<span class="kw">let </span>pallet = pallet.as_bytes();
-
 		<span class="kw">let </span>extrinsic = <span class="self">self</span>.extrinsic.clone().unwrap_or_default();
 		<span class="kw">let </span>extrinsic_split: Vec&lt;<span class="kw-2">&amp;</span>str&gt; = extrinsic.split(<span class="string">','</span>).collect();
 		<span class="kw">let </span>extrinsics: Vec&lt;<span class="kw">_</span>&gt; = extrinsic_split.iter().map(|x| x.trim().as_bytes()).collect();
 
 		<span class="comment">// Use the benchmark list and the user input to determine the set of benchmarks to run.
 		</span><span class="kw">let </span><span class="kw-2">mut </span>benchmarks_to_run = Vec::new();
-		list.iter()
-			.filter(|item| pallet.is_empty() || pallet == <span class="kw-2">&amp;</span><span class="string">b"*"</span>[..] || pallet == <span class="kw-2">&amp;</span>item.pallet[..])
-			.for_each(|item| {
-				<span class="kw">for </span>benchmark <span class="kw">in </span><span class="kw-2">&amp;</span>item.benchmarks {
-					<span class="kw">let </span>benchmark_name = <span class="kw-2">&amp;</span>benchmark.name;
-					<span class="kw">if </span>extrinsic.is_empty() ||
-						extrinsic.as_bytes() == <span class="kw-2">&amp;</span><span class="string">b"*"</span>[..] ||
-						extrinsics.contains(&amp;&amp;benchmark_name[..])
-					{
-						benchmarks_to_run.push((
-							item.pallet.clone(),
-							benchmark.name.clone(),
-							benchmark.components.clone(),
-							benchmark.pov_modes.clone(),
-						))
-					}
+		list.iter().filter(|item| <span class="self">self</span>.pallet_selected(<span class="kw-2">&amp;</span>item.pallet)).for_each(|item| {
+			<span class="kw">for </span>benchmark <span class="kw">in </span><span class="kw-2">&amp;</span>item.benchmarks {
+				<span class="kw">let </span>benchmark_name = <span class="kw-2">&amp;</span>benchmark.name;
+				<span class="kw">if </span>extrinsic.is_empty() ||
+					extrinsic.as_bytes() == <span class="kw-2">&amp;</span><span class="string">b"*"</span>[..] ||
+					extrinsics.contains(&amp;&amp;benchmark_name[..])
+				{
+					benchmarks_to_run.push((
+						item.pallet.clone(),
+						benchmark.name.clone(),
+						benchmark.components.clone(),
+						benchmark.pov_modes.clone(),
+					))
 				}
-			});
+			}
+		});
 		<span class="comment">// Convert `Vec&lt;u8&gt;` to `String` for better readability.
 		</span><span class="kw">let </span>benchmarks_to_run: Vec&lt;<span class="kw">_</span>&gt; = benchmarks_to_run
 			.into_iter()
@@ -1720,6 +1737,16 @@ become a hard error any time after December 2024."</span>;
 		<span class="prelude-val">Ok</span>(benchmarks_to_run)
 	}
 
+	<span class="doccomment">/// Whether this pallet should be run.
+	</span><span class="kw">fn </span>pallet_selected(<span class="kw-2">&amp;</span><span class="self">self</span>, pallet: <span class="kw-2">&amp;</span>Vec&lt;u8&gt;) -&gt; bool {
+		<span class="kw">let </span>include = <span class="self">self</span>.pallet.clone().unwrap_or_default();
+
+		<span class="kw">let </span>included = include.is_empty() || include == <span class="string">"*" </span>|| include.as_bytes() == pallet;
+		<span class="kw">let </span>excluded = <span class="self">self</span>.exclude_pallets.iter().any(|p| p.as_bytes() == pallet);
+
+		included &amp;&amp; !excluded
+	}
+
 	<span class="doccomment">/// Build the genesis storage by either the Genesis Builder API, chain spec or nothing.
 	///
 	/// Behaviour can be controlled by the `--genesis-builder` flag.
@@ -1728,12 +1755,11 @@ become a hard error any time after December 2024."</span>;
 		chain_spec: <span class="kw-2">&amp;</span><span class="prelude-ty">Option</span>&lt;Box&lt;<span class="kw">dyn </span>ChainSpec&gt;&gt;,
 	) -&gt; <span class="prelude-ty">Result</span>&lt;sp_storage::Storage&gt; {
 		<span class="prelude-val">Ok</span>(<span class="kw">match </span>(<span class="self">self</span>.genesis_builder, <span class="self">self</span>.runtime.as_ref()) {
-			(<span class="prelude-val">Some</span>(GenesisBuilderPolicy::None), <span class="prelude-val">Some</span>(<span class="kw">_</span>)) =&gt; <span class="kw">return </span><span class="prelude-val">Err</span>(<span class="string">"Cannot use `--genesis-builder=none` with `--runtime` since the runtime would be ignored."</span>.into()),
-			(<span class="prelude-val">Some</span>(GenesisBuilderPolicy::None), <span class="prelude-val">None</span>) =&gt; Storage::default(),
+			(<span class="prelude-val">Some</span>(GenesisBuilderPolicy::None), <span class="kw">_</span>) =&gt; Storage::default(),
 			(<span class="prelude-val">Some</span>(GenesisBuilderPolicy::SpecGenesis | GenesisBuilderPolicy::Spec), <span class="prelude-val">Some</span>(<span class="kw">_</span>)) =&gt;
 					<span class="kw">return </span><span class="prelude-val">Err</span>(<span class="string">"Cannot use `--genesis-builder=spec-genesis` with `--runtime` since the runtime would be ignored."</span>.into()),
 			(<span class="prelude-val">Some</span>(GenesisBuilderPolicy::SpecGenesis | GenesisBuilderPolicy::Spec), <span class="prelude-val">None</span>) | (<span class="prelude-val">None</span>, <span class="prelude-val">None</span>) =&gt; {
-				<span class="macro">log::warn!</span>(<span class="string">"{WARN_SPEC_GENESIS_CTOR}"</span>);
+				<span class="macro">log::warn!</span>(target: LOG_TARGET, <span class="string">"{WARN_SPEC_GENESIS_CTOR}"</span>);
 				<span class="kw">let </span><span class="prelude-val">Some</span>(chain_spec) = chain_spec <span class="kw">else </span>{
 					<span class="kw">return </span><span class="prelude-val">Err</span>(<span class="string">"No chain spec specified to generate the genesis state"</span>.into());
 				};
@@ -1755,7 +1781,7 @@ become a hard error any time after December 2024."</span>;
 			</span>},
 			(<span class="prelude-val">Some</span>(GenesisBuilderPolicy::Runtime), <span class="prelude-val">None</span>) =&gt; <span class="kw">return </span><span class="prelude-val">Err</span>(<span class="string">"Cannot use `--genesis-builder=runtime` without `--runtime`"</span>.into()),
 			(<span class="prelude-val">Some</span>(GenesisBuilderPolicy::Runtime), <span class="prelude-val">Some</span>(runtime)) | (<span class="prelude-val">None</span>, <span class="prelude-val">Some</span>(runtime)) =&gt; {
-				<span class="macro">log::info!</span>(<span class="string">"Loading WASM from {}"</span>, runtime.display());
+				<span class="macro">log::info!</span>(target: LOG_TARGET, <span class="string">"Loading WASM from {}"</span>, runtime.display());
 
 				<span class="kw">let </span>code = fs::read(<span class="kw-2">&amp;</span>runtime).map_err(|e| {
 					<span class="macro">format!</span>(
@@ -1775,7 +1801,7 @@ become a hard error any time after December 2024."</span>;
 		<span class="kw-2">&amp;</span><span class="self">self</span>,
 		chain_spec: <span class="kw-2">&amp;</span><span class="kw">dyn </span>ChainSpec,
 	) -&gt; <span class="prelude-ty">Result</span>&lt;Storage&gt; {
-		<span class="macro">log::info!</span>(<span class="string">"Building genesis state from chain spec runtime"</span>);
+		<span class="macro">log::info!</span>(target: LOG_TARGET, <span class="string">"Building genesis state from chain spec runtime"</span>);
 		<span class="kw">let </span>storage = chain_spec
 			.build_storage()
 			.map_err(|e| <span class="macro">format!</span>(<span class="string">"{ERROR_CANNOT_BUILD_GENESIS}\nError: {e}"</span>))<span class="question-mark">?</span>;
@@ -1798,8 +1824,9 @@ become a hard error any time after December 2024."</span>;
 			genesis_config_caller.get_storage_for_named_preset(preset).inspect_err(|e| {
 				<span class="kw">let </span>presets = genesis_config_caller.preset_names().unwrap_or_default();
 				<span class="macro">log::error!</span>(
+					target: LOG_TARGET,
 					<span class="string">"Please pick one of the available presets with \
-			`--genesis-builder-preset=&lt;PRESET&gt;`. Available presets ({}): {:?}. Error: {:?}"</span>,
+			`--genesis-builder-preset=&lt;PRESET&gt;` or use a different `--genesis-builder-policy`. Available presets ({}): {:?}. Error: {:?}"</span>,
 					presets.len(),
 					presets,
 					e
@@ -1852,10 +1879,25 @@ become a hard error any time after December 2024."</span>;
 		<span class="kw-2">&amp;</span><span class="self">self</span>,
 		state: <span class="kw-2">&amp;</span><span class="lifetime">'a </span>BenchmarkingState&lt;H&gt;,
 	) -&gt; <span class="prelude-ty">Result</span>&lt;FetchedCode&lt;<span class="lifetime">'a</span>, BenchmarkingState&lt;H&gt;, H&gt;&gt; {
-		<span class="macro">log::info!</span>(<span class="string">"Loading WASM from state"</span>);
-		<span class="kw">let </span>state = sp_state_machine::backend::BackendRuntimeCode::new(state);
+		<span class="kw">if let </span><span class="prelude-val">Some</span>(runtime) = <span class="self">self</span>.runtime.as_ref() {
+			<span class="macro">log::info!</span>(target: LOG_TARGET, <span class="string">"Loading WASM from file"</span>);
+			<span class="kw">let </span>code = fs::read(runtime).map_err(|e| {
+				<span class="macro">format!</span>(
+					<span class="string">"Could not load runtime file from path: {}, error: {}"</span>,
+					runtime.display(),
+					e
+				)
+			})<span class="question-mark">?</span>;
+			<span class="kw">let </span>hash = sp_core::blake2_256(<span class="kw-2">&amp;</span>code).to_vec();
+			<span class="kw">let </span>wrapped_code = WrappedRuntimeCode(Cow::Owned(code));
 
-		<span class="prelude-val">Ok</span>(FetchedCode { state })
+			<span class="prelude-val">Ok</span>(FetchedCode::FromFile { wrapped_code, heap_pages: <span class="self">self</span>.heap_pages, hash })
+		} <span class="kw">else </span>{
+			<span class="macro">log::info!</span>(target: LOG_TARGET, <span class="string">"Loading WASM from state"</span>);
+			<span class="kw">let </span>state = sp_state_machine::backend::BackendRuntimeCode::new(state);
+
+			<span class="prelude-val">Ok</span>(FetchedCode::FromGenesis { state })
+		}
 	}
 
 	<span class="doccomment">/// Allocation strategy for pallet benchmarking.

@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1728385692989,
+  "lastUpdate": 1728393501425,
   "repoUrl": "https://github.com/paritytech/polkadot-sdk",
   "entries": {
     "statement-distribution-regression-bench": [
@@ -13987,6 +13987,50 @@ window.BENCHMARK_DATA = {
           {
             "name": "statement-distribution",
             "value": 0.035242316915999994,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "serban@parity.io",
+            "name": "Serban Iorga",
+            "username": "serban300"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "a4dce869cb1c80a5c02b4355cdcbf75ead654556",
+          "message": "Omni-Node renamings (#5915)\n\n- moved the omni-node lib from\n  `cumulus/polkadot-parachain/polkadot-parachain-lib` to\n  `cumulus/polkadot-omni-node/lib`\n- renamed `polkadot-parachain-lib` to `polkadot-omni-node-lib`\n- added `polkadot-omni-node` binary\n\nRelated to https://github.com/paritytech/polkadot-sdk/issues/5566",
+          "timestamp": "2024-10-08T12:13:02Z",
+          "tree_id": "731c96f0930e8861c36136028c2c519375fa1c02",
+          "url": "https://github.com/paritytech/polkadot-sdk/commit/a4dce869cb1c80a5c02b4355cdcbf75ead654556"
+        },
+        "date": 1728393482145,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "Received from peers",
+            "value": 106.39999999999996,
+            "unit": "KiB"
+          },
+          {
+            "name": "Sent to peers",
+            "value": 127.94599999999997,
+            "unit": "KiB"
+          },
+          {
+            "name": "statement-distribution",
+            "value": 0.03521680573199999,
+            "unit": "seconds"
+          },
+          {
+            "name": "test-environment",
+            "value": 0.044794035631999976,
             "unit": "seconds"
           }
         ]
