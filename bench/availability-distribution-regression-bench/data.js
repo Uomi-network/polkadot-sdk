@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1728385639596,
+  "lastUpdate": 1728393448767,
   "repoUrl": "https://github.com/paritytech/polkadot-sdk",
   "entries": {
     "availability-distribution-regression-bench": [
@@ -29239,6 +29239,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "test-environment",
             "value": 0.009051572240000074,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "serban@parity.io",
+            "name": "Serban Iorga",
+            "username": "serban300"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "a4dce869cb1c80a5c02b4355cdcbf75ead654556",
+          "message": "Omni-Node renamings (#5915)\n\n- moved the omni-node lib from\n  `cumulus/polkadot-parachain/polkadot-parachain-lib` to\n  `cumulus/polkadot-omni-node/lib`\n- renamed `polkadot-parachain-lib` to `polkadot-omni-node-lib`\n- added `polkadot-omni-node` binary\n\nRelated to https://github.com/paritytech/polkadot-sdk/issues/5566",
+          "timestamp": "2024-10-08T12:13:02Z",
+          "tree_id": "731c96f0930e8861c36136028c2c519375fa1c02",
+          "url": "https://github.com/paritytech/polkadot-sdk/commit/a4dce869cb1c80a5c02b4355cdcbf75ead654556"
+        },
+        "date": 1728393429377,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "Sent to peers",
+            "value": 18481.666666666653,
+            "unit": "KiB"
+          },
+          {
+            "name": "Received from peers",
+            "value": 433.3333333333332,
+            "unit": "KiB"
+          },
+          {
+            "name": "bitfield-distribution",
+            "value": 0.024941755633333326,
+            "unit": "seconds"
+          },
+          {
+            "name": "test-environment",
+            "value": 0.00939957250666673,
+            "unit": "seconds"
+          },
+          {
+            "name": "availability-distribution",
+            "value": 0.016810286860000002,
+            "unit": "seconds"
+          },
+          {
+            "name": "availability-store",
+            "value": 0.17902572937333333,
             "unit": "seconds"
           }
         ]
