@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1728410279495,
+  "lastUpdate": 1728422605386,
   "repoUrl": "https://github.com/paritytech/polkadot-sdk",
   "entries": {
     "availability-distribution-regression-bench": [
@@ -29401,6 +29401,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "availability-distribution",
             "value": 0.016247231593333338,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "git@kchr.de",
+            "name": "Bastian Köcher",
+            "username": "bkchr"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "5d82bdc428ebc33e642212fc720fc21ff2119412",
+          "message": "Bump some dependencies (#5886)\n\nThis bumps `ethbloom`, `ethereum-types`, `primitive-types` and `rlp` to\r\ntheir latest version.\r\n\r\nFixes: https://github.com/paritytech/polkadot-sdk/issues/5870\r\n\r\n---------\r\n\r\nCo-authored-by: command-bot <>\r\nCo-authored-by: ggwpez <ggwpez@users.noreply.github.com>\r\nCo-authored-by: Oliver Tale-Yazdi <oliver.tale-yazdi@parity.io>\r\nCo-authored-by: Shawn Tabrizi <shawntabrizi@gmail.com>\r\nCo-authored-by: Dónal Murray <donal.murray@parity.io>",
+          "timestamp": "2024-10-08T22:56:13+02:00",
+          "tree_id": "e030746ad30a7ba2fef8d92b0c3ac6e213b89633",
+          "url": "https://github.com/paritytech/polkadot-sdk/commit/5d82bdc428ebc33e642212fc720fc21ff2119412"
+        },
+        "date": 1728422585340,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "Received from peers",
+            "value": 433.3333333333332,
+            "unit": "KiB"
+          },
+          {
+            "name": "Sent to peers",
+            "value": 18481.666666666653,
+            "unit": "KiB"
+          },
+          {
+            "name": "bitfield-distribution",
+            "value": 0.024931265126666668,
+            "unit": "seconds"
+          },
+          {
+            "name": "availability-store",
+            "value": 0.17831021059999996,
+            "unit": "seconds"
+          },
+          {
+            "name": "test-environment",
+            "value": 0.008702694966666737,
+            "unit": "seconds"
+          },
+          {
+            "name": "availability-distribution",
+            "value": 0.01635603480666666,
             "unit": "seconds"
           }
         ]
