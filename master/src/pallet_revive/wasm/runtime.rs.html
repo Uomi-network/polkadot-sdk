@@ -2226,8 +2226,6 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 <a href="#2076" id="2076">2076</a>
 <a href="#2077" id="2077">2077</a>
 <a href="#2078" id="2078">2078</a>
-<a href="#2079" id="2079">2079</a>
-<a href="#2080" id="2080">2080</a>
 </pre></div><pre class="rust"><code><span class="comment">// This file is part of Substrate.
 
 // Copyright (C) Parity Technologies (UK) Ltd.
@@ -2276,9 +2274,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 
 <span class="doccomment">/// Encode a `U256` into a 32 byte buffer.
 </span><span class="kw">fn </span>as_bytes(u: U256) -&gt; [u8; <span class="number">32</span>] {
-	<span class="kw">let </span><span class="kw-2">mut </span>bytes = [<span class="number">0u8</span>; <span class="number">32</span>];
-	u.to_little_endian(<span class="kw-2">&amp;mut </span>bytes);
-	bytes
+	u.to_little_endian()
 }
 
 <span class="attr">#[derive(Clone, Copy)]

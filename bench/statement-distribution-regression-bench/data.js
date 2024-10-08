@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1728398930997,
+  "lastUpdate": 1728410333108,
   "repoUrl": "https://github.com/paritytech/polkadot-sdk",
   "entries": {
     "statement-distribution-regression-bench": [
@@ -14075,6 +14075,50 @@ window.BENCHMARK_DATA = {
           {
             "name": "statement-distribution",
             "value": 0.035275350031999976,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "363911+pepoviola@users.noreply.github.com",
+            "name": "Javier Viola",
+            "username": "pepoviola"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": false,
+          "id": "1e5f5fe9086233a464ee249de74e4df959b8eb15",
+          "message": "bump zombienet version and set request for k8s (#5968)\n\nBump zombienet version, including fixes for `ci` and set _resources\nrequests_ for the runner.\n\nThx!\n\nCo-authored-by: Bastian Köcher <git@kchr.de>",
+          "timestamp": "2024-10-08T16:16:36Z",
+          "tree_id": "b94cbdaf42f5e273993f2102cdca960a30f2c747",
+          "url": "https://github.com/paritytech/polkadot-sdk/commit/1e5f5fe9086233a464ee249de74e4df959b8eb15"
+        },
+        "date": 1728410313442,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "Received from peers",
+            "value": 106.39999999999996,
+            "unit": "KiB"
+          },
+          {
+            "name": "Sent to peers",
+            "value": 127.93599999999995,
+            "unit": "KiB"
+          },
+          {
+            "name": "statement-distribution",
+            "value": 0.035448466495999996,
+            "unit": "seconds"
+          },
+          {
+            "name": "test-environment",
+            "value": 0.044904000537999915,
             "unit": "seconds"
           }
         ]

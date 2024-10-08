@@ -247,9 +247,6 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 <a href="#97" id="97">97</a>
 <a href="#98" id="98">98</a>
 <a href="#99" id="99">99</a>
-<a href="#100" id="100">100</a>
-<a href="#101" id="101">101</a>
-<a href="#102" id="102">102</a>
 </pre></div><pre class="rust"><code><span class="comment">// Copyright (C) Parity Technologies (UK) Ltd.
 // This file is part of Parity Bridges Common.
 
@@ -283,9 +280,6 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 
 <span class="attr">#[cfg(feature = <span class="string">"std"</span>)]
 </span><span class="kw">use </span>serde::{Deserialize, Serialize};
-
-<span class="attr">#[cfg(feature = <span class="string">"std"</span>)]
-</span><span class="kw">use </span>parity_util_mem::MallocSizeOf;
 
 <span class="doccomment">/// Parachain id.
 ///
@@ -323,7 +317,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 </span><span class="attr">#[derive(
 	PartialEq, Eq, Clone, PartialOrd, Ord, Encode, Decode, RuntimeDebug, TypeInfo, Default,
 )]
-#[cfg_attr(feature = <span class="string">"std"</span>, derive(Serialize, Deserialize, Hash, MallocSizeOf))]
+#[cfg_attr(feature = <span class="string">"std"</span>, derive(Serialize, Deserialize, Hash))]
 </span><span class="kw">pub struct </span>ParaHead(<span class="kw">pub </span>Vec&lt;u8&gt;);
 
 <span class="kw">impl </span>ParaHead {

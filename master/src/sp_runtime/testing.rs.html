@@ -567,8 +567,6 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 <a href="#417" id="417">417</a>
 <a href="#418" id="418">418</a>
 <a href="#419" id="419">419</a>
-<a href="#420" id="420">420</a>
-<a href="#421" id="421">421</a>
 </pre></div><pre class="rust"><code><span class="comment">// This file is part of Substrate.
 
 // Copyright (C) Parity Technologies (UK) Ltd.
@@ -600,10 +598,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 	ApplyExtrinsicResultWithInfo, KeyTypeId,
 };
 <span class="kw">use </span>serde::{de::Error <span class="kw">as </span>DeError, Deserialize, Deserializer, Serialize, Serializer};
-<span class="kw">use </span>sp_core::{
-	crypto::{key_types, ByteArray, CryptoType, Dummy},
-	U256,
-};
+<span class="kw">use </span>sp_core::crypto::{key_types, ByteArray, CryptoType, Dummy};
 <span class="kw">pub use </span>sp_core::{sr25519, H256};
 <span class="kw">use </span>std::{
 	cell::RefCell,
@@ -650,7 +645,8 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 <span class="kw">impl </span>UintAuthorityId {
 	<span class="doccomment">/// Convert this authority ID into a public key.
 	</span><span class="kw">pub fn </span>to_public_key&lt;T: ByteArray&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; T {
-		<span class="kw">let </span>bytes: [u8; <span class="number">32</span>] = U256::from(<span class="self">self</span>.<span class="number">0</span>).into();
+		<span class="kw">let </span><span class="kw-2">mut </span>bytes = [<span class="number">0u8</span>; <span class="number">32</span>];
+		bytes[<span class="number">0</span>..<span class="number">8</span>].copy_from_slice(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0</span>.to_le_bytes());
 		T::from_slice(<span class="kw-2">&amp;</span>bytes).unwrap()
 	}
 }
