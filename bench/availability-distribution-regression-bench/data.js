@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1728383378135,
+  "lastUpdate": 1728385639596,
   "repoUrl": "https://github.com/paritytech/polkadot-sdk",
   "entries": {
     "availability-distribution-regression-bench": [
@@ -29185,6 +29185,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "test-environment",
             "value": 0.008870535720000076,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "1177472+mordamax@users.noreply.github.com",
+            "name": "Maksym H",
+            "username": "mordamax"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "4b40e762080b3b05a88988eb2d6dca0d86b166c8",
+          "message": "improve prdoc generation (#5931)\n\nRelated to\nhttps://github.com/paritytech/polkadot-sdk/pull/5924#issuecomment-2393558697\n\nimprove prdoc arguments validation & help:\n- convert audiences options to snake_case. Fixes\nhttps://github.com/paritytech/polkadot-sdk/issues/5927\n  - support more than one audiences\n  - define allowed bump options\n- infer --pr from the actual PR (now it's optional, can still be\noverwritten)\n\n\n![image](https://github.com/user-attachments/assets/24e18fe2-2f67-4ce0-90e4-34f6c2f860c9)\n\nTest evidence:\nhttps://github.com/paritytech-stg/polkadot-sdk/pull/52/commits/6dd274e3678d287c163cfa6cb696acee9852767d",
+          "timestamp": "2024-10-08T10:02:47Z",
+          "tree_id": "64d11f8102568582a096edffaf5260a96c1ac702",
+          "url": "https://github.com/paritytech/polkadot-sdk/commit/4b40e762080b3b05a88988eb2d6dca0d86b166c8"
+        },
+        "date": 1728385620055,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "Sent to peers",
+            "value": 18481.666666666653,
+            "unit": "KiB"
+          },
+          {
+            "name": "Received from peers",
+            "value": 433.3333333333332,
+            "unit": "KiB"
+          },
+          {
+            "name": "bitfield-distribution",
+            "value": 0.024861887006666666,
+            "unit": "seconds"
+          },
+          {
+            "name": "availability-store",
+            "value": 0.17708029724666668,
+            "unit": "seconds"
+          },
+          {
+            "name": "availability-distribution",
+            "value": 0.016525001333333334,
+            "unit": "seconds"
+          },
+          {
+            "name": "test-environment",
+            "value": 0.009051572240000074,
             "unit": "seconds"
           }
         ]
