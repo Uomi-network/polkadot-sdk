@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1728323349890,
+  "lastUpdate": 1728383351919,
   "repoUrl": "https://github.com/paritytech/polkadot-sdk",
   "entries": {
     "availability-recovery-regression-bench": [
@@ -23267,6 +23267,50 @@ window.BENCHMARK_DATA = {
           {
             "name": "availability-recovery",
             "value": 11.668433570533333,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "david.kazlauskas@parity.io",
+            "name": "davidk-pt",
+            "username": "davidk-pt"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": false,
+          "id": "9a37238295392a4a367fb45c0ca3d7f73ab32080",
+          "message": "Add migration to clear unapproved proposals from treasury pallet (#5892)\n\nResolves https://github.com/polkadot-fellows/runtimes/issues/459\n\nTested with rococo/westend/kusama/polkadot runtimes\n\n---------\n\nCo-authored-by: DavidK <davidk@parity.io>\nCo-authored-by: Muharem <ismailov.m.h@gmail.com>\nCo-authored-by: Shawn Tabrizi <shawntabrizi@gmail.com>\nCo-authored-by: Dónal Murray <donal.murray@parity.io>",
+          "timestamp": "2024-10-08T09:24:40Z",
+          "tree_id": "88e50c2a17c4b4b85310be9a06013a6a261e4d9c",
+          "url": "https://github.com/paritytech/polkadot-sdk/commit/9a37238295392a4a367fb45c0ca3d7f73ab32080"
+        },
+        "date": 1728383331704,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "Received from peers",
+            "value": 307203,
+            "unit": "KiB"
+          },
+          {
+            "name": "Sent to peers",
+            "value": 1.6666666666666665,
+            "unit": "KiB"
+          },
+          {
+            "name": "availability-recovery",
+            "value": 11.687895999199998,
+            "unit": "seconds"
+          },
+          {
+            "name": "test-environment",
+            "value": 0.23210370696666663,
             "unit": "seconds"
           }
         ]
