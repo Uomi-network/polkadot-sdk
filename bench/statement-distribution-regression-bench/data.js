@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1728323429156,
+  "lastUpdate": 1728383431348,
   "repoUrl": "https://github.com/paritytech/polkadot-sdk",
   "entries": {
     "statement-distribution-regression-bench": [
@@ -13899,6 +13899,50 @@ window.BENCHMARK_DATA = {
           {
             "name": "test-environment",
             "value": 0.04472740098399997,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "david.kazlauskas@parity.io",
+            "name": "davidk-pt",
+            "username": "davidk-pt"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": false,
+          "id": "9a37238295392a4a367fb45c0ca3d7f73ab32080",
+          "message": "Add migration to clear unapproved proposals from treasury pallet (#5892)\n\nResolves https://github.com/polkadot-fellows/runtimes/issues/459\n\nTested with rococo/westend/kusama/polkadot runtimes\n\n---------\n\nCo-authored-by: DavidK <davidk@parity.io>\nCo-authored-by: Muharem <ismailov.m.h@gmail.com>\nCo-authored-by: Shawn Tabrizi <shawntabrizi@gmail.com>\nCo-authored-by: Dónal Murray <donal.murray@parity.io>",
+          "timestamp": "2024-10-08T09:24:40Z",
+          "tree_id": "88e50c2a17c4b4b85310be9a06013a6a261e4d9c",
+          "url": "https://github.com/paritytech/polkadot-sdk/commit/9a37238295392a4a367fb45c0ca3d7f73ab32080"
+        },
+        "date": 1728383412179,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "Sent to peers",
+            "value": 127.93999999999994,
+            "unit": "KiB"
+          },
+          {
+            "name": "Received from peers",
+            "value": 106.39999999999996,
+            "unit": "KiB"
+          },
+          {
+            "name": "test-environment",
+            "value": 0.044795585493999986,
+            "unit": "seconds"
+          },
+          {
+            "name": "statement-distribution",
+            "value": 0.035391839848000005,
             "unit": "seconds"
           }
         ]
