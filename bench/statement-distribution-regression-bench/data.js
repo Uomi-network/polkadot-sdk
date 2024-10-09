@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1728422660128,
+  "lastUpdate": 1728458362514,
   "repoUrl": "https://github.com/paritytech/polkadot-sdk",
   "entries": {
     "statement-distribution-regression-bench": [
@@ -14163,6 +14163,50 @@ window.BENCHMARK_DATA = {
           {
             "name": "statement-distribution",
             "value": 0.035666474126000006,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "363911+pepoviola@users.noreply.github.com",
+            "name": "Javier Viola",
+            "username": "pepoviola"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": false,
+          "id": "6c2b46f9620fd147e63b151320cc145551fd2c18",
+          "message": "Disable flaky tests reported in 5972/5973/5974 (#5976)\n\nDisable flaky tests reported in:\n#5972 \n#5973 \n#5974",
+          "timestamp": "2024-10-09T06:14:09Z",
+          "tree_id": "fd029effbdb603700d66139f52f8f81765254f7d",
+          "url": "https://github.com/paritytech/polkadot-sdk/commit/6c2b46f9620fd147e63b151320cc145551fd2c18"
+        },
+        "date": 1728458343135,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "Received from peers",
+            "value": 106.39999999999996,
+            "unit": "KiB"
+          },
+          {
+            "name": "Sent to peers",
+            "value": 127.94799999999995,
+            "unit": "KiB"
+          },
+          {
+            "name": "statement-distribution",
+            "value": 0.035567927815999996,
+            "unit": "seconds"
+          },
+          {
+            "name": "test-environment",
+            "value": 0.044926774547999954,
             "unit": "seconds"
           }
         ]
