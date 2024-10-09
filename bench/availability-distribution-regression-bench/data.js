@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1728488515005,
+  "lastUpdate": 1728493122522,
   "repoUrl": "https://github.com/paritytech/polkadot-sdk",
   "entries": {
     "availability-distribution-regression-bench": [
@@ -29617,6 +29617,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "test-environment",
             "value": 0.008859967180000082,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "117534+vgeddes@users.noreply.github.com",
+            "name": "Vincent Geddes",
+            "username": "vgeddes"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "90ff47d989b0498e4e88366b432486e06b1398d8",
+          "message": "Snowbridge V2 docs (#5902)\n\nHere are MD docs for V2 @acatangiu @franciscoaguirre . Let me know what\nyou think.\n\n---------\n\nCo-authored-by: Adrian Catangiu <adrian@parity.io>\nCo-authored-by: Francisco Aguirre <franciscoaguirreperez@gmail.com>\nCo-authored-by: Alistair Singh <alistair.singh7@gmail.com>",
+          "timestamp": "2024-10-09T15:54:50Z",
+          "tree_id": "ad942c94e756e0ebdcf9fe9f7cd79c1bf8b516e9",
+          "url": "https://github.com/paritytech/polkadot-sdk/commit/90ff47d989b0498e4e88366b432486e06b1398d8"
+        },
+        "date": 1728493101150,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "Received from peers",
+            "value": 433.3333333333332,
+            "unit": "KiB"
+          },
+          {
+            "name": "Sent to peers",
+            "value": 18481.666666666653,
+            "unit": "KiB"
+          },
+          {
+            "name": "availability-store",
+            "value": 0.17870729868,
+            "unit": "seconds"
+          },
+          {
+            "name": "test-environment",
+            "value": 0.008831055853333429,
+            "unit": "seconds"
+          },
+          {
+            "name": "bitfield-distribution",
+            "value": 0.024710136893333328,
+            "unit": "seconds"
+          },
+          {
+            "name": "availability-distribution",
+            "value": 0.01676489299333334,
             "unit": "seconds"
           }
         ]
