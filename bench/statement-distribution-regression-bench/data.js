@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1728458362514,
+  "lastUpdate": 1728480170358,
   "repoUrl": "https://github.com/paritytech/polkadot-sdk",
   "entries": {
     "statement-distribution-regression-bench": [
@@ -14207,6 +14207,50 @@ window.BENCHMARK_DATA = {
           {
             "name": "test-environment",
             "value": 0.044926774547999954,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "41779041+alvicsam@users.noreply.github.com",
+            "name": "Alexander Samusev",
+            "username": "alvicsam"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": false,
+          "id": "6765bcd8a34bc47b4f8ad0c5c9f00574e3b1b9af",
+          "message": "[ci] Remove short-benchmarks from Gitlab (#5988)\n\nPR removes short-benchmarks from GitLab, adds condition for\ncargo-check-rutimes",
+          "timestamp": "2024-10-09T12:16:55Z",
+          "tree_id": "6b24a8657e4e5d6d7bef929671b9e16eac7eff36",
+          "url": "https://github.com/paritytech/polkadot-sdk/commit/6765bcd8a34bc47b4f8ad0c5c9f00574e3b1b9af"
+        },
+        "date": 1728480148824,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "Received from peers",
+            "value": 106.39999999999996,
+            "unit": "KiB"
+          },
+          {
+            "name": "Sent to peers",
+            "value": 127.96000000000002,
+            "unit": "KiB"
+          },
+          {
+            "name": "statement-distribution",
+            "value": 0.035293879846000006,
+            "unit": "seconds"
+          },
+          {
+            "name": "test-environment",
+            "value": 0.04454563040399995,
             "unit": "seconds"
           }
         ]
