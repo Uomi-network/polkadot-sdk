@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1728480113106,
+  "lastUpdate": 1728488515005,
   "repoUrl": "https://github.com/paritytech/polkadot-sdk",
   "entries": {
     "availability-distribution-regression-bench": [
@@ -29563,6 +29563,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "availability-store",
             "value": 0.17960670370666684,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "41779041+alvicsam@users.noreply.github.com",
+            "name": "Alexander Samusev",
+            "username": "alvicsam"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "48b56aa1780c23fa579904d01ee2e442c10863d2",
+          "message": "[ci] Move test-linux-stable-no-try-runtime to GHA (#5979)\n\nPR moves `test-linux-stable-no-try-runtime` from gitlab to github.\nI disabled two tests because our current runners don't have necessary\nsyscalls enabled. Will continue working on it in\nhttps://github.com/paritytech/ci_cd/issues/1056\nAlso PR remove `gh cli` installation since it's installed in the\n`ci-unified` image.\n\nclose https://github.com/paritytech/ci_cd/issues/1023",
+          "timestamp": "2024-10-09T14:37:44Z",
+          "tree_id": "cede9f559cc736195bf1a31856361ad595c530c5",
+          "url": "https://github.com/paritytech/polkadot-sdk/commit/48b56aa1780c23fa579904d01ee2e442c10863d2"
+        },
+        "date": 1728488493644,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "Received from peers",
+            "value": 433.3333333333332,
+            "unit": "KiB"
+          },
+          {
+            "name": "Sent to peers",
+            "value": 18481.666666666653,
+            "unit": "KiB"
+          },
+          {
+            "name": "availability-store",
+            "value": 0.17856051437333323,
+            "unit": "seconds"
+          },
+          {
+            "name": "bitfield-distribution",
+            "value": 0.02477617116666667,
+            "unit": "seconds"
+          },
+          {
+            "name": "availability-distribution",
+            "value": 0.01635514803333333,
+            "unit": "seconds"
+          },
+          {
+            "name": "test-environment",
+            "value": 0.008859967180000082,
             "unit": "seconds"
           }
         ]
