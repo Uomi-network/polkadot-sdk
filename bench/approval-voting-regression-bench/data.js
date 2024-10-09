@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1728497555886,
+  "lastUpdate": 1728508044421,
   "repoUrl": "https://github.com/paritytech/polkadot-sdk",
   "entries": {
     "approval-voting-regression-bench": [
@@ -24307,6 +24307,105 @@ window.BENCHMARK_DATA = {
           {
             "name": "approval-voting-parallel/approval-voting-parallel-db",
             "value": 2.1078003771200082,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "49699333+dependabot[bot]@users.noreply.github.com",
+            "name": "dependabot[bot]",
+            "username": "dependabot[bot]"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "e0062af9c8bdbd15a5b387912f4ba2913d82b75b",
+          "message": "Bump strum from 0.26.2 to 0.26.3 (#5943)\n\nBumps [strum](https://github.com/Peternator7/strum) from 0.26.2 to\n0.26.3.\n<details>\n<summary>Release notes</summary>\n<p><em>Sourced from <a\nhref=\"https://github.com/Peternator7/strum/releases\">strum's\nreleases</a>.</em></p>\n<blockquote>\n<h2>v0.26.3</h2>\n<h2>What's Changed</h2>\n<ul>\n<li>Fix typos &amp; misspellings in docs by <a\nhref=\"https://github.com/5-pebbles\"><code>@​5-pebbles</code></a> in <a\nhref=\"https://redirect.github.com/Peternator7/strum/pull/347\">Peternator7/strum#347</a></li>\n<li>Update <code>heck</code> requirement by <a\nhref=\"https://github.com/smoelius\"><code>@​smoelius</code></a> in <a\nhref=\"https://redirect.github.com/Peternator7/strum/pull/346\">Peternator7/strum#346</a></li>\n<li>Fix broken links by <a\nhref=\"https://github.com/rainbowatcher\"><code>@​rainbowatcher</code></a>\nin <a\nhref=\"https://redirect.github.com/Peternator7/strum/pull/350\">Peternator7/strum#350</a></li>\n<li>Interpolate unnamed enum variant fields in to_string attribute by <a\nhref=\"https://github.com/gin-ahirsch\"><code>@​gin-ahirsch</code></a> in\n<a\nhref=\"https://redirect.github.com/Peternator7/strum/pull/345\">Peternator7/strum#345</a></li>\n<li>add hyperlinks to documentation and clarify derive macros by <a\nhref=\"https://github.com/lolbinarycat\"><code>@​lolbinarycat</code></a>\nin <a\nhref=\"https://redirect.github.com/Peternator7/strum/pull/355\">Peternator7/strum#355</a></li>\n<li>Use fully qualified syntax for calling <code>get</code> on an\n<code>EnumIter</code>, eliminating ambiguities by <a\nhref=\"https://github.com/bluurryy\"><code>@​bluurryy</code></a> in <a\nhref=\"https://redirect.github.com/Peternator7/strum/pull/357\">Peternator7/strum#357</a></li>\n</ul>\n<h2>New Contributors</h2>\n<ul>\n<li><a href=\"https://github.com/5-pebbles\"><code>@​5-pebbles</code></a>\nmade their first contribution in <a\nhref=\"https://redirect.github.com/Peternator7/strum/pull/347\">Peternator7/strum#347</a></li>\n<li><a\nhref=\"https://github.com/rainbowatcher\"><code>@​rainbowatcher</code></a>\nmade their first contribution in <a\nhref=\"https://redirect.github.com/Peternator7/strum/pull/350\">Peternator7/strum#350</a></li>\n<li><a\nhref=\"https://github.com/gin-ahirsch\"><code>@​gin-ahirsch</code></a>\nmade their first contribution in <a\nhref=\"https://redirect.github.com/Peternator7/strum/pull/345\">Peternator7/strum#345</a></li>\n<li><a\nhref=\"https://github.com/lolbinarycat\"><code>@​lolbinarycat</code></a>\nmade their first contribution in <a\nhref=\"https://redirect.github.com/Peternator7/strum/pull/355\">Peternator7/strum#355</a></li>\n<li><a href=\"https://github.com/bluurryy\"><code>@​bluurryy</code></a>\nmade their first contribution in <a\nhref=\"https://redirect.github.com/Peternator7/strum/pull/357\">Peternator7/strum#357</a></li>\n</ul>\n<p><strong>Full Changelog</strong>: <a\nhref=\"https://github.com/Peternator7/strum/compare/v0.26.2...v0.26.3\">https://github.com/Peternator7/strum/compare/v0.26.2...v0.26.3</a></p>\n</blockquote>\n</details>\n<details>\n<summary>Changelog</summary>\n<p><em>Sourced from <a\nhref=\"https://github.com/Peternator7/strum/blob/master/CHANGELOG.md\">strum's\nchangelog</a>.</em></p>\n<blockquote>\n<h2>0.26.3 (strum_macros)</h2>\n<ul>\n<li><a\nhref=\"https://redirect.github.com/Peternator7/strum/pull/344\">#344</a>:\nHide <code>EnumTable</code> because it's going to be deprecated in the\nnext\nversion.</li>\n<li><a\nhref=\"https://redirect.github.com/Peternator7/strum/pull/357\">#357</a>:\nFixes an incompatiblity with <code>itertools</code> by using the fully\nqualified name rather than the inherent method.</li>\n<li><a\nhref=\"https://redirect.github.com/Peternator7/strum/pull/345\">#345</a>:\nAllows unnamed tuple like variants to use their variants in\nstring interpolation. <code>#[strum(to_string = &quot;Field 0: {0},\nField 1: {1})&quot;)]</code> will now work for tuple variants</li>\n</ul>\n</blockquote>\n</details>\n<details>\n<summary>Commits</summary>\n<ul>\n<li><a\nhref=\"https://github.com/Peternator7/strum/commit/c89286fc2a4916ee61133aaa8d63fce83f6fc39e\"><code>c89286f</code></a>\nUpdate changelog &amp; strum_macros version</li>\n<li><a\nhref=\"https://github.com/Peternator7/strum/commit/0c85c16e12e80dd49e75117e7c94f697d0ad06d0\"><code>0c85c16</code></a>\nUse associated function syntax for calling <code>get</code> on an\n<code>EnumIter</code>, eliminatin...</li>\n<li><a\nhref=\"https://github.com/Peternator7/strum/commit/9689d7bb55bad0269c3fc9679a7434670139b12b\"><code>9689d7b</code></a>\nadd hyperlinks to documentation and clarify derive macros (<a\nhref=\"https://redirect.github.com/Peternator7/strum/issues/355\">#355</a>)</li>\n<li><a\nhref=\"https://github.com/Peternator7/strum/commit/186d29f6a1691b6356a2d85d66f8904b9a5d3140\"><code>186d29f</code></a>\nInterpolate unnamed enum variant fields in to_string attribute (<a\nhref=\"https://redirect.github.com/Peternator7/strum/issues/345\">#345</a>)</li>\n<li><a\nhref=\"https://github.com/Peternator7/strum/commit/410062e122e001e6c3725cdc91483a0d4de5ca31\"><code>410062e</code></a>\nFix broken links (<a\nhref=\"https://redirect.github.com/Peternator7/strum/issues/350\">#350</a>)</li>\n<li><a\nhref=\"https://github.com/Peternator7/strum/commit/1e46337eb2ec71caccf2fc35929e2f0cbedbb3c2\"><code>1e46337</code></a>\nUpdate <code>heck</code> requirement (<a\nhref=\"https://redirect.github.com/Peternator7/strum/issues/346\">#346</a>)</li>\n<li><a\nhref=\"https://github.com/Peternator7/strum/commit/f5fce032ed381a334e81676bd2c391353c265476\"><code>f5fce03</code></a>\nFix typos &amp; misspellings in docs (<a\nhref=\"https://redirect.github.com/Peternator7/strum/issues/347\">#347</a>)</li>\n<li>See full diff in <a\nhref=\"https://github.com/Peternator7/strum/compare/v0.26.2...v0.26.3\">compare\nview</a></li>\n</ul>\n</details>\n<br />\n\n\n[![Dependabot compatibility\nscore](https://dependabot-badges.githubapp.com/badges/compatibility_score?dependency-name=strum&package-manager=cargo&previous-version=0.26.2&new-version=0.26.3)](https://docs.github.com/en/github/managing-security-vulnerabilities/about-dependabot-security-updates#about-compatibility-scores)\n\nDependabot will resolve any conflicts with this PR as long as you don't\nalter it yourself. You can also trigger a rebase manually by commenting\n`@dependabot rebase`.\n\n[//]: # (dependabot-automerge-start)\n[//]: # (dependabot-automerge-end)\n\n---\n\n<details>\n<summary>Dependabot commands and options</summary>\n<br />\n\nYou can trigger Dependabot actions by commenting on this PR:\n- `@dependabot rebase` will rebase this PR\n- `@dependabot recreate` will recreate this PR, overwriting any edits\nthat have been made to it\n- `@dependabot merge` will merge this PR after your CI passes on it\n- `@dependabot squash and merge` will squash and merge this PR after\nyour CI passes on it\n- `@dependabot cancel merge` will cancel a previously requested merge\nand block automerging\n- `@dependabot reopen` will reopen this PR if it is closed\n- `@dependabot close` will close this PR and stop Dependabot recreating\nit. You can achieve the same result by closing it manually\n- `@dependabot show <dependency name> ignore conditions` will show all\nof the ignore conditions of the specified dependency\n- `@dependabot ignore this major version` will close this PR and stop\nDependabot creating any more for this major version (unless you reopen\nthe PR or upgrade to it yourself)\n- `@dependabot ignore this minor version` will close this PR and stop\nDependabot creating any more for this minor version (unless you reopen\nthe PR or upgrade to it yourself)\n- `@dependabot ignore this dependency` will close this PR and stop\nDependabot creating any more for this dependency (unless you reopen the\nPR or upgrade to it yourself)\n\n\n</details>\n\nSigned-off-by: dependabot[bot] <support@github.com>\nCo-authored-by: dependabot[bot] <49699333+dependabot[bot]@users.noreply.github.com>",
+          "timestamp": "2024-10-09T19:41:20Z",
+          "tree_id": "4ccc80f03ed526b0dcdcf4b6cdf623dea9f51329",
+          "url": "https://github.com/paritytech/polkadot-sdk/commit/e0062af9c8bdbd15a5b387912f4ba2913d82b75b"
+        },
+        "date": 1728508023791,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "Received from peers",
+            "value": 52944.40000000001,
+            "unit": "KiB"
+          },
+          {
+            "name": "Sent to peers",
+            "value": 63633.77,
+            "unit": "KiB"
+          },
+          {
+            "name": "approval-voting/test-environment",
+            "value": 0.00001728038,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-0",
+            "value": 2.4424788662499997,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting",
+            "value": 0.00001728038,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-1",
+            "value": 2.4296067329500013,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-db",
+            "value": 2.1198082984500006,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-3",
+            "value": 2.44319536767,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-distribution/test-environment",
+            "value": 0.000018875360000000003,
+            "unit": "seconds"
+          },
+          {
+            "name": "test-environment",
+            "value": 3.3409524012321996,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-2",
+            "value": 2.469501670020001,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel",
+            "value": 12.398026540519947,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-distribution",
+            "value": 0.000018875360000000003,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-gather-signatures",
+            "value": 0.006028375470000005,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-subsystem",
+            "value": 0.4874072297099462,
             "unit": "seconds"
           }
         ]
