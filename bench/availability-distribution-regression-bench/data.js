@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1728422605386,
+  "lastUpdate": 1728458309577,
   "repoUrl": "https://github.com/paritytech/polkadot-sdk",
   "entries": {
     "availability-distribution-regression-bench": [
@@ -29455,6 +29455,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "availability-distribution",
             "value": 0.01635603480666666,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "363911+pepoviola@users.noreply.github.com",
+            "name": "Javier Viola",
+            "username": "pepoviola"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": false,
+          "id": "6c2b46f9620fd147e63b151320cc145551fd2c18",
+          "message": "Disable flaky tests reported in 5972/5973/5974 (#5976)\n\nDisable flaky tests reported in:\n#5972 \n#5973 \n#5974",
+          "timestamp": "2024-10-09T06:14:09Z",
+          "tree_id": "fd029effbdb603700d66139f52f8f81765254f7d",
+          "url": "https://github.com/paritytech/polkadot-sdk/commit/6c2b46f9620fd147e63b151320cc145551fd2c18"
+        },
+        "date": 1728458289706,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "Received from peers",
+            "value": 433.3333333333332,
+            "unit": "KiB"
+          },
+          {
+            "name": "Sent to peers",
+            "value": 18481.666666666653,
+            "unit": "KiB"
+          },
+          {
+            "name": "bitfield-distribution",
+            "value": 0.024805525460000002,
+            "unit": "seconds"
+          },
+          {
+            "name": "availability-store",
+            "value": 0.17884651787999992,
+            "unit": "seconds"
+          },
+          {
+            "name": "test-environment",
+            "value": 0.009194039106666732,
+            "unit": "seconds"
+          },
+          {
+            "name": "availability-distribution",
+            "value": 0.016558626179999997,
             "unit": "seconds"
           }
         ]
