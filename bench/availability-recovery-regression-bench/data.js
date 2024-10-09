@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1728480084006,
+  "lastUpdate": 1728488486911,
   "repoUrl": "https://github.com/paritytech/polkadot-sdk",
   "entries": {
     "availability-recovery-regression-bench": [
@@ -23619,6 +23619,50 @@ window.BENCHMARK_DATA = {
           {
             "name": "test-environment",
             "value": 0.2313315447,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "41779041+alvicsam@users.noreply.github.com",
+            "name": "Alexander Samusev",
+            "username": "alvicsam"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "48b56aa1780c23fa579904d01ee2e442c10863d2",
+          "message": "[ci] Move test-linux-stable-no-try-runtime to GHA (#5979)\n\nPR moves `test-linux-stable-no-try-runtime` from gitlab to github.\nI disabled two tests because our current runners don't have necessary\nsyscalls enabled. Will continue working on it in\nhttps://github.com/paritytech/ci_cd/issues/1056\nAlso PR remove `gh cli` installation since it's installed in the\n`ci-unified` image.\n\nclose https://github.com/paritytech/ci_cd/issues/1023",
+          "timestamp": "2024-10-09T14:37:44Z",
+          "tree_id": "cede9f559cc736195bf1a31856361ad595c530c5",
+          "url": "https://github.com/paritytech/polkadot-sdk/commit/48b56aa1780c23fa579904d01ee2e442c10863d2"
+        },
+        "date": 1728488465774,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "Sent to peers",
+            "value": 1.6666666666666665,
+            "unit": "KiB"
+          },
+          {
+            "name": "Received from peers",
+            "value": 307203,
+            "unit": "KiB"
+          },
+          {
+            "name": "test-environment",
+            "value": 0.23340048596666668,
+            "unit": "seconds"
+          },
+          {
+            "name": "availability-recovery",
+            "value": 11.708295736333335,
             "unit": "seconds"
           }
         ]
