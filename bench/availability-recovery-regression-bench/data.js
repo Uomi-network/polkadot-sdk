@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1728493094158,
+  "lastUpdate": 1728497499219,
   "repoUrl": "https://github.com/paritytech/polkadot-sdk",
   "entries": {
     "availability-recovery-regression-bench": [
@@ -23707,6 +23707,50 @@ window.BENCHMARK_DATA = {
           {
             "name": "availability-recovery",
             "value": 11.907389443566668,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "eresav@me.com",
+            "name": "Andrei Eres",
+            "username": "AndreiEres"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "e294d6287743f036e19af1c3e6383f114d5172a9",
+          "message": "Add PVF execution priority (#4837)\n\nResolves https://github.com/paritytech/polkadot-sdk/issues/4632\n\nThe new logic optimizes the distribution of execution jobs for disputes,\napprovals, and backings. Testing shows improved finality lag and\ncandidate checking times, especially under heavy network load.\n\n### Approach\n\nThis update adds prioritization to the PVF execution queue. The logic\npartially implements the suggestions from\nhttps://github.com/paritytech/polkadot-sdk/issues/4632#issuecomment-2209188695.\n\nWe use thresholds to determine how much a current priority can \"steal\"\nfrom lower ones:\n-  Disputes: 70%\n-  Approvals: 80%\n-  Backing System Parachains: 100%\n-  Backing: 100%\n\nA threshold indicates the portion of the current priority that can be\nallocated from lower priorities.\n\nFor example:\n-  Disputes take 70%, leaving 30% for approvals and all backings.\n- 80% of the remaining goes to approvals, which is 30% * 80% = 24% of\nthe original 100%.\n- If we used parts of the original 100%, approvals couldn't take more\nthan 24%, even if there are no disputes.\n\nAssuming a maximum of 12 executions per block, with a 6-second window, 2\nCPU cores, and a 2-second run time, we get these distributions:\n\n-  With disputes: 8 disputes, 3 approvals, 1 backing\n-  Without disputes: 9 approvals, 3 backings\n\nIt's worth noting that when there are no disputes, if there's only one\nbacking job, we continue processing approvals regardless of their\nfulfillment status.\n\n### Versi Testing 40/20\n\nTesting showed a slight difference in finality lag and candidate\nchecking time between this pull request and its base on the master\nbranch. The more loaded the network, the greater the observed\ndifference.\n\nTesting Parameters:\n-  40 validators (4 malicious)\n-  20 gluttons with 2 seconds of PVF execution time\n-  6 VRF modulo samples\n-  12 required approvals\n\n![Pasted Graphic\n3](https://github.com/user-attachments/assets/8b6163a4-a1c9-44c2-bdba-ce1ef4b1eba7)\n![Pasted Graphic\n4](https://github.com/user-attachments/assets/9f016647-7727-42e8-afe9-04f303e6c862)\n\n### Versi Testing 80/40\n\nFor this test, we compared the master branch with the branch from\nhttps://github.com/paritytech/polkadot-sdk/pull/5616. The second branch\nis based on the current one but removes backing jobs that have exceeded\ntheir time limits. We excluded malicious nodes to reduce noise from\ndisputing and banning validators. The results show that, under the same\nload, nodes experience less finality lag and reduced recovery and check\ntime. Even parachains are functioning with a shorter block time,\nalthough it remains over 6 seconds.\n\nTesting Parameters:\n-  80 validators (0 malicious)\n-  40 gluttons with 2 seconds of PVF execution time\n-  6 VRF modulo samples\n-  30 required approvals\n\n\n![image](https://github.com/user-attachments/assets/42bcc845-9115-4ae3-9910-286b77a60bbf)\n\n---------\n\nCo-authored-by: Andrei Sandu <54316454+sandreim@users.noreply.github.com>",
+          "timestamp": "2024-10-09T17:07:49Z",
+          "tree_id": "3302c5a95d2422c827b7aea2a11e0a28b0439092",
+          "url": "https://github.com/paritytech/polkadot-sdk/commit/e294d6287743f036e19af1c3e6383f114d5172a9"
+        },
+        "date": 1728497477533,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "Received from peers",
+            "value": 307203,
+            "unit": "KiB"
+          },
+          {
+            "name": "Sent to peers",
+            "value": 1.6666666666666665,
+            "unit": "KiB"
+          },
+          {
+            "name": "availability-recovery",
+            "value": 11.377981718933333,
+            "unit": "seconds"
+          },
+          {
+            "name": "test-environment",
+            "value": 0.22848067853333331,
             "unit": "seconds"
           }
         ]
