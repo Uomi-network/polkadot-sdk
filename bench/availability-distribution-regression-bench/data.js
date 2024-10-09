@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1728458309577,
+  "lastUpdate": 1728480113106,
   "repoUrl": "https://github.com/paritytech/polkadot-sdk",
   "entries": {
     "availability-distribution-regression-bench": [
@@ -29509,6 +29509,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "availability-distribution",
             "value": 0.016558626179999997,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "41779041+alvicsam@users.noreply.github.com",
+            "name": "Alexander Samusev",
+            "username": "alvicsam"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": false,
+          "id": "6765bcd8a34bc47b4f8ad0c5c9f00574e3b1b9af",
+          "message": "[ci] Remove short-benchmarks from Gitlab (#5988)\n\nPR removes short-benchmarks from GitLab, adds condition for\ncargo-check-rutimes",
+          "timestamp": "2024-10-09T12:16:55Z",
+          "tree_id": "6b24a8657e4e5d6d7bef929671b9e16eac7eff36",
+          "url": "https://github.com/paritytech/polkadot-sdk/commit/6765bcd8a34bc47b4f8ad0c5c9f00574e3b1b9af"
+        },
+        "date": 1728480091074,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "Sent to peers",
+            "value": 18481.666666666653,
+            "unit": "KiB"
+          },
+          {
+            "name": "Received from peers",
+            "value": 433.3333333333332,
+            "unit": "KiB"
+          },
+          {
+            "name": "bitfield-distribution",
+            "value": 0.02482199758666667,
+            "unit": "seconds"
+          },
+          {
+            "name": "availability-distribution",
+            "value": 0.01631083627333333,
+            "unit": "seconds"
+          },
+          {
+            "name": "test-environment",
+            "value": 0.008810446480000097,
+            "unit": "seconds"
+          },
+          {
+            "name": "availability-store",
+            "value": 0.17960670370666684,
             "unit": "seconds"
           }
         ]
