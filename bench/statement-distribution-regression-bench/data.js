@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1728553948544,
+  "lastUpdate": 1728557860190,
   "repoUrl": "https://github.com/paritytech/polkadot-sdk",
   "entries": {
     "statement-distribution-regression-bench": [
@@ -14515,6 +14515,50 @@ window.BENCHMARK_DATA = {
           {
             "name": "statement-distribution",
             "value": 0.03523675500199999,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "serban@parity.io",
+            "name": "Serban Iorga",
+            "username": "serban300"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "cba7d13bc7d132fe758b859393bca7ddd45c690f",
+          "message": "Fix `0003-beefy-and-mmr` test (#6003)\n\nResolves https://github.com/paritytech/polkadot-sdk/issues/5972\n\nOnly needed to increase some timeouts",
+          "timestamp": "2024-10-10T09:47:29Z",
+          "tree_id": "80c45544f604fe8b36586e2ed8fce18d12454acd",
+          "url": "https://github.com/paritytech/polkadot-sdk/commit/cba7d13bc7d132fe758b859393bca7ddd45c690f"
+        },
+        "date": 1728557839383,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "Received from peers",
+            "value": 106.39999999999996,
+            "unit": "KiB"
+          },
+          {
+            "name": "Sent to peers",
+            "value": 127.94599999999997,
+            "unit": "KiB"
+          },
+          {
+            "name": "statement-distribution",
+            "value": 0.035356051360000015,
+            "unit": "seconds"
+          },
+          {
+            "name": "test-environment",
+            "value": 0.04443559363199995,
             "unit": "seconds"
           }
         ]
