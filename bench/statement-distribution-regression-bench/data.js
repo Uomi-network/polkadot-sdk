@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1728557860190,
+  "lastUpdate": 1728561965606,
   "repoUrl": "https://github.com/paritytech/polkadot-sdk",
   "entries": {
     "statement-distribution-regression-bench": [
@@ -14559,6 +14559,50 @@ window.BENCHMARK_DATA = {
           {
             "name": "test-environment",
             "value": 0.04443559363199995,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "1177472+mordamax@users.noreply.github.com",
+            "name": "Maksym H",
+            "username": "mordamax"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "439b31ef9bbdf0e0709bbab4804a9590b48ba8f0",
+          "message": "Set larger timeout for cmd.yml (#6006)\n\n1800 min",
+          "timestamp": "2024-10-10T10:57:39Z",
+          "tree_id": "3d6773bfa26927964f53b1e75c015e285390c62c",
+          "url": "https://github.com/paritytech/polkadot-sdk/commit/439b31ef9bbdf0e0709bbab4804a9590b48ba8f0"
+        },
+        "date": 1728561944839,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "Sent to peers",
+            "value": 127.95199999999997,
+            "unit": "KiB"
+          },
+          {
+            "name": "Received from peers",
+            "value": 106.39999999999996,
+            "unit": "KiB"
+          },
+          {
+            "name": "test-environment",
+            "value": 0.04531338475799993,
+            "unit": "seconds"
+          },
+          {
+            "name": "statement-distribution",
+            "value": 0.03601780077800001,
             "unit": "seconds"
           }
         ]
