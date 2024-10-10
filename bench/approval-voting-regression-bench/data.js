@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1728508044421,
+  "lastUpdate": 1728549858034,
   "repoUrl": "https://github.com/paritytech/polkadot-sdk",
   "entries": {
     "approval-voting-regression-bench": [
@@ -24406,6 +24406,105 @@ window.BENCHMARK_DATA = {
           {
             "name": "approval-voting-parallel/approval-voting-parallel-subsystem",
             "value": 0.4874072297099462,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "info@radiumblock.com",
+            "name": "RadiumBlock",
+            "username": "radiumb"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "cb1f19c51c62a79dc623e75a82300f51ff5fc1b3",
+          "message": "Add RadiumBlock bootnodes to Coretime Polkadot Chain spec (#5967)\n\n✄\n-----------------------------------------------------------------------------\n\nThank you for your Pull Request! 🙏 Please make sure it follows the\ncontribution guidelines outlined in [this\n\ndocument](https://github.com/paritytech/polkadot-sdk/blob/master/docs/contributor/CONTRIBUTING.md)\nand fill out the\nsections below. Once you're ready to submit your PR for review, please\ndelete this section and leave only the text under\nthe \"Description\" heading.\n\n# Description\n\nPlease consider adding RadiumBlock bootnodes to Coretime Polkadot Chain\nspec\n\n## Integration\n\n*In depth notes about how this PR should be integrated by downstream\nprojects. This part is mandatory, and should be\nreviewed by reviewers, if the PR does NOT have the `R0-Silent` label. In\ncase of a `R0-Silent`, it can be ignored.*\n\n## Review Notes\n\n*In depth notes about the **implementation** details of your PR. This\nshould be the main guide for reviewers to\nunderstand your approach and effectively review it. If too long, use\n\n[`<details>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/details)*.\n\n*Imagine that someone who is depending on the old code wants to\nintegrate your new code and the only information that\nthey get is this section. It helps to include example usage and default\nvalue here, with a `diff` code-block to show\npossibly integration.*\n\n*Include your leftover TODOs, if any, here.*\n\n# Checklist\n\n* [x] My PR includes a detailed description as outlined in the\n\"Description\" and its two subsections above.\n* [ ] My PR follows the [labeling requirements](\n\nhttps://github.com/paritytech/polkadot-sdk/blob/master/docs/contributor/CONTRIBUTING.md#Process\n) of this project (at minimum one label for `T` required)\n* External contributors: ask maintainers to put the right label on your\nPR.\n* [ ] I have made corresponding changes to the documentation (if\napplicable)\n* [ ] I have added tests that prove my fix is effective or that my\nfeature works (if applicable)\n\nYou can remove the \"Checklist\" section once all have been checked. Thank\nyou for your contribution!\n\n✄\n-----------------------------------------------------------------------------\n\nCo-authored-by: Veena <veena.john@radiumblock.com>\nCo-authored-by: Dónal Murray <donal.murray@parity.io>",
+          "timestamp": "2024-10-10T07:38:29Z",
+          "tree_id": "a37ec0bd60ff6e3e96565e5db6b02f7add31f3fa",
+          "url": "https://github.com/paritytech/polkadot-sdk/commit/cb1f19c51c62a79dc623e75a82300f51ff5fc1b3"
+        },
+        "date": 1728549836637,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "Sent to peers",
+            "value": 63621.54,
+            "unit": "KiB"
+          },
+          {
+            "name": "Received from peers",
+            "value": 52940,
+            "unit": "KiB"
+          },
+          {
+            "name": "approval-voting",
+            "value": 0.00001843578,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-3",
+            "value": 2.4189369971199985,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-subsystem",
+            "value": 0.4829375371699568,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-distribution/test-environment",
+            "value": 0.00001954154,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel",
+            "value": 12.329894037069952,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-1",
+            "value": 2.4121825906199983,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-db",
+            "value": 2.1179514455599966,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-2",
+            "value": 2.4634893149299986,
+            "unit": "seconds"
+          },
+          {
+            "name": "test-environment",
+            "value": 3.3013067594220025,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting/test-environment",
+            "value": 0.00001843578,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-gather-signatures",
+            "value": 0.005998644160000002,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-0",
+            "value": 2.428397507510002,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-distribution",
+            "value": 0.00001954154,
             "unit": "seconds"
           }
         ]
