@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1728549858034,
+  "lastUpdate": 1728553920662,
   "repoUrl": "https://github.com/paritytech/polkadot-sdk",
   "entries": {
     "approval-voting-regression-bench": [
@@ -24505,6 +24505,105 @@ window.BENCHMARK_DATA = {
           {
             "name": "approval-distribution",
             "value": 0.00001954154,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "franciscoaguirreperez@gmail.com",
+            "name": "Francisco Aguirre",
+            "username": "franciscoaguirre"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "4a70b2cffb23db148a9af50cfbf13c4655dbaf7b",
+          "message": "Remove redundant XCMs from dry run's forwarded xcms (#5913)\n\n# Description\n\nThis PR addresses\nhttps://github.com/paritytech/polkadot-sdk/issues/5878.\n\nAfter dry running an xcm on asset hub, we had redundant xcms showing up\nin the `forwarded_xcms` field of the dry run effects returned.\nThese were caused by two things:\n- The `UpwardMessageSender` router always added an element even if there\nwere no messages.\n- The two routers on asset hub westend related to bridging (to rococo\nand sepolia) getting the message from their queues when their queues is\nactually the same xcmp queue that was already contemplated.\n\nIn order to fix this, we check for no messages in UMP and clear the\nimplementation of `InspectMessageQueues` for these bridging routers.\nKeep in mind that the bridged message is still sent, as normal via the\nxcmp-queue to Bridge Hub.\nTo keep on dry-running the journey of the message, the next hop to\ndry-run is Bridge Hub.\nThat'll be tackled in a different PR.\n\nAdded a test in `bridge-hub-westend-integration-tests` and\n`bridge-hub-rococo-integration-tests` that show that dry-running a\ntransfer across the bridge from asset hub results in one and only one\nmessage sent to bridge hub.\n\n## TODO\n- [x] Functionality\n- [x] Test\n\n---------\n\nCo-authored-by: command-bot <>",
+          "timestamp": "2024-10-10T08:46:49Z",
+          "tree_id": "0a6f1d88c0d50756243a6f902f4c4339ca8a34c8",
+          "url": "https://github.com/paritytech/polkadot-sdk/commit/4a70b2cffb23db148a9af50cfbf13c4655dbaf7b"
+        },
+        "date": 1728553899701,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "Received from peers",
+            "value": 52940,
+            "unit": "KiB"
+          },
+          {
+            "name": "Sent to peers",
+            "value": 63626.590000000004,
+            "unit": "KiB"
+          },
+          {
+            "name": "approval-voting",
+            "value": 0.00002032094,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-1",
+            "value": 2.414015269079999,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-subsystem",
+            "value": 0.49245138222997464,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-distribution",
+            "value": 0.00001837968,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-2",
+            "value": 2.4427781489999996,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-db",
+            "value": 2.119597636169991,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting/test-environment",
+            "value": 0.00002032094,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-gather-signatures",
+            "value": 0.0062275463500000025,
+            "unit": "seconds"
+          },
+          {
+            "name": "test-environment",
+            "value": 3.3794444696321526,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-0",
+            "value": 2.4232675419,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-3",
+            "value": 2.4075144110499993,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel",
+            "value": 12.305851935779964,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-distribution/test-environment",
+            "value": 0.00001837968,
             "unit": "seconds"
           }
         ]
