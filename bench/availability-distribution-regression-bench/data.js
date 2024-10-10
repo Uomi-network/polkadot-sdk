@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1728557804798,
+  "lastUpdate": 1728561909910,
   "repoUrl": "https://github.com/paritytech/polkadot-sdk",
   "entries": {
     "availability-distribution-regression-bench": [
@@ -29941,6 +29941,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "test-environment",
             "value": 0.008908584746666748,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "1177472+mordamax@users.noreply.github.com",
+            "name": "Maksym H",
+            "username": "mordamax"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "439b31ef9bbdf0e0709bbab4804a9590b48ba8f0",
+          "message": "Set larger timeout for cmd.yml (#6006)\n\n1800 min",
+          "timestamp": "2024-10-10T10:57:39Z",
+          "tree_id": "3d6773bfa26927964f53b1e75c015e285390c62c",
+          "url": "https://github.com/paritytech/polkadot-sdk/commit/439b31ef9bbdf0e0709bbab4804a9590b48ba8f0"
+        },
+        "date": 1728561888447,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "Sent to peers",
+            "value": 18481.666666666653,
+            "unit": "KiB"
+          },
+          {
+            "name": "Received from peers",
+            "value": 433.3333333333332,
+            "unit": "KiB"
+          },
+          {
+            "name": "bitfield-distribution",
+            "value": 0.024990392786666676,
+            "unit": "seconds"
+          },
+          {
+            "name": "availability-store",
+            "value": 0.18051068448000002,
+            "unit": "seconds"
+          },
+          {
+            "name": "test-environment",
+            "value": 0.008815734733333422,
+            "unit": "seconds"
+          },
+          {
+            "name": "availability-distribution",
+            "value": 0.016533106193333338,
             "unit": "seconds"
           }
         ]
