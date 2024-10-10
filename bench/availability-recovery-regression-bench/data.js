@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1728549800984,
+  "lastUpdate": 1728553864810,
   "repoUrl": "https://github.com/paritytech/polkadot-sdk",
   "entries": {
     "availability-recovery-regression-bench": [
@@ -23839,6 +23839,50 @@ window.BENCHMARK_DATA = {
           {
             "name": "test-environment",
             "value": 0.23228955240000007,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "franciscoaguirreperez@gmail.com",
+            "name": "Francisco Aguirre",
+            "username": "franciscoaguirre"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "4a70b2cffb23db148a9af50cfbf13c4655dbaf7b",
+          "message": "Remove redundant XCMs from dry run's forwarded xcms (#5913)\n\n# Description\n\nThis PR addresses\nhttps://github.com/paritytech/polkadot-sdk/issues/5878.\n\nAfter dry running an xcm on asset hub, we had redundant xcms showing up\nin the `forwarded_xcms` field of the dry run effects returned.\nThese were caused by two things:\n- The `UpwardMessageSender` router always added an element even if there\nwere no messages.\n- The two routers on asset hub westend related to bridging (to rococo\nand sepolia) getting the message from their queues when their queues is\nactually the same xcmp queue that was already contemplated.\n\nIn order to fix this, we check for no messages in UMP and clear the\nimplementation of `InspectMessageQueues` for these bridging routers.\nKeep in mind that the bridged message is still sent, as normal via the\nxcmp-queue to Bridge Hub.\nTo keep on dry-running the journey of the message, the next hop to\ndry-run is Bridge Hub.\nThat'll be tackled in a different PR.\n\nAdded a test in `bridge-hub-westend-integration-tests` and\n`bridge-hub-rococo-integration-tests` that show that dry-running a\ntransfer across the bridge from asset hub results in one and only one\nmessage sent to bridge hub.\n\n## TODO\n- [x] Functionality\n- [x] Test\n\n---------\n\nCo-authored-by: command-bot <>",
+          "timestamp": "2024-10-10T08:46:49Z",
+          "tree_id": "0a6f1d88c0d50756243a6f902f4c4339ca8a34c8",
+          "url": "https://github.com/paritytech/polkadot-sdk/commit/4a70b2cffb23db148a9af50cfbf13c4655dbaf7b"
+        },
+        "date": 1728553843809,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "Received from peers",
+            "value": 307203,
+            "unit": "KiB"
+          },
+          {
+            "name": "Sent to peers",
+            "value": 1.6666666666666665,
+            "unit": "KiB"
+          },
+          {
+            "name": "test-environment",
+            "value": 0.2343170307666667,
+            "unit": "seconds"
+          },
+          {
+            "name": "availability-recovery",
+            "value": 11.8332031262,
             "unit": "seconds"
           }
         ]
