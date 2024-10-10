@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1728549829291,
+  "lastUpdate": 1728553892208,
   "repoUrl": "https://github.com/paritytech/polkadot-sdk",
   "entries": {
     "availability-distribution-regression-bench": [
@@ -29833,6 +29833,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "test-environment",
             "value": 0.008764601726666755,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "franciscoaguirreperez@gmail.com",
+            "name": "Francisco Aguirre",
+            "username": "franciscoaguirre"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "4a70b2cffb23db148a9af50cfbf13c4655dbaf7b",
+          "message": "Remove redundant XCMs from dry run's forwarded xcms (#5913)\n\n# Description\n\nThis PR addresses\nhttps://github.com/paritytech/polkadot-sdk/issues/5878.\n\nAfter dry running an xcm on asset hub, we had redundant xcms showing up\nin the `forwarded_xcms` field of the dry run effects returned.\nThese were caused by two things:\n- The `UpwardMessageSender` router always added an element even if there\nwere no messages.\n- The two routers on asset hub westend related to bridging (to rococo\nand sepolia) getting the message from their queues when their queues is\nactually the same xcmp queue that was already contemplated.\n\nIn order to fix this, we check for no messages in UMP and clear the\nimplementation of `InspectMessageQueues` for these bridging routers.\nKeep in mind that the bridged message is still sent, as normal via the\nxcmp-queue to Bridge Hub.\nTo keep on dry-running the journey of the message, the next hop to\ndry-run is Bridge Hub.\nThat'll be tackled in a different PR.\n\nAdded a test in `bridge-hub-westend-integration-tests` and\n`bridge-hub-rococo-integration-tests` that show that dry-running a\ntransfer across the bridge from asset hub results in one and only one\nmessage sent to bridge hub.\n\n## TODO\n- [x] Functionality\n- [x] Test\n\n---------\n\nCo-authored-by: command-bot <>",
+          "timestamp": "2024-10-10T08:46:49Z",
+          "tree_id": "0a6f1d88c0d50756243a6f902f4c4339ca8a34c8",
+          "url": "https://github.com/paritytech/polkadot-sdk/commit/4a70b2cffb23db148a9af50cfbf13c4655dbaf7b"
+        },
+        "date": 1728553871436,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "Sent to peers",
+            "value": 18481.666666666653,
+            "unit": "KiB"
+          },
+          {
+            "name": "Received from peers",
+            "value": 433.3333333333332,
+            "unit": "KiB"
+          },
+          {
+            "name": "test-environment",
+            "value": 0.009147585446666743,
+            "unit": "seconds"
+          },
+          {
+            "name": "availability-distribution",
+            "value": 0.01649219042,
+            "unit": "seconds"
+          },
+          {
+            "name": "bitfield-distribution",
+            "value": 0.02478533318666666,
+            "unit": "seconds"
+          },
+          {
+            "name": "availability-store",
+            "value": 0.17954195451333332,
             "unit": "seconds"
           }
         ]
