@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1728561937963,
+  "lastUpdate": 1728641135749,
   "repoUrl": "https://github.com/paritytech/polkadot-sdk",
   "entries": {
     "approval-voting-regression-bench": [
@@ -24802,6 +24802,105 @@ window.BENCHMARK_DATA = {
           {
             "name": "approval-voting/test-environment",
             "value": 0.00001703254,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "41779041+alvicsam@users.noreply.github.com",
+            "name": "Alexander Samusev",
+            "username": "alvicsam"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "c16ac9250c0f41287a8bae1b47469b85b67e7a80",
+          "message": "[ci] Remove quick-benchmarks-omni from GitLab (#6014)\n\nThe `quick-benchmarks-omni` job was moved to GHA (can be found\n[here](https://github.com/paritytech/polkadot-sdk/blob/439b31ef9bbdf0e0709bbab4804a9590b48ba8f0/.github/workflows/check-frame-omni-bencher.yml#L22))\nbut hasn't been removed from GitLab . PR fixes it and makes the check\nrequired.",
+          "timestamp": "2024-10-11T08:53:29Z",
+          "tree_id": "ac5df2c070eacb3d69e251d0f404864113b4260e",
+          "url": "https://github.com/paritytech/polkadot-sdk/commit/c16ac9250c0f41287a8bae1b47469b85b67e7a80"
+        },
+        "date": 1728641115673,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "Received from peers",
+            "value": 52943,
+            "unit": "KiB"
+          },
+          {
+            "name": "Sent to peers",
+            "value": 63632.18000000001,
+            "unit": "KiB"
+          },
+          {
+            "name": "test-environment",
+            "value": 3.2881897359522227,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-1",
+            "value": 2.40465847269,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-0",
+            "value": 2.4139735334600005,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-2",
+            "value": 2.4499453719799993,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-db",
+            "value": 2.115512077510002,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-subsystem",
+            "value": 0.4989612252199695,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel",
+            "value": 12.294346957549967,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-distribution",
+            "value": 0.000018645079999999997,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-3",
+            "value": 2.4052084513699983,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting",
+            "value": 0.000017909990000000002,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-distribution/test-environment",
+            "value": 0.000018645079999999997,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting/test-environment",
+            "value": 0.000017909990000000002,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-gather-signatures",
+            "value": 0.006087825319999998,
             "unit": "seconds"
           }
         ]
