@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1728641135749,
+  "lastUpdate": 1728651593490,
   "repoUrl": "https://github.com/paritytech/polkadot-sdk",
   "entries": {
     "approval-voting-regression-bench": [
@@ -24901,6 +24901,105 @@ window.BENCHMARK_DATA = {
           {
             "name": "approval-voting-parallel/approval-voting-gather-signatures",
             "value": 0.006087825319999998,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "1728078+michalkucharczyk@users.noreply.github.com",
+            "name": "Michal Kucharczyk",
+            "username": "michalkucharczyk"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "b45f89c51fbd58e984e5e013992dd26715cb8bdc",
+          "message": "`substrate-node`: removed excessive polkadot-sdk features (#5925)\n\nSome of the features enabled for `polkadot-sdk` umbrella crate were not\nnecessary for substrate node (e.g. all `cumulus-*` or `polkadot-*`\nfeatures) resulting in much longer compilation time. This PR fixes that.",
+          "timestamp": "2024-10-11T11:55:00Z",
+          "tree_id": "04c3189a9db02e7ea5943418ce470283e2e8eaa1",
+          "url": "https://github.com/paritytech/polkadot-sdk/commit/b45f89c51fbd58e984e5e013992dd26715cb8bdc"
+        },
+        "date": 1728651572169,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "Received from peers",
+            "value": 52942.5,
+            "unit": "KiB"
+          },
+          {
+            "name": "Sent to peers",
+            "value": 63631.31999999999,
+            "unit": "KiB"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-subsystem",
+            "value": 0.4736213418799829,
+            "unit": "seconds"
+          },
+          {
+            "name": "test-environment",
+            "value": 3.3426344956824545,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-distribution/test-environment",
+            "value": 0.00002034437,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-gather-signatures",
+            "value": 0.006106566330000005,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-db",
+            "value": 2.1157185675399903,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-0",
+            "value": 2.4234683936300008,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-3",
+            "value": 2.4082089792000003,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel",
+            "value": 12.295423724379976,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting",
+            "value": 0.00001760202,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting/test-environment",
+            "value": 0.00001760202,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-1",
+            "value": 2.4156708216600027,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-distribution",
+            "value": 0.00002034437,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-2",
+            "value": 2.452629054140001,
             "unit": "seconds"
           }
         ]
