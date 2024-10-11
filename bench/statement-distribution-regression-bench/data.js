@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1728641162678,
+  "lastUpdate": 1728651622577,
   "repoUrl": "https://github.com/paritytech/polkadot-sdk",
   "entries": {
     "statement-distribution-regression-bench": [
@@ -14647,6 +14647,50 @@ window.BENCHMARK_DATA = {
           {
             "name": "test-environment",
             "value": 0.044250806061999944,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "1728078+michalkucharczyk@users.noreply.github.com",
+            "name": "Michal Kucharczyk",
+            "username": "michalkucharczyk"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "b45f89c51fbd58e984e5e013992dd26715cb8bdc",
+          "message": "`substrate-node`: removed excessive polkadot-sdk features (#5925)\n\nSome of the features enabled for `polkadot-sdk` umbrella crate were not\nnecessary for substrate node (e.g. all `cumulus-*` or `polkadot-*`\nfeatures) resulting in much longer compilation time. This PR fixes that.",
+          "timestamp": "2024-10-11T11:55:00Z",
+          "tree_id": "04c3189a9db02e7ea5943418ce470283e2e8eaa1",
+          "url": "https://github.com/paritytech/polkadot-sdk/commit/b45f89c51fbd58e984e5e013992dd26715cb8bdc"
+        },
+        "date": 1728651600762,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "Sent to peers",
+            "value": 127.94399999999992,
+            "unit": "KiB"
+          },
+          {
+            "name": "Received from peers",
+            "value": 106.39999999999996,
+            "unit": "KiB"
+          },
+          {
+            "name": "test-environment",
+            "value": 0.04469914243799994,
+            "unit": "seconds"
+          },
+          {
+            "name": "statement-distribution",
+            "value": 0.03565991955999999,
             "unit": "seconds"
           }
         ]
