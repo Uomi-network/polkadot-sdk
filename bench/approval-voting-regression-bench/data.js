@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1728651593490,
+  "lastUpdate": 1728670879782,
   "repoUrl": "https://github.com/paritytech/polkadot-sdk",
   "entries": {
     "approval-voting-regression-bench": [
@@ -25000,6 +25000,105 @@ window.BENCHMARK_DATA = {
           {
             "name": "approval-voting-parallel/approval-voting-parallel-2",
             "value": 2.452629054140001,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "1177472+mordamax@users.noreply.github.com",
+            "name": "Maksym H",
+            "username": "mordamax"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "c0b734336a68b6f48ac70a9b9507d8ddb9fed57e",
+          "message": "/cmd: Improved devx of benching many pallets simultaneously (#6007)\n\n### Improved devx of running many pallets simultaneously\n\nChanges to /cmd:\n- Replace (flip) `--continue-on-fail` with `--fail-fast`, but only for\n`bench`. This makes all pallets/runtimes run non-stop by default, as it\nwas primary use-case during tests\n- The list of successful/failed pallets was hard to find within tons of\nlogs, so decided to write only needed logs in a file, and output as a\nsummary in the workflow and in the comment\n- Side fix: updated `tasks_example` to `pallet_example_tasks` to make\ncompliant with standard naming\n\n<img width=\"1006\" alt=\"image\"\nsrc=\"https://github.com/user-attachments/assets/14896041-7018-4a0d-92b7-4508e81913c2\">\n\n+ added command results to workflow summary:\n<img width=\"1275\" alt=\"image\"\nsrc=\"https://github.com/user-attachments/assets/b4a8afdb-dc9f-4ff9-9720-28a88956035f\">\n\n---------\n\nCo-authored-by: GitHub Action <action@github.com>",
+          "timestamp": "2024-10-11T17:20:57Z",
+          "tree_id": "1f74571a0c13e816d7b05ed444fc3dd4cdcbb738",
+          "url": "https://github.com/paritytech/polkadot-sdk/commit/c0b734336a68b6f48ac70a9b9507d8ddb9fed57e"
+        },
+        "date": 1728670859169,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "Received from peers",
+            "value": 52942.5,
+            "unit": "KiB"
+          },
+          {
+            "name": "Sent to peers",
+            "value": 63632.21999999999,
+            "unit": "KiB"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-1",
+            "value": 2.389345258220002,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-0",
+            "value": 2.407813741460001,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-3",
+            "value": 2.4115850082000017,
+            "unit": "seconds"
+          },
+          {
+            "name": "test-environment",
+            "value": 3.344287835012063,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-distribution",
+            "value": 0.000018709970000000003,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-distribution/test-environment",
+            "value": 0.000018709970000000003,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting",
+            "value": 0.00001861305,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting/test-environment",
+            "value": 0.00001861305,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-gather-signatures",
+            "value": 0.005939696319999997,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-2",
+            "value": 2.454065172160001,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-subsystem",
+            "value": 0.4901300488799505,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel",
+            "value": 12.274743324959957,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-db",
+            "value": 2.1158643997200004,
             "unit": "seconds"
           }
         ]
