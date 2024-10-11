@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1728641080271,
+  "lastUpdate": 1728651536357,
   "repoUrl": "https://github.com/paritytech/polkadot-sdk",
   "entries": {
     "availability-recovery-regression-bench": [
@@ -24015,6 +24015,50 @@ window.BENCHMARK_DATA = {
           {
             "name": "availability-recovery",
             "value": 11.877051548866666,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "1728078+michalkucharczyk@users.noreply.github.com",
+            "name": "Michal Kucharczyk",
+            "username": "michalkucharczyk"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "b45f89c51fbd58e984e5e013992dd26715cb8bdc",
+          "message": "`substrate-node`: removed excessive polkadot-sdk features (#5925)\n\nSome of the features enabled for `polkadot-sdk` umbrella crate were not\nnecessary for substrate node (e.g. all `cumulus-*` or `polkadot-*`\nfeatures) resulting in much longer compilation time. This PR fixes that.",
+          "timestamp": "2024-10-11T11:55:00Z",
+          "tree_id": "04c3189a9db02e7ea5943418ce470283e2e8eaa1",
+          "url": "https://github.com/paritytech/polkadot-sdk/commit/b45f89c51fbd58e984e5e013992dd26715cb8bdc"
+        },
+        "date": 1728651514808,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "Sent to peers",
+            "value": 1.6666666666666665,
+            "unit": "KiB"
+          },
+          {
+            "name": "Received from peers",
+            "value": 307203,
+            "unit": "KiB"
+          },
+          {
+            "name": "test-environment",
+            "value": 0.23551657033333337,
+            "unit": "seconds"
+          },
+          {
+            "name": "availability-recovery",
+            "value": 11.971792218966666,
             "unit": "seconds"
           }
         ]
