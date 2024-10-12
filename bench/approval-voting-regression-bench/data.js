@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1728670879782,
+  "lastUpdate": 1728771587040,
   "repoUrl": "https://github.com/paritytech/polkadot-sdk",
   "entries": {
     "approval-voting-regression-bench": [
@@ -25099,6 +25099,105 @@ window.BENCHMARK_DATA = {
           {
             "name": "approval-voting-parallel/approval-voting-parallel-db",
             "value": 2.1158643997200004,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "eagr@tutanota.com",
+            "name": "Julian Eager",
+            "username": "eagr"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "d1c115b6197bf6c45d5640594f0432e6c2781a4f",
+          "message": "Fix storage expansion in pallet section (#6023)\n\nfixes #5320 @sam0x17 @gupnik \n\n# Description\n\nThe issue could be confirmed with the added example. The cause is for\nmacro hygiene, `entries` in the `#( #entries_builder )*` expansion won't\nbe able to reference the `entries` defined outside. The solution here is\nto allow the reference to be passed into the expansion with closure.\n\nOr we could just switch to the unhygienic span with `quote::quote!`\ninstead such that `entries` will resolve to the \"outer\" definition.",
+          "timestamp": "2024-10-12T21:20:04Z",
+          "tree_id": "6a2ecd446cf92a91db05ff44e9d5a5562308bd9c",
+          "url": "https://github.com/paritytech/polkadot-sdk/commit/d1c115b6197bf6c45d5640594f0432e6c2781a4f"
+        },
+        "date": 1728771566565,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "Received from peers",
+            "value": 52942.40000000001,
+            "unit": "KiB"
+          },
+          {
+            "name": "Sent to peers",
+            "value": 63629.729999999996,
+            "unit": "KiB"
+          },
+          {
+            "name": "approval-voting-parallel",
+            "value": 12.354812031860003,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-distribution",
+            "value": 0.00002140602,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-gather-signatures",
+            "value": 0.00623559343,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-distribution/test-environment",
+            "value": 0.00002140602,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting",
+            "value": 0.000018207590000000004,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-db",
+            "value": 2.1052834285399937,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-2",
+            "value": 2.46117280362,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-subsystem",
+            "value": 0.5036047645700046,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-3",
+            "value": 2.4358678558300015,
+            "unit": "seconds"
+          },
+          {
+            "name": "test-environment",
+            "value": 3.3879081653723233,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-1",
+            "value": 2.40921975395,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-0",
+            "value": 2.433427831920002,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting/test-environment",
+            "value": 0.000018207590000000004,
             "unit": "seconds"
           }
         ]
