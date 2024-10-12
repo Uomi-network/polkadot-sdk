@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1728670824207,
+  "lastUpdate": 1728771532817,
   "repoUrl": "https://github.com/paritytech/polkadot-sdk",
   "entries": {
     "availability-recovery-regression-bench": [
@@ -24103,6 +24103,50 @@ window.BENCHMARK_DATA = {
           {
             "name": "test-environment",
             "value": 0.23293997983333337,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "eagr@tutanota.com",
+            "name": "Julian Eager",
+            "username": "eagr"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "d1c115b6197bf6c45d5640594f0432e6c2781a4f",
+          "message": "Fix storage expansion in pallet section (#6023)\n\nfixes #5320 @sam0x17 @gupnik \n\n# Description\n\nThe issue could be confirmed with the added example. The cause is for\nmacro hygiene, `entries` in the `#( #entries_builder )*` expansion won't\nbe able to reference the `entries` defined outside. The solution here is\nto allow the reference to be passed into the expansion with closure.\n\nOr we could just switch to the unhygienic span with `quote::quote!`\ninstead such that `entries` will resolve to the \"outer\" definition.",
+          "timestamp": "2024-10-12T21:20:04Z",
+          "tree_id": "6a2ecd446cf92a91db05ff44e9d5a5562308bd9c",
+          "url": "https://github.com/paritytech/polkadot-sdk/commit/d1c115b6197bf6c45d5640594f0432e6c2781a4f"
+        },
+        "date": 1728771511989,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "Sent to peers",
+            "value": 1.6666666666666665,
+            "unit": "KiB"
+          },
+          {
+            "name": "Received from peers",
+            "value": 307203,
+            "unit": "KiB"
+          },
+          {
+            "name": "test-environment",
+            "value": 0.23504327640000003,
+            "unit": "seconds"
+          },
+          {
+            "name": "availability-recovery",
+            "value": 11.979036080133334,
             "unit": "seconds"
           }
         ]
