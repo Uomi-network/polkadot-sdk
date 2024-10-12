@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1728670852187,
+  "lastUpdate": 1728771559881,
   "repoUrl": "https://github.com/paritytech/polkadot-sdk",
   "entries": {
     "availability-distribution-regression-bench": [
@@ -30157,6 +30157,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "availability-store",
             "value": 0.1794350137,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "eagr@tutanota.com",
+            "name": "Julian Eager",
+            "username": "eagr"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "d1c115b6197bf6c45d5640594f0432e6c2781a4f",
+          "message": "Fix storage expansion in pallet section (#6023)\n\nfixes #5320 @sam0x17 @gupnik \n\n# Description\n\nThe issue could be confirmed with the added example. The cause is for\nmacro hygiene, `entries` in the `#( #entries_builder )*` expansion won't\nbe able to reference the `entries` defined outside. The solution here is\nto allow the reference to be passed into the expansion with closure.\n\nOr we could just switch to the unhygienic span with `quote::quote!`\ninstead such that `entries` will resolve to the \"outer\" definition.",
+          "timestamp": "2024-10-12T21:20:04Z",
+          "tree_id": "6a2ecd446cf92a91db05ff44e9d5a5562308bd9c",
+          "url": "https://github.com/paritytech/polkadot-sdk/commit/d1c115b6197bf6c45d5640594f0432e6c2781a4f"
+        },
+        "date": 1728771539482,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "Sent to peers",
+            "value": 18481.666666666653,
+            "unit": "KiB"
+          },
+          {
+            "name": "Received from peers",
+            "value": 433.3333333333332,
+            "unit": "KiB"
+          },
+          {
+            "name": "test-environment",
+            "value": 0.00935161546666673,
+            "unit": "seconds"
+          },
+          {
+            "name": "bitfield-distribution",
+            "value": 0.02503088204,
+            "unit": "seconds"
+          },
+          {
+            "name": "availability-store",
+            "value": 0.18159648216666668,
+            "unit": "seconds"
+          },
+          {
+            "name": "availability-distribution",
+            "value": 0.016788009206666663,
             "unit": "seconds"
           }
         ]
