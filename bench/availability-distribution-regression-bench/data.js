@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1728903700031,
+  "lastUpdate": 1728923379553,
   "repoUrl": "https://github.com/paritytech/polkadot-sdk",
   "entries": {
     "availability-distribution-regression-bench": [
@@ -30265,6 +30265,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "bitfield-distribution",
             "value": 0.02490015576666666,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "serban@parity.io",
+            "name": "Serban Iorga",
+            "username": "serban300"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "d7f01a1795f2ca6aed8fc0abaa51bda78f5382b9",
+          "message": "Use the umbrella crate for the parachain template (#5991)\n\nUse the umbrella crate for the parachain template\n\nThis covers almost all the dependencies. There are just a few exceptions\nfor which I created a separate issue:\nhttps://github.com/paritytech/polkadot-sdk/issues/5993\n\nAlso related to: https://github.com/paritytech/polkadot-sdk/issues/4782",
+          "timestamp": "2024-10-14T14:36:51Z",
+          "tree_id": "65920e76d0edf7a1eb6254a62e74ab34789d74c7",
+          "url": "https://github.com/paritytech/polkadot-sdk/commit/d7f01a1795f2ca6aed8fc0abaa51bda78f5382b9"
+        },
+        "date": 1728923358833,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "Received from peers",
+            "value": 433.3333333333332,
+            "unit": "KiB"
+          },
+          {
+            "name": "Sent to peers",
+            "value": 18481.666666666653,
+            "unit": "KiB"
+          },
+          {
+            "name": "availability-distribution",
+            "value": 0.016262767793333334,
+            "unit": "seconds"
+          },
+          {
+            "name": "test-environment",
+            "value": 0.00870550412666675,
+            "unit": "seconds"
+          },
+          {
+            "name": "availability-store",
+            "value": 0.17893666219333337,
+            "unit": "seconds"
+          },
+          {
+            "name": "bitfield-distribution",
+            "value": 0.024603022233333324,
             "unit": "seconds"
           }
         ]
