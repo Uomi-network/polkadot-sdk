@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1728903756435,
+  "lastUpdate": 1728923436588,
   "repoUrl": "https://github.com/paritytech/polkadot-sdk",
   "entries": {
     "statement-distribution-regression-bench": [
@@ -14823,6 +14823,50 @@ window.BENCHMARK_DATA = {
           {
             "name": "test-environment",
             "value": 0.044772288429999946,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "serban@parity.io",
+            "name": "Serban Iorga",
+            "username": "serban300"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "d7f01a1795f2ca6aed8fc0abaa51bda78f5382b9",
+          "message": "Use the umbrella crate for the parachain template (#5991)\n\nUse the umbrella crate for the parachain template\n\nThis covers almost all the dependencies. There are just a few exceptions\nfor which I created a separate issue:\nhttps://github.com/paritytech/polkadot-sdk/issues/5993\n\nAlso related to: https://github.com/paritytech/polkadot-sdk/issues/4782",
+          "timestamp": "2024-10-14T14:36:51Z",
+          "tree_id": "65920e76d0edf7a1eb6254a62e74ab34789d74c7",
+          "url": "https://github.com/paritytech/polkadot-sdk/commit/d7f01a1795f2ca6aed8fc0abaa51bda78f5382b9"
+        },
+        "date": 1728923415643,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "Received from peers",
+            "value": 106.39999999999996,
+            "unit": "KiB"
+          },
+          {
+            "name": "Sent to peers",
+            "value": 127.94399999999996,
+            "unit": "KiB"
+          },
+          {
+            "name": "test-environment",
+            "value": 0.04458494751599998,
+            "unit": "seconds"
+          },
+          {
+            "name": "statement-distribution",
+            "value": 0.03538708727400003,
             "unit": "seconds"
           }
         ]
