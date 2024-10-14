@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1728771532817,
+  "lastUpdate": 1728903671283,
   "repoUrl": "https://github.com/paritytech/polkadot-sdk",
   "entries": {
     "availability-recovery-regression-bench": [
@@ -24147,6 +24147,50 @@ window.BENCHMARK_DATA = {
           {
             "name": "availability-recovery",
             "value": 11.979036080133334,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "1177472+mordamax@users.noreply.github.com",
+            "name": "Maksym H",
+            "username": "mordamax"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "ff87db8c42e55ac386a7431ebc3a5ce3ecdddcd3",
+          "message": "update cmd timeout (#6038)\n\n30 hrs -> 72 hours\nas it has stopped by timeout here\nhttps://github.com/paritytech/polkadot-sdk/actions/runs/11299872333/job/31431758932",
+          "timestamp": "2024-10-14T09:46:40Z",
+          "tree_id": "07bc34fffa2b56ca9b04a920bc6833bc06bc02e1",
+          "url": "https://github.com/paritytech/polkadot-sdk/commit/ff87db8c42e55ac386a7431ebc3a5ce3ecdddcd3"
+        },
+        "date": 1728903649874,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "Received from peers",
+            "value": 307203,
+            "unit": "KiB"
+          },
+          {
+            "name": "Sent to peers",
+            "value": 1.6666666666666665,
+            "unit": "KiB"
+          },
+          {
+            "name": "availability-recovery",
+            "value": 11.823653689733336,
+            "unit": "seconds"
+          },
+          {
+            "name": "test-environment",
+            "value": 0.23279890089999994,
             "unit": "seconds"
           }
         ]
