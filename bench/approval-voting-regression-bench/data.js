@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1728903728565,
+  "lastUpdate": 1728923406895,
   "repoUrl": "https://github.com/paritytech/polkadot-sdk",
   "entries": {
     "approval-voting-regression-bench": [
@@ -25297,6 +25297,105 @@ window.BENCHMARK_DATA = {
           {
             "name": "approval-distribution",
             "value": 0.00001865185,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "serban@parity.io",
+            "name": "Serban Iorga",
+            "username": "serban300"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "d7f01a1795f2ca6aed8fc0abaa51bda78f5382b9",
+          "message": "Use the umbrella crate for the parachain template (#5991)\n\nUse the umbrella crate for the parachain template\n\nThis covers almost all the dependencies. There are just a few exceptions\nfor which I created a separate issue:\nhttps://github.com/paritytech/polkadot-sdk/issues/5993\n\nAlso related to: https://github.com/paritytech/polkadot-sdk/issues/4782",
+          "timestamp": "2024-10-14T14:36:51Z",
+          "tree_id": "65920e76d0edf7a1eb6254a62e74ab34789d74c7",
+          "url": "https://github.com/paritytech/polkadot-sdk/commit/d7f01a1795f2ca6aed8fc0abaa51bda78f5382b9"
+        },
+        "date": 1728923386310,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "Sent to peers",
+            "value": 63627.62999999999,
+            "unit": "KiB"
+          },
+          {
+            "name": "Received from peers",
+            "value": 52936.59999999999,
+            "unit": "KiB"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-db",
+            "value": 2.1249552134499954,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-subsystem",
+            "value": 0.48792471299997653,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-distribution",
+            "value": 0.00001753755,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-1",
+            "value": 2.4276352960399996,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-0",
+            "value": 2.4371149034599995,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting",
+            "value": 0.000018210390000000004,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-2",
+            "value": 2.4896383249900014,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel",
+            "value": 12.413816168569971,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-gather-signatures",
+            "value": 0.006041881610000006,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-3",
+            "value": 2.440505836019999,
+            "unit": "seconds"
+          },
+          {
+            "name": "test-environment",
+            "value": 3.3159262312426128,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting/test-environment",
+            "value": 0.000018210390000000004,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-distribution/test-environment",
+            "value": 0.00001753755,
             "unit": "seconds"
           }
         ]
